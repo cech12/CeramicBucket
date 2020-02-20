@@ -1,0 +1,13 @@
+modLoader="javafml"
+loaderVersion="[28,)"
+issueTrackerURL="https://github.com/cech12/CeramicBucket/issues"
+[[mods]]
+    modId="ceramicbucket"
+    version="${file.jarVersion}"
+    displayName="Ceramic Bucket"
+    displayURL="https://github.com/cech12/CeramicBucket"
+    logoFile="logo.png"
+    authors="Cech12"
+    description='''
+    A mod which adds a Ceramic Bucket.
+    '''
