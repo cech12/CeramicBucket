@@ -23,6 +23,8 @@ import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -36,7 +38,16 @@ public class CeramicBucketItem extends BucketItem {
 
     @Override
     protected @Nonnull ItemStack emptyBucket(@Nonnull ItemStack stack, PlayerEntity player) {
-        return !player.abilities.isCreativeMode ? new ItemStack(CeramicBucketItems.CERAMIC_BUCKET) : stack;
+        //in creative mode bucket is always full
+        if (player.abilities.isCreativeMode) {
+            return stack;
+        }
+        //contains lava? no empty bucket remains.
+        if (FluidUtil.getFluidContained(stack).orElse(new FluidStack(Fluids.EMPTY, 0)).getFluid() == Fluids.LAVA) {
+            return ItemStack.EMPTY;
+        }
+        //else empty bucket
+        return new ItemStack(CeramicBucketItems.CERAMIC_BUCKET);
     }
 
     @Override

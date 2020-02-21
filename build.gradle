@@ -14,8 +14,8 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
 version = "${mod_version}-${minecraft_version}"
-group = 'cech12.ceramicshears' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'ceramicshears'
+group = 'cech12.ceramicbucket' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = 'ceramicbucket'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
