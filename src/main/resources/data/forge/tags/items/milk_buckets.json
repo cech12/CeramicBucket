@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:milk_bucket",
+    "ceramicbucket:ceramic_milk_bucket"
+  ]
+}
