@@ -4,9 +4,9 @@ import cech12.ceramicbucket.api.item.CeramicBucketItems;
 import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.SoundEvents;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -30,13 +30,16 @@ public class CeramicBucketMod {
             ItemStack itemstack = player.getHeldItem(event.getHand());
             if (itemstack.getItem() == CeramicBucketItems.CERAMIC_BUCKET && !player.abilities.isCreativeMode && !cowEntity.isChild()) {
                 player.playSound(SoundEvents.ENTITY_COW_MILK, 1.0F, 1.0F);
-                itemstack.shrink(1);
-                if (itemstack.isEmpty()) {
-                    player.setHeldItem(event.getHand(), new ItemStack(CeramicBucketItems.CERAMIC_MILK_BUCKET));
-                } else if (!player.inventory.addItemStackToInventory(new ItemStack(CeramicBucketItems.CERAMIC_MILK_BUCKET))) {
-                    player.dropItem(new ItemStack(CeramicBucketItems.CERAMIC_MILK_BUCKET), false);
+                if (!event.getWorld().isRemote()) {
+                    itemstack.shrink(1);
+                    if (itemstack.isEmpty()) {
+                        player.setHeldItem(event.getHand(), new ItemStack(CeramicBucketItems.CERAMIC_MILK_BUCKET));
+                    } else if (!player.inventory.addItemStackToInventory(new ItemStack(CeramicBucketItems.CERAMIC_MILK_BUCKET))) {
+                        player.dropItem(new ItemStack(CeramicBucketItems.CERAMIC_MILK_BUCKET), false);
+                    }
                 }
-                event.setResult(Event.Result.DENY);
+                event.setCanceled(true);
+                event.setCancellationResult(ActionResultType.SUCCESS);
             }
         }
     }
