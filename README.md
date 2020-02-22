@@ -2,6 +2,16 @@
 
 This is a **Minecraft Forge** mod for versions 1.14.4, 1.15.1, 1.15.2 and adds a **Ceramic Bucket** to the game.
 
+![All Buckets](https://raw.githubusercontent.com/cech12/CeramicBucket/master/material/all_buckets.png)
+
+Adds 2 items to the game:
+
+* **Unfired Clay Bucket**: Craftable with three clay balls.
+* **Ceramic Bucket**: Craftable in furnace with an Unfired Clay Bucket.
+
 ![Crafting](https://raw.githubusercontent.com/cech12/CeramicBucket/master/material/crafting.png)
+
+The **Ceramic Bucket** acts like a normal bucket and can contain **water**, **lava** and **milk**.
+The only difference is if the bucket contains lava, it melts as soon as you empty it.
 
 For more information check out the **Wiki**: https://github.com/cech12/CeramicBucket/wiki
