@@ -1,6 +1,7 @@
 package cech12.ceramicbucket.item;
 
 import cech12.ceramicbucket.api.item.CeramicBucketItems;
+import cech12.ceramicbucket.config.Config;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.IBucketPickupHandler;
@@ -42,8 +43,9 @@ public class CeramicBucketItem extends BucketItem {
         if (player.abilities.isCreativeMode) {
             return stack;
         }
-        //contains lava? no empty bucket remains.
-        if (FluidUtil.getFluidContained(stack).orElse(new FluidStack(Fluids.EMPTY, 0)).getFluid() == Fluids.LAVA) {
+        //contains hot fluid (configurable temperature, std. 1000) like lava (1300)? no empty bucket remains.
+        int minBreakTemperature = Config.CERAMIC_BUCKET_BREAK_TEMPERATURE.getValue();
+        if (minBreakTemperature >= 0 && FluidUtil.getFluidContained(stack).orElse(FluidStack.EMPTY).getFluid().getAttributes().getTemperature() >= minBreakTemperature) {
             return ItemStack.EMPTY;
         }
         //else empty bucket

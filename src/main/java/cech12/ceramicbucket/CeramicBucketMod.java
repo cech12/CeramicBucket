@@ -1,6 +1,7 @@
 package cech12.ceramicbucket;
 
 import cech12.ceramicbucket.api.item.CeramicBucketItems;
+import cech12.ceramicbucket.config.Config;
 import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -8,7 +9,9 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.SoundEvents;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 
 import static cech12.ceramicbucket.CeramicBucketMod.MOD_ID;
 
@@ -17,6 +20,11 @@ import static cech12.ceramicbucket.CeramicBucketMod.MOD_ID;
 public class CeramicBucketMod {
 
     public static final String MOD_ID = "ceramicbucket";
+
+    public CeramicBucketMod() {
+        //Config
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.COMMON, MOD_ID + "-common.toml");
+    }
 
     /**
      * Add cow interaction.
