@@ -10,4 +10,9 @@ public class CeramicBucketItems {
     public static Item CERAMIC_WATER_BUCKET;
     public static Item UNFIRED_CLAY_BUCKET;
 
+    public static Item PUFFERFISH_CERAMIC_BUCKET;
+    public static Item SALMON_CERAMIC_BUCKET;
+    public static Item COD_CERAMIC_BUCKET;
+    public static Item TROPICAL_FISH_CERAMIC_BUCKET;
+
 }

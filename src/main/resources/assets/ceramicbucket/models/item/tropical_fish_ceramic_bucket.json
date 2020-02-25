@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "ceramicbucket:item/tropical_fish_ceramic_bucket"
+  }
+}
