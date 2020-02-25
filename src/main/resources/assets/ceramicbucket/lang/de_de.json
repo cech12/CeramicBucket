@@ -1,7 +1,12 @@
 {
   "item.ceramicbucket.ceramic_bucket": "Keramikeimer",
-  "item.ceramicbucket.ceramic_lava_bucket": "Keramik Lavaeimer",
-  "item.ceramicbucket.ceramic_milk_bucket": "Keramik Milcheimer",
-  "item.ceramicbucket.ceramic_water_bucket": "Keramik Wassereimer",
-  "item.ceramicbucket.unfired_clay_bucket": "Ungebrannter Toneimer"
+  "item.ceramicbucket.ceramic_lava_bucket": "Keramik-Lavaeimer",
+  "item.ceramicbucket.ceramic_milk_bucket": "Keramik-Milcheimer",
+  "item.ceramicbucket.ceramic_water_bucket": "Keramik-Wassereimer",
+  "item.ceramicbucket.unfired_clay_bucket": "Ungebrannter Toneimer",
+
+  "item.ceramicbucket.pufferfish_ceramic_bucket": "Keramik-Kugelfischeimer",
+  "item.ceramicbucket.salmon_ceramic_bucket": "Keramik-Lachseimer",
+  "item.ceramicbucket.cod_ceramic_bucket": "Keramik-Kabeljaueimer",
+  "item.ceramicbucket.tropical_fish_ceramic_bucket": "Keramik-Tropenfischeimer"
 }
