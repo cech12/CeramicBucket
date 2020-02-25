@@ -11,7 +11,7 @@ Adds 2 items to the game:
 
 ![Crafting](https://raw.githubusercontent.com/cech12/CeramicBucket/master/material/crafting.png)
 
-The **Ceramic Bucket** acts like a normal bucket and can contain **water**, **lava** and **milk**.
+The **Ceramic Bucket** acts like a normal bucket and can contain **water**, **lava**, **milk** and **fishes**.
 The only difference is if the bucket contains lava, it melts as soon as you empty it.
 
 For more information check out the **Wiki**: https://github.com/cech12/CeramicBucket/wiki
