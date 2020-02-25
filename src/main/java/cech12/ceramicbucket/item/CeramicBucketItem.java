@@ -37,10 +37,9 @@ public class CeramicBucketItem extends BucketItem {
         super(supplier, builder);
     }
 
-    @Override
-    protected @Nonnull ItemStack emptyBucket(@Nonnull ItemStack stack, PlayerEntity player) {
+    public @Nonnull ItemStack emptyBucket(@Nonnull ItemStack stack, PlayerEntity player) {
         //in creative mode bucket is always full
-        if (player.abilities.isCreativeMode) {
+        if (player != null && player.abilities.isCreativeMode) {
             return stack;
         }
         //contains hot fluid (configurable temperature, std. 1000) like lava (1300)? no empty bucket remains.
@@ -57,7 +56,7 @@ public class CeramicBucketItem extends BucketItem {
         return new FluidCeramicBucketWrapper(stack);
     }
 
-    protected Item getCeramicVariant(Item bucket) {
+    public Item getCeramicVariant(Item bucket) {
         if (bucket.equals(Items.LAVA_BUCKET)) {
             return CeramicBucketItems.CERAMIC_LAVA_BUCKET;
         } else if (bucket.equals(Items.WATER_BUCKET)){
