@@ -22,8 +22,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -183,20 +181,6 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
                 return raytrace != null && this.tryPlaceContainedLiquid(player, worldIn, raytrace.getPos().offset(raytrace.getFace()), null, stack);
             }
         }
-    }
-
-    @Override
-    @Nonnull
-    public String getTranslationKey() {
-        return Util.makeTranslationKey("item", CeramicBucketItems.CERAMIC_BUCKET.getRegistryName());
-    }
-
-    @Override
-    @Nonnull
-    public ITextComponent getDisplayName(@Nonnull ItemStack stack) {
-        if (getFluid(stack) == Fluids.EMPTY)
-            return super.getDisplayName(stack);
-        return super.getDisplayName(stack).appendSibling(new StringTextComponent(" (").appendSibling(getFluid(stack).getDefaultState().getBlockState().getBlock().getNameTextComponent()).appendSibling(new StringTextComponent(")")));
     }
 
     @Deprecated
