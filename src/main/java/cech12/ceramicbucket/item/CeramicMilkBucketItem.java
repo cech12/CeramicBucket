@@ -29,6 +29,6 @@ public class CeramicMilkBucketItem extends MilkBucketItem {
 
     @Override
     public ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable CompoundNBT nbt) {
-        return new FluidCeramicBucketWrapper(stack);
+        return null; //new FilledCeramicBucketFluidHandler(stack);
     }
 }

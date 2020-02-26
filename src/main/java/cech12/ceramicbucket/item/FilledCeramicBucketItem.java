@@ -1,23 +1,23 @@
 package cech12.ceramicbucket.item;
 
 import cech12.ceramicbucket.api.item.CeramicBucketItems;
+
 import net.minecraft.fluid.Fluids;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
-public class CeramicBucketItem extends AbstractCeramicBucketItem {
+public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
 
-    public CeramicBucketItem(Item.Properties builder) {
+    public FilledCeramicBucketItem(Properties builder) {
         super(Fluids.EMPTY.delegate, builder);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     FluidHandlerItemStack getNewFluidHandlerInstance(@Nonnull ItemStack stack) {
-        return new CeramicBucketFluidHandler(stack, new ItemStack(CeramicBucketItems.FILLED_CERAMIC_BUCKET));
+        return new FilledCeramicBucketFluidHandler(stack, new ItemStack(CeramicBucketItems.CERAMIC_BUCKET));
     }
-
 }

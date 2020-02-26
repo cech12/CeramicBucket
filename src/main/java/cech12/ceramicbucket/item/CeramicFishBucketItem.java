@@ -26,12 +26,12 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class CeramicFishBucketItem extends CeramicBucketItem {
+public class CeramicFishBucketItem extends FilledCeramicBucketItem {
 
     private final EntityType<?> fishType;
 
     public CeramicFishBucketItem(EntityType<?> fishTypeIn, Supplier<? extends Fluid> supplier, Item.Properties builder) {
-        super(supplier, builder);
+        super(builder);
         this.fishType = fishTypeIn;
     }
 
