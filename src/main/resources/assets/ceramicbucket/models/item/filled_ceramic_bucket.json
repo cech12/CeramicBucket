@@ -2,6 +2,8 @@
   "parent": "item/generated",
   "textures": {
     "layer0": "ceramicbucket:item/ceramic_bucket",
-    "layer1": "ceramicbucket:item/water_overlay"
+    "layer1": "ceramicbucket:item/fluid_overlay_bright",
+    "layer2": "ceramicbucket:item/fluid_overlay_normal",
+    "layer3": "ceramicbucket:item/fluid_overlay_dark"
   }
 }
