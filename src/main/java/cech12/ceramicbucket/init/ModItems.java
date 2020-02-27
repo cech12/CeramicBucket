@@ -5,12 +5,27 @@ import cech12.ceramicbucket.item.CeramicBucketItem;
 import cech12.ceramicbucket.item.CeramicFishBucketItem;
 import cech12.ceramicbucket.item.CeramicMilkBucketItem;
 import cech12.ceramicbucket.item.FilledCeramicBucketItem;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.DispenserBlock;
+import net.minecraft.block.IBucketPickupHandler;
+import net.minecraft.dispenser.DefaultDispenseItemBehavior;
+import net.minecraft.dispenser.IBlockSource;
+import net.minecraft.dispenser.IDispenseItemBehavior;
 import net.minecraft.entity.EntityType;
+import net.minecraft.fluid.FlowingFluid;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.*;
+import net.minecraft.tileentity.DispenserTileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import javax.annotation.Nonnull;
 
 import static cech12.ceramicbucket.CeramicBucketMod.MOD_ID;
 
@@ -30,13 +45,13 @@ public class ModItems {
         CeramicBucketItems.TROPICAL_FISH_CERAMIC_BUCKET = registerItem("tropical_fish_ceramic_bucket", new CeramicFishBucketItem(EntityType.TROPICAL_FISH, (new Item.Properties()).maxStackSize(1).group(ItemGroup.MISC)));
 
         //dispense behaviour empty bucket
-        /*
         DispenserBlock.registerDispenseBehavior(CeramicBucketItems.CERAMIC_BUCKET, new DefaultDispenseItemBehavior() {
             private final DefaultDispenseItemBehavior dispenseBehavior = new DefaultDispenseItemBehavior();
 
             /**
              * Dispense the specified stack, play the dispense sound and spawn particles.
-             /
+             */
+            @Nonnull
             public ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
                 IWorld iworld = source.getWorld();
                 BlockPos blockpos = source.getBlockPos().offset(source.getBlockState().get(DispenserBlock.FACING));
@@ -47,17 +62,13 @@ public class ModItems {
                     if (!(fluid instanceof FlowingFluid)) {
                         return super.dispenseStack(source, stack);
                     } else {
-                        Item item = fluid.getFilledBucket();
-                        //Ceramic conversion
-                        if (stack.getItem() == CeramicBucketItems.CERAMIC_BUCKET) {
-                            item = ((CeramicBucketItem) stack.getItem()).getCeramicVariant(item);
-                        }
+                        ItemStack bucket = ((FilledCeramicBucketItem) CeramicBucketItems.FILLED_CERAMIC_BUCKET).getFilledInstance(fluid);
                         stack.shrink(1);
                         if (stack.isEmpty()) {
-                            return new ItemStack(item);
+                            return bucket;
                         } else {
-                            if (source.<DispenserTileEntity>getBlockTileEntity().addItemStack(new ItemStack(item)) < 0) {
-                                this.dispenseBehavior.dispense(source, new ItemStack(item));
+                            if (source.<DispenserTileEntity>getBlockTileEntity().addItemStack(bucket) < 0) {
+                                this.dispenseBehavior.dispense(source, bucket);
                             }
 
                             return stack;
@@ -75,31 +86,25 @@ public class ModItems {
 
             /**
              * Dispense the specified stack, play the dispense sound and spawn particles.
-             /
+             */
+            @Nonnull
             public ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
-                BucketItem bucketitem = (BucketItem)stack.getItem();
+                FilledCeramicBucketItem bucketItem = (FilledCeramicBucketItem)stack.getItem();
                 BlockPos blockpos = source.getBlockPos().offset(source.getBlockState().get(DispenserBlock.FACING));
                 World world = source.getWorld();
-                if (bucketitem.tryPlaceContainedLiquid((PlayerEntity)null, world, blockpos, (BlockRayTraceResult)null)) {
-                    bucketitem.onLiquidPlaced(world, stack, blockpos);
-                    //Ceramic conversion
-                    if (stack.getItem() instanceof CeramicBucketItem) {
-                        return ((CeramicBucketItem) stack.getItem()).emptyBucket(stack, null);
-                    }
-                    return new ItemStack(CeramicBucketItems.CERAMIC_BUCKET);
+                if (bucketItem.tryPlaceContainedLiquid(null, world, blockpos, null, stack)) {
+                    bucketItem.onLiquidPlaced(world, stack, blockpos);
+                    return bucketItem.emptyBucket(stack, null);
                 } else {
                     return this.dispenseBehaviour.dispense(source, stack);
                 }
             }
         };
-        DispenserBlock.registerDispenseBehavior(CeramicBucketItems.CERAMIC_LAVA_BUCKET, idispenseitembehavior);
-        DispenserBlock.registerDispenseBehavior(CeramicBucketItems.CERAMIC_WATER_BUCKET, idispenseitembehavior);
+        DispenserBlock.registerDispenseBehavior(CeramicBucketItems.FILLED_CERAMIC_BUCKET, idispenseitembehavior);
         DispenserBlock.registerDispenseBehavior(CeramicBucketItems.PUFFERFISH_CERAMIC_BUCKET, idispenseitembehavior);
         DispenserBlock.registerDispenseBehavior(CeramicBucketItems.SALMON_CERAMIC_BUCKET, idispenseitembehavior);
         DispenserBlock.registerDispenseBehavior(CeramicBucketItems.COD_CERAMIC_BUCKET, idispenseitembehavior);
         DispenserBlock.registerDispenseBehavior(CeramicBucketItems.TROPICAL_FISH_CERAMIC_BUCKET, idispenseitembehavior);
-
-         */
     }
 
     private static Item registerItem(String name, Item item) {

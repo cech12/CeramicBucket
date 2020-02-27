@@ -31,8 +31,8 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
         return new FilledCeramicBucketFluidHandler(stack, new ItemStack(CeramicBucketItems.CERAMIC_BUCKET));
     }
 
-    private ItemStack getFilledInstance(@Nonnull Fluid fluid) {
-        return fill(super.getDefaultInstance(), new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME));
+    public ItemStack getFilledInstance(@Nonnull Fluid fluid) {
+        return fill(new ItemStack(this), new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME));
     }
 
     @Nonnull

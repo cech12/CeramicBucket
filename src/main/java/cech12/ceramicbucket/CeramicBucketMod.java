@@ -2,6 +2,7 @@ package cech12.ceramicbucket;
 
 import cech12.ceramicbucket.api.item.CeramicBucketItems;
 import cech12.ceramicbucket.config.Config;
+import cech12.ceramicbucket.item.CeramicFishBucketItem;
 import cech12.ceramicbucket.item.FilledCeramicBucketItem;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.passive.CowEntity;
@@ -67,13 +68,13 @@ public class CeramicBucketMod {
                     //get ceramic variant
                     ItemStack bucket;
                     if (fishEntity instanceof PufferfishEntity) {
-                        bucket = CeramicBucketItems.PUFFERFISH_CERAMIC_BUCKET.getDefaultInstance();
+                        bucket = ((CeramicFishBucketItem) CeramicBucketItems.PUFFERFISH_CERAMIC_BUCKET).getFilledInstance();
                     } else if (fishEntity instanceof CodEntity) {
-                        bucket = CeramicBucketItems.COD_CERAMIC_BUCKET.getDefaultInstance();
+                        bucket = ((CeramicFishBucketItem) CeramicBucketItems.COD_CERAMIC_BUCKET).getFilledInstance();
                     } else if (fishEntity instanceof TropicalFishEntity) {
-                        bucket = CeramicBucketItems.TROPICAL_FISH_CERAMIC_BUCKET.getDefaultInstance();
+                        bucket = ((CeramicFishBucketItem) CeramicBucketItems.TROPICAL_FISH_CERAMIC_BUCKET).getFilledInstance();
                     } else {
-                        bucket = CeramicBucketItems.SALMON_CERAMIC_BUCKET.getDefaultInstance();
+                        bucket = ((CeramicFishBucketItem) CeramicBucketItems.SALMON_CERAMIC_BUCKET).getFilledInstance();
                     }
                     //setBucketData
                     if (fishEntity.hasCustomName()) {

@@ -7,6 +7,7 @@ import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.passive.fish.AbstractFishEntity;
 import net.minecraft.entity.passive.fish.TropicalFishEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -16,6 +17,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IWorld;
@@ -36,6 +38,10 @@ public class CeramicFishBucketItem extends FilledCeramicBucketItem {
         this.fishType = fishTypeIn;
     }
 
+    public ItemStack getFilledInstance() {
+        return super.getFilledInstance(Fluids.WATER);
+    }
+
     public void onLiquidPlaced(World worldIn, ItemStack p_203792_2_, BlockPos pos) {
         if (!worldIn.isRemote) {
             this.placeFish(worldIn, p_203792_2_, pos);
@@ -43,12 +49,12 @@ public class CeramicFishBucketItem extends FilledCeramicBucketItem {
 
     }
 
-    protected void playEmptySound(@Nullable PlayerEntity player, IWorld worldIn, BlockPos pos) {
+    protected void playEmptySound(@Nullable PlayerEntity player, IWorld worldIn, @Nonnull BlockPos pos) {
         worldIn.playSound(player, pos, SoundEvents.ITEM_BUCKET_EMPTY_FISH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
     }
 
     private void placeFish(World worldIn, ItemStack p_205357_2_, BlockPos pos) {
-        Entity entity = this.fishType.spawn(worldIn, p_205357_2_, (PlayerEntity)null, pos, SpawnReason.BUCKET, true, false);
+        Entity entity = this.fishType.spawn(worldIn, p_205357_2_, null, pos, SpawnReason.BUCKET, true, false);
         if (entity != null) {
             ((AbstractFishEntity)entity).setFromBucket(true);
         }
@@ -93,7 +99,13 @@ public class CeramicFishBucketItem extends FilledCeramicBucketItem {
     @Override
     public void fillItemGroup(@Nonnull ItemGroup group, @Nonnull NonNullList<ItemStack> items) {
         if (this.isInGroup(group)) {
-            items.add(new ItemStack(this));
+            items.add(this.getFilledInstance());
         }
+    }
+
+    @Override
+    @Nonnull
+    public ITextComponent getDisplayName(@Nonnull ItemStack stack) {
+        return super.getDisplayName(stack).appendSibling(new StringTextComponent(" (").appendSibling(fishType.getName()).appendSibling(new StringTextComponent(")")));
     }
 }
