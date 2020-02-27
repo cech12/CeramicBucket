@@ -2,7 +2,10 @@ package cech12.ceramicbucket.init;
 
 import cech12.ceramicbucket.api.item.CeramicBucketItems;
 import cech12.ceramicbucket.item.CeramicBucketItem;
+import cech12.ceramicbucket.item.CeramicFishBucketItem;
+import cech12.ceramicbucket.item.CeramicMilkBucketItem;
 import cech12.ceramicbucket.item.FilledCeramicBucketItem;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.*;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -19,16 +22,13 @@ public class ModItems {
         CeramicBucketItems.UNFIRED_CLAY_BUCKET = registerItem("unfired_clay_bucket", new Item((new Item.Properties()).group(ItemGroup.MISC)));
         CeramicBucketItems.CERAMIC_BUCKET = registerItem("ceramic_bucket", new CeramicBucketItem((new Item.Properties()).maxStackSize(16).group(ItemGroup.MISC)));
         CeramicBucketItems.FILLED_CERAMIC_BUCKET = registerItem("filled_ceramic_bucket", new FilledCeramicBucketItem((new Item.Properties()).maxStackSize(1).group(ItemGroup.MISC)));
-        /*
-        CeramicBucketItems.CERAMIC_LAVA_BUCKET = registerItem("ceramic_lava_bucket", new CeramicBucketItem(Fluids.LAVA.delegate, (new Item.Properties()).containerItem(CeramicBucketItems.CERAMIC_BUCKET).maxStackSize(1).group(ItemGroup.MISC)));
         CeramicBucketItems.CERAMIC_MILK_BUCKET = registerItem("ceramic_milk_bucket", new CeramicMilkBucketItem((new Item.Properties()).containerItem(CeramicBucketItems.CERAMIC_BUCKET).maxStackSize(1).group(ItemGroup.MISC)));
-        CeramicBucketItems.CERAMIC_WATER_BUCKET = registerItem("ceramic_water_bucket", new CeramicBucketItem(Fluids.WATER.delegate, (new Item.Properties()).containerItem(CeramicBucketItems.CERAMIC_BUCKET).maxStackSize(1).group(ItemGroup.MISC)));
 
-        CeramicBucketItems.PUFFERFISH_CERAMIC_BUCKET = registerItem("pufferfish_ceramic_bucket", new CeramicFishBucketItem(EntityType.PUFFERFISH, Fluids.WATER.delegate, (new Item.Properties()).maxStackSize(1).group(ItemGroup.MISC)));
-        CeramicBucketItems.SALMON_CERAMIC_BUCKET = registerItem("salmon_ceramic_bucket", new CeramicFishBucketItem(EntityType.SALMON, Fluids.WATER.delegate, (new Item.Properties()).maxStackSize(1).group(ItemGroup.MISC)));
-        CeramicBucketItems.COD_CERAMIC_BUCKET = registerItem("cod_ceramic_bucket", new CeramicFishBucketItem(EntityType.COD, Fluids.WATER.delegate, (new Item.Properties()).maxStackSize(1).group(ItemGroup.MISC)));
-        CeramicBucketItems.TROPICAL_FISH_CERAMIC_BUCKET = registerItem("tropical_fish_ceramic_bucket", new CeramicFishBucketItem(EntityType.TROPICAL_FISH, Fluids.WATER.delegate, (new Item.Properties()).maxStackSize(1).group(ItemGroup.MISC)));
-         */
+        CeramicBucketItems.PUFFERFISH_CERAMIC_BUCKET = registerItem("pufferfish_ceramic_bucket", new CeramicFishBucketItem(EntityType.PUFFERFISH, (new Item.Properties()).maxStackSize(1).group(ItemGroup.MISC)));
+        CeramicBucketItems.SALMON_CERAMIC_BUCKET = registerItem("salmon_ceramic_bucket", new CeramicFishBucketItem(EntityType.SALMON, (new Item.Properties()).maxStackSize(1).group(ItemGroup.MISC)));
+        CeramicBucketItems.COD_CERAMIC_BUCKET = registerItem("cod_ceramic_bucket", new CeramicFishBucketItem(EntityType.COD, (new Item.Properties()).maxStackSize(1).group(ItemGroup.MISC)));
+        CeramicBucketItems.TROPICAL_FISH_CERAMIC_BUCKET = registerItem("tropical_fish_ceramic_bucket", new CeramicFishBucketItem(EntityType.TROPICAL_FISH, (new Item.Properties()).maxStackSize(1).group(ItemGroup.MISC)));
+
         //dispense behaviour empty bucket
         /*
         DispenserBlock.registerDispenseBehavior(CeramicBucketItems.CERAMIC_BUCKET, new DefaultDispenseItemBehavior() {

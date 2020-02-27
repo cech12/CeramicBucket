@@ -44,6 +44,7 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
     /**
      * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
      */
+    @Override
     public void fillItemGroup(@Nonnull ItemGroup group, @Nonnull NonNullList<ItemStack> items) {
         if (this.isInGroup(group)) {
             for(Fluid fluid : ForgeRegistries.FLUIDS) {
@@ -52,7 +53,6 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
                 }
             }
         }
-
     }
 
     @Override

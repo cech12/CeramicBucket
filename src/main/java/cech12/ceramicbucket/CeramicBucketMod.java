@@ -2,12 +2,13 @@ package cech12.ceramicbucket;
 
 import cech12.ceramicbucket.api.item.CeramicBucketItems;
 import cech12.ceramicbucket.config.Config;
+import cech12.ceramicbucket.item.FilledCeramicBucketItem;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.entity.passive.fish.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResultType;
@@ -58,23 +59,22 @@ public class CeramicBucketMod {
             AbstractFishEntity fishEntity = (AbstractFishEntity) event.getTarget();
             PlayerEntity player = event.getPlayer();
             ItemStack itemstack = player.getHeldItem(event.getHand());
-            if (itemstack.getItem() == CeramicBucketItems.CERAMIC_WATER_BUCKET && fishEntity.isAlive()) {
+            if (itemstack.getItem() == CeramicBucketItems.FILLED_CERAMIC_BUCKET && ((FilledCeramicBucketItem) itemstack.getItem()).getFluid(itemstack) == Fluids.WATER && fishEntity.isAlive()) {
                 fishEntity.playSound(SoundEvents.ITEM_BUCKET_FILL_FISH, 1.0F, 1.0F);
                 if (!event.getWorld().isRemote()) {
                     itemstack.shrink(1);
                     //-------------------------------------------
                     //get ceramic variant
-                    Item item;
+                    ItemStack bucket;
                     if (fishEntity instanceof PufferfishEntity) {
-                        item = CeramicBucketItems.PUFFERFISH_CERAMIC_BUCKET;
+                        bucket = CeramicBucketItems.PUFFERFISH_CERAMIC_BUCKET.getDefaultInstance();
                     } else if (fishEntity instanceof CodEntity) {
-                        item = CeramicBucketItems.COD_CERAMIC_BUCKET;
+                        bucket = CeramicBucketItems.COD_CERAMIC_BUCKET.getDefaultInstance();
                     } else if (fishEntity instanceof TropicalFishEntity) {
-                        item = CeramicBucketItems.TROPICAL_FISH_CERAMIC_BUCKET;
+                        bucket = CeramicBucketItems.TROPICAL_FISH_CERAMIC_BUCKET.getDefaultInstance();
                     } else {
-                        item = CeramicBucketItems.SALMON_CERAMIC_BUCKET;
+                        bucket = CeramicBucketItems.SALMON_CERAMIC_BUCKET.getDefaultInstance();
                     }
-                    ItemStack bucket = new ItemStack(item);
                     //setBucketData
                     if (fishEntity.hasCustomName()) {
                         bucket.setDisplayName(fishEntity.getCustomName());

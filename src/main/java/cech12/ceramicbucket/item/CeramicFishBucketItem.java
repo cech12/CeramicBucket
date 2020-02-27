@@ -7,10 +7,11 @@ import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.passive.fish.AbstractFishEntity;
 import net.minecraft.entity.passive.fish.TropicalFishEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
@@ -22,15 +23,15 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class CeramicFishBucketItem extends FilledCeramicBucketItem {
 
     private final EntityType<?> fishType;
 
-    public CeramicFishBucketItem(EntityType<?> fishTypeIn, Supplier<? extends Fluid> supplier, Item.Properties builder) {
+    public CeramicFishBucketItem(EntityType<?> fishTypeIn, Item.Properties builder) {
         super(builder);
         this.fishType = fishTypeIn;
     }
@@ -84,6 +85,15 @@ public class CeramicFishBucketItem extends FilledCeramicBucketItem {
                 tooltip.add(itextcomponent);
             }
         }
+    }
 
+    /**
+     * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
+     */
+    @Override
+    public void fillItemGroup(@Nonnull ItemGroup group, @Nonnull NonNullList<ItemStack> items) {
+        if (this.isInGroup(group)) {
+            items.add(new ItemStack(this));
+        }
     }
 }
