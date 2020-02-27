@@ -2,6 +2,7 @@ package cech12.ceramicbucket.item;
 
 import cech12.ceramicbucket.api.item.CeramicBucketItems;
 
+import cech12.ceramicbucket.utils.ColorUtils;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
@@ -11,6 +12,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidAttributes;
@@ -49,7 +51,7 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem implement
     public void fillItemGroup(@Nonnull ItemGroup group, @Nonnull NonNullList<ItemStack> items) {
         if (this.isInGroup(group)) {
             for(Fluid fluid : ForgeRegistries.FLUIDS) {
-                if (fluid.getDefaultState().isSource()) {
+                if (fluid.getDefaultState().isSource() && fluid.getFilledBucket() != null) {
                     items.add(getFilledInstance(fluid));
                 }
             }
@@ -67,7 +69,15 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem implement
     public ITextComponent getDisplayName(@Nonnull ItemStack stack) {
         if (getFluid(stack) == Fluids.EMPTY)
             return super.getDisplayName(stack);
-        return super.getDisplayName(stack).appendSibling(new StringTextComponent(" (").appendSibling(getFluid(stack).getDefaultState().getBlockState().getBlock().getNameTextComponent()).appendSibling(new StringTextComponent(")")));
+        ITextComponent text;
+        if (getFluid(stack) == Fluids.WATER || getFluid(stack) == Fluids.LAVA) {
+            //vanilla fluids
+            text = getFluid(stack).getDefaultState().getBlockState().getBlock().getNameTextComponent();
+        } else {
+            //fluids registered by mods
+            text = new TranslationTextComponent(Util.makeTranslationKey("fluid", ForgeRegistries.FLUIDS.getKey(getFluid(stack))));
+        }
+        return super.getDisplayName(stack).appendSibling(new StringTextComponent(" (")).appendSibling(text).appendSibling(new StringTextComponent(")"));
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -83,7 +93,7 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem implement
                     case 3: return 16733234; //red
                 }
             }
-            return fluid.getAttributes().getColor();
+            return ColorUtils.getFluidColor(fluid);
         }
         return -1;
     }
