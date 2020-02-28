@@ -31,6 +31,10 @@
       "model": "ceramicbucket:item/filled_ceramic_buckets/industrialforegoing/meat"
     },
     {
+      "predicate": { "industrialforegoing:milk": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/industrialforegoing/milk"
+    },
+    {
       "predicate": { "industrialforegoing:pink_slime": 1 },
       "model": "ceramicbucket:item/filled_ceramic_buckets/industrialforegoing/pink_slime"
     },
