@@ -2,8 +2,6 @@ package cech12.ceramicbucket.item;
 
 import cech12.ceramicbucket.api.item.CeramicBucketItems;
 
-import cech12.ceramicbucket.utils.ColorUtils;
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemGroup;
@@ -22,7 +20,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 
-public class FilledCeramicBucketItem extends AbstractCeramicBucketItem implements IItemColor {
+public class FilledCeramicBucketItem extends AbstractCeramicBucketItem { //implements IItemColor {
 
     public FilledCeramicBucketItem(Properties builder) {
         super(Fluids.EMPTY.delegate, builder);
@@ -53,7 +51,13 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem implement
             for(Fluid fluid : ForgeRegistries.FLUIDS) {
                 if (fluid.getDefaultState().isSource() && fluid.getFilledBucket() != null) {
                     items.add(getFilledInstance(fluid));
+                    //add a property per fluid
+                    this.addPropertyOverride(fluid.getRegistryName(),
+                            (stack, world, livingEntity) ->
+                                    ((FilledCeramicBucketItem) stack.getItem()).getFluid(stack).getRegistryName().equals(fluid.getRegistryName()) ? 1.0F : 0.0F
+                    );
                 }
+
             }
         }
     }
@@ -80,21 +84,4 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem implement
         return super.getDisplayName(stack).appendSibling(new StringTextComponent(" (")).appendSibling(text).appendSibling(new StringTextComponent(")"));
     }
 
-    @OnlyIn(Dist.CLIENT)
-    @Override
-    public int getColor(@Nonnull ItemStack stack, int layer) {
-        //color layer1
-        if (layer > 0 && stack.getItem() instanceof FilledCeramicBucketItem) {
-            Fluid fluid = ((FilledCeramicBucketItem) stack.getItem()).getFluid(stack).getFluid();
-            if (fluid == Fluids.LAVA) { //lava has multiple colors
-                switch (layer) {
-                    case 1: return 14996060; //yellow
-                    case 2: return 16751943; //orange
-                    case 3: return 16733234; //red
-                }
-            }
-            return ColorUtils.getFluidColor(fluid);
-        }
-        return -1;
-    }
 }

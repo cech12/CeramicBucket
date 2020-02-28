@@ -2,8 +2,62 @@
   "parent": "item/generated",
   "textures": {
     "layer0": "ceramicbucket:item/ceramic_bucket",
-    "layer1": "ceramicbucket:item/fluid_overlay_bright",
-    "layer2": "ceramicbucket:item/fluid_overlay_normal",
-    "layer3": "ceramicbucket:item/fluid_overlay_dark"
-  }
+    "layer1": "ceramicbucket:item/fluids/unknown"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "minecraft:water": 1
+      },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/minecraft_water"
+    },
+    {
+      "predicate": {
+        "minecraft:lava": 1
+      },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/minecraft_lava"
+    },
+    {
+      "predicate": {
+        "industrialforegoing:biofuel": 1
+      },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/industrialforegoing_biofuel"
+    },
+    {
+      "predicate": {
+        "industrialforegoing:essence": 1
+      },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/industrialforegoing_essence"
+    },
+    {
+      "predicate": {
+        "industrialforegoing:latex": 1
+      },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/industrialforegoing_latex"
+    },
+    {
+      "predicate": {
+        "industrialforegoing:meat": 1
+      },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/industrialforegoing_meat"
+    },
+    {
+      "predicate": {
+        "industrialforegoing:pink_slime": 1
+      },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/industrialforegoing_pink_slime"
+    },
+    {
+      "predicate": {
+        "industrialforegoing:sewage": 1
+      },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/industrialforegoing_sewage"
+    },
+    {
+      "predicate": {
+        "industrialforegoing:sludge": 1
+      },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/industrialforegoing_sludge"
+    }
+  ]
 }
