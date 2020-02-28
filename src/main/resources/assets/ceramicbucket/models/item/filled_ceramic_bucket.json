@@ -6,58 +6,119 @@
   },
   "overrides": [
     {
-      "predicate": {
-        "minecraft:water": 1
-      },
-      "model": "ceramicbucket:item/filled_ceramic_buckets/minecraft_water"
+      "predicate": { "minecraft:water": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/minecraft/water"
     },
     {
-      "predicate": {
-        "minecraft:lava": 1
-      },
-      "model": "ceramicbucket:item/filled_ceramic_buckets/minecraft_lava"
+      "predicate": { "minecraft:lava": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/minecraft/lava"
+    },
+
+    {
+      "predicate": { "industrialforegoing:biofuel": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/industrialforegoing/biofuel"
     },
     {
-      "predicate": {
-        "industrialforegoing:biofuel": 1
-      },
-      "model": "ceramicbucket:item/filled_ceramic_buckets/industrialforegoing_biofuel"
+      "predicate": { "industrialforegoing:essence": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/industrialforegoing/essence"
     },
     {
-      "predicate": {
-        "industrialforegoing:essence": 1
-      },
-      "model": "ceramicbucket:item/filled_ceramic_buckets/industrialforegoing_essence"
+      "predicate": { "industrialforegoing:latex": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/industrialforegoing/latex"
     },
     {
-      "predicate": {
-        "industrialforegoing:latex": 1
-      },
-      "model": "ceramicbucket:item/filled_ceramic_buckets/industrialforegoing_latex"
+      "predicate": { "industrialforegoing:meat": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/industrialforegoing/meat"
     },
     {
-      "predicate": {
-        "industrialforegoing:meat": 1
-      },
-      "model": "ceramicbucket:item/filled_ceramic_buckets/industrialforegoing_meat"
+      "predicate": { "industrialforegoing:pink_slime": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/industrialforegoing/pink_slime"
     },
     {
-      "predicate": {
-        "industrialforegoing:pink_slime": 1
-      },
-      "model": "ceramicbucket:item/filled_ceramic_buckets/industrialforegoing_pink_slime"
+      "predicate": { "industrialforegoing:sewage": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/industrialforegoing/sewage"
     },
     {
-      "predicate": {
-        "industrialforegoing:sewage": 1
-      },
-      "model": "ceramicbucket:item/filled_ceramic_buckets/industrialforegoing_sewage"
+      "predicate": { "industrialforegoing:sludge": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/industrialforegoing/sludge"
+    },
+
+    {
+      "predicate": { "mekanism:brine": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/mekanism/brine"
     },
     {
-      "predicate": {
-        "industrialforegoing:sludge": 1
-      },
-      "model": "ceramicbucket:item/filled_ceramic_buckets/industrialforegoing_sludge"
+      "predicate": { "mekanism:chlorine": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/mekanism/chlorine"
+    },
+    {
+      "predicate": { "mekanism:deuterium": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/mekanism/deuterium"
+    },
+    {
+      "predicate": { "mekanism:ethene": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/mekanism/ethene"
+    },
+    {
+      "predicate": { "mekanism:fusion_fuel": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/mekanism/fusion_fuel"
+    },
+    {
+      "predicate": { "mekanism:heavy_water": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/mekanism/heavy_water"
+    },
+    {
+      "predicate": { "mekanism:hydrogen": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/mekanism/hydrogen"
+    },
+    {
+      "predicate": { "mekanism:hydrogen_chloride": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/mekanism/hydrogen_chloride"
+    },
+    {
+      "predicate": { "mekanism:lithium": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/mekanism/lithium"
+    },
+    {
+      "predicate": { "mekanism:oxygen": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/mekanism/oxygen"
+    },
+    {
+      "predicate": { "mekanism:sodium": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/mekanism/sodium"
+    },
+    {
+      "predicate": { "mekanism:steam": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/mekanism/steam"
+    },
+    {
+      "predicate": { "mekanism:sulfur_dioxide": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/mekanism/sulfur_dioxide"
+    },
+    {
+      "predicate": { "mekanism:sulfur_trioxide": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/mekanism/sulfur_trioxide"
+    },
+    {
+      "predicate": { "mekanism:sulfuric_acid": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/mekanism/sulfuric_acid"
+    },
+    {
+      "predicate": { "mekanism:tritium": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/mekanism/tritium"
+    },
+
+    {
+      "predicate": { "vehicle:blaze_juice": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/vehicle/blaze_juice"
+    },
+    {
+      "predicate": { "vehicle:ender_sap": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/vehicle/ender_sap"
+    },
+    {
+      "predicate": { "vehicle:fuelium": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/vehicle/fuelium"
     }
   ]
 }
