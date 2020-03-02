@@ -1,5 +1,7 @@
 {
   "item.ceramicbucket.ceramic_bucket": "Ceramic Bucket",
-  "item.ceramicbucket.ceramic_milk_bucket": "Ceramic Bucket (Milk)",
+  "item.ceramicbucket.ceramic_fish_bucket": "Ceramic Bucket of %s",
+  "item.ceramicbucket.ceramic_milk_bucket": "Milk Ceramic Bucket",
+  "item.ceramicbucket.filled_ceramic_bucket": "%s Ceramic Bucket",
   "item.ceramicbucket.unfired_clay_bucket": "Unfired Clay Bucket"
 }

@@ -17,7 +17,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IWorld;
@@ -106,6 +105,6 @@ public class CeramicFishBucketItem extends FilledCeramicBucketItem {
     @Override
     @Nonnull
     public ITextComponent getDisplayName(@Nonnull ItemStack stack) {
-        return super.getDisplayName(stack).appendSibling(new StringTextComponent(" (").appendSibling(fishType.getName()).appendSibling(new StringTextComponent(")")));
+        return new TranslationTextComponent("item.ceramicbucket.ceramic_fish_bucket", fishType.getName());
     }
 }

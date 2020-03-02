@@ -9,7 +9,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -71,17 +70,19 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem { //imple
     @Override
     @Nonnull
     public ITextComponent getDisplayName(@Nonnull ItemStack stack) {
-        if (getFluid(stack) == Fluids.EMPTY)
-            return super.getDisplayName(stack);
-        ITextComponent text;
-        if (getFluid(stack) == Fluids.WATER || getFluid(stack) == Fluids.LAVA) {
-            //vanilla fluids
-            text = getFluid(stack).getDefaultState().getBlockState().getBlock().getNameTextComponent();
+        if (getFluid(stack) == Fluids.EMPTY) {
+            return new TranslationTextComponent("item.ceramicbucket.ceramic_bucket");
         } else {
-            //fluids registered by mods
-            text = new TranslationTextComponent(Util.makeTranslationKey("fluid", ForgeRegistries.FLUIDS.getKey(getFluid(stack))));
+            ITextComponent fluidText;
+            if (getFluid(stack) == Fluids.WATER || getFluid(stack) == Fluids.LAVA) {
+                //vanilla fluids
+                fluidText = getFluid(stack).getDefaultState().getBlockState().getBlock().getNameTextComponent();
+            } else {
+                //fluids registered by mods
+                fluidText = new TranslationTextComponent(Util.makeTranslationKey("fluid", ForgeRegistries.FLUIDS.getKey(getFluid(stack))));
+            }
+            return  new TranslationTextComponent("item.ceramicbucket.filled_ceramic_bucket", fluidText);
         }
-        return super.getDisplayName(stack).appendSibling(new StringTextComponent(" (")).appendSibling(text).appendSibling(new StringTextComponent(")"));
     }
 
 }
