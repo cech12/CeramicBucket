@@ -113,6 +113,35 @@
     },
 
     {
+      "predicate": { "omegacraft:alkene": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/omegacraft/alkene"
+    },
+    {
+      "predicate": { "omegacraft:lpg": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/omegacraft/lpg"
+    },
+    {
+      "predicate": { "omegacraft:oil": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/omegacraft/oil"
+    },
+    {
+      "predicate": { "omegacraft:refined_fuel": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/omegacraft/refined_fuel"
+    },
+    {
+      "predicate": { "omegacraft:refined_oil": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/omegacraft/refined_oil"
+    },
+    {
+      "predicate": { "omegacraft:rpetrol": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/omegacraft/rpetrol"
+    },
+    {
+      "predicate": { "omegacraft:tar": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/omegacraft/tar"
+    },
+
+    {
       "predicate": { "vehicle:blaze_juice": 1 },
       "model": "ceramicbucket:item/filled_ceramic_buckets/vehicle/blaze_juice"
     },
