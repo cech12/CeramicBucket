@@ -18,5 +18,6 @@ All fluids of following mods are official supported:
 * [Industrial Foregoing (1.14.4-2.1.2-582ea8b & 1.15.2-2.2.1-f27c515)](https://www.curseforge.com/minecraft/mc-mods/industrial-foregoing)
 * [Mekanism (1.15) (9.9.11.403) (alpha)](https://www.curseforge.com/minecraft/mc-mods/mekanism)
 * [MrCrayfish's Vehicle Mod (1.15) (0.42.7)](https://www.curseforge.com/minecraft/mc-mods/mrcrayfishs-vehicle-mod)
+* [Omega Craft 4.0.9 (1.14 & 1.15)](https://www.curseforge.com/minecraft/mc-mods/omega-craft-mod)
 
 For more information check out the **Wiki**: https://github.com/cech12/CeramicBucket/wiki
