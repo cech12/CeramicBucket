@@ -20,5 +20,6 @@ All fluids of following mods are official supported:
 * [Mekanism Generators (1.15.2-9.9.16.408) (alpha)](https://www.curseforge.com/minecraft/mc-mods/mekanism-generators)
 * [MrCrayfish's Vehicle Mod (1.15) (0.42.7)](https://www.curseforge.com/minecraft/mc-mods/mrcrayfishs-vehicle-mod)
 * [Omega Craft 4.0.9 (1.14 & 1.15)](https://www.curseforge.com/minecraft/mc-mods/omega-craft-mod)
+* [Silent's Mechanisms (1.15.2-0.7.0+50 & 1.14.4-0.6.13+49) (beta)](https://www.curseforge.com/minecraft/mc-mods/silents-mechanisms)
 
 For more information check out the **Wiki**: https://github.com/cech12/CeramicBucket/wiki

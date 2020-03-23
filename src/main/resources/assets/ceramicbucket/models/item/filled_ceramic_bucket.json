@@ -159,6 +159,23 @@
     },
 
     {
+      "predicate": { "silents_mechanisms:diesel": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/silents_mechanisms/diesel"
+    },
+    {
+      "predicate": { "silents_mechanisms:ethane": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/silents_mechanisms/ethane"
+    },
+    {
+      "predicate": { "silents_mechanisms:oil": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/silents_mechanisms/oil"
+    },
+    {
+      "predicate": { "silents_mechanisms:polyethylene": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/silents_mechanisms/polyethylene"
+    },
+
+    {
       "predicate": { "vehicle:blaze_juice": 1 },
       "model": "ceramicbucket:item/filled_ceramic_buckets/vehicle/blaze_juice"
     },
