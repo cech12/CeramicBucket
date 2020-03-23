@@ -113,6 +113,23 @@
     },
 
     {
+      "predicate": { "mekanismgenerators:bioethanol": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/mekanismgenerators/bioethanol"
+    },
+    {
+      "predicate": { "mekanismgenerators:deuterium": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/mekanismgenerators/deuterium"
+    },
+    {
+      "predicate": { "mekanismgenerators:fusion_fuel": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/mekanismgenerators/fusion_fuel"
+    },
+    {
+      "predicate": { "mekanismgenerators:tritium": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/mekanismgenerators/tritium"
+    },
+
+    {
       "predicate": { "omegacraft:alkene": 1 },
       "model": "ceramicbucket:item/filled_ceramic_buckets/omegacraft/alkene"
     },
