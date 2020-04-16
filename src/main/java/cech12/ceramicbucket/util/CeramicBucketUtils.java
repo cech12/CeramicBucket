@@ -15,11 +15,11 @@ import java.util.List;
 
 public class CeramicBucketUtils {
 
-    private static final Tag<Fluid> MILK_TAG = new FluidTags.Wrapper(new ResourceLocation("forge:milk"));
+    private static final Tag<Fluid> MILK_TAG = new FluidTags.Wrapper(new ResourceLocation("forge", "milk"));
     private static final List<ResourceLocation> MILK_FLUIDS = new ArrayList<>();
     static {
         MILK_FLUIDS.add(new ResourceLocation("milk")); //like in FluidUtil.getFilledBucket(...)
-        MILK_FLUIDS.add(new ResourceLocation("industrialforegoing:milk")); //IndustrialForegoing has another id
+        MILK_FLUIDS.add(new ResourceLocation("industrialforegoing:milk")); //milk of IndustrialForegoing has not "forge:milk" tag
     }
 
     /**
