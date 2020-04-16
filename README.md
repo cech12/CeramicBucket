@@ -22,4 +22,6 @@ All fluids of following mods are official supported:
 * [Omega Craft 4.0.9 (1.14 & 1.15)](https://www.curseforge.com/minecraft/mc-mods/omega-craft-mod)
 * [Silent's Mechanisms (1.15.2-0.7.0+50 & 1.14.4-0.6.13+49) (beta)](https://www.curseforge.com/minecraft/mc-mods/silents-mechanisms)
 
+All milk fluids are supported if they have the fluid tag "forge:milk" or are listed above.
+
 For more information check out the **Wiki**: https://github.com/cech12/CeramicBucket/wiki
