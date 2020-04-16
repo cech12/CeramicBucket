@@ -1,6 +1,0 @@
-{
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "ceramicbucket:item/ceramic_milk_bucket"
-  }
-}

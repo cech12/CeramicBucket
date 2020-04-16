@@ -1,5 +1,7 @@
 package cech12.ceramicbucket.item;
 
+import cech12.ceramicbucket.api.item.CeramicBucketItems;
+import cech12.ceramicbucket.util.CeramicBucketUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
@@ -9,16 +11,20 @@ import javax.annotation.Nonnull;
 
 public class CeramicBucketFluidHandler extends FluidHandlerItemStack {
 
-    protected final ItemStack filledContainer;
+    protected final ItemStack filledContainer = new ItemStack(CeramicBucketItems.FILLED_CERAMIC_BUCKET);
+    protected final ItemStack filledMilkContainer = new ItemStack(CeramicBucketItems.CERAMIC_MILK_BUCKET);
 
-    public CeramicBucketFluidHandler(@Nonnull ItemStack container, @Nonnull ItemStack filledContainer) {
+    public CeramicBucketFluidHandler(@Nonnull ItemStack container) {
         super(container, FluidAttributes.BUCKET_VOLUME);
-        this.filledContainer = filledContainer;
     }
 
     @Override
     protected void setFluid(FluidStack fluid) {
-        this.container = this.filledContainer;
+        if (CeramicBucketUtils.isMilkFluid(fluid.getFluid())) {
+            this.container = this.filledMilkContainer;
+        } else {
+            this.container = this.filledContainer;
+        }
         super.setFluid(fluid);
     }
 

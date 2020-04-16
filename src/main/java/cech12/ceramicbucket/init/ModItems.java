@@ -5,6 +5,7 @@ import cech12.ceramicbucket.item.CeramicBucketItem;
 import cech12.ceramicbucket.item.CeramicFishBucketItem;
 import cech12.ceramicbucket.item.CeramicMilkBucketItem;
 import cech12.ceramicbucket.item.FilledCeramicBucketItem;
+import cech12.ceramicbucket.util.CeramicBucketUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.DispenserBlock;
@@ -62,7 +63,7 @@ public class ModItems {
                     if (!(fluid instanceof FlowingFluid)) {
                         return super.dispenseStack(source, stack);
                     } else {
-                        ItemStack bucket = ((FilledCeramicBucketItem) CeramicBucketItems.FILLED_CERAMIC_BUCKET).getFilledInstance(fluid);
+                        ItemStack bucket = CeramicBucketUtils.getFilledCeramicBucket(fluid);
                         stack.shrink(1);
                         if (stack.isEmpty()) {
                             return bucket;
@@ -101,6 +102,7 @@ public class ModItems {
             }
         };
         DispenserBlock.registerDispenseBehavior(CeramicBucketItems.FILLED_CERAMIC_BUCKET, idispenseitembehavior);
+        DispenserBlock.registerDispenseBehavior(CeramicBucketItems.CERAMIC_MILK_BUCKET, idispenseitembehavior);
         DispenserBlock.registerDispenseBehavior(CeramicBucketItems.PUFFERFISH_CERAMIC_BUCKET, idispenseitembehavior);
         DispenserBlock.registerDispenseBehavior(CeramicBucketItems.SALMON_CERAMIC_BUCKET, idispenseitembehavior);
         DispenserBlock.registerDispenseBehavior(CeramicBucketItems.COD_CERAMIC_BUCKET, idispenseitembehavior);

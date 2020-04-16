@@ -3,6 +3,7 @@ package cech12.ceramicbucket;
 import cech12.ceramicbucket.api.item.CeramicBucketItems;
 import cech12.ceramicbucket.config.Config;
 import cech12.ceramicbucket.item.CeramicFishBucketItem;
+import cech12.ceramicbucket.item.CeramicMilkBucketItem;
 import cech12.ceramicbucket.item.FilledCeramicBucketItem;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.passive.CowEntity;
@@ -48,9 +49,9 @@ public class CeramicBucketMod {
                 if (!event.getWorld().isRemote()) {
                     itemstack.shrink(1);
                     if (itemstack.isEmpty()) {
-                        player.setHeldItem(event.getHand(), new ItemStack(CeramicBucketItems.CERAMIC_MILK_BUCKET));
-                    } else if (!player.inventory.addItemStackToInventory(new ItemStack(CeramicBucketItems.CERAMIC_MILK_BUCKET))) {
-                        player.dropItem(new ItemStack(CeramicBucketItems.CERAMIC_MILK_BUCKET), false);
+                        player.setHeldItem(event.getHand(), ((CeramicMilkBucketItem)CeramicBucketItems.CERAMIC_MILK_BUCKET).getFilledInstance());
+                    } else if (!player.inventory.addItemStackToInventory(((CeramicMilkBucketItem)CeramicBucketItems.CERAMIC_MILK_BUCKET).getFilledInstance())) {
+                        player.dropItem(((CeramicMilkBucketItem)CeramicBucketItems.CERAMIC_MILK_BUCKET).getFilledInstance(), false);
                     }
                 }
                 event.setCanceled(true);

@@ -1,5 +1,6 @@
 package cech12.ceramicbucket.item;
 
+import cech12.ceramicbucket.api.item.CeramicBucketItems;
 import cech12.ceramicbucket.config.Config;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidAttributes;
@@ -11,11 +12,10 @@ import javax.annotation.Nonnull;
 
 public class FilledCeramicBucketFluidHandler extends FluidHandlerItemStack {
 
-    protected final ItemStack emptyContainer;
+    protected final ItemStack emptyContainer = new ItemStack(CeramicBucketItems.CERAMIC_BUCKET);
 
-    public FilledCeramicBucketFluidHandler(@Nonnull ItemStack container, @Nonnull ItemStack emptyContainer) {
+    public FilledCeramicBucketFluidHandler(@Nonnull ItemStack container) {
         super(container, FluidAttributes.BUCKET_VOLUME);
-        this.emptyContainer = emptyContainer;
     }
 
     @Override

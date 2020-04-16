@@ -1,6 +1,5 @@
 package cech12.ceramicbucket.item;
 
-import cech12.ceramicbucket.api.item.CeramicBucketItems;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -17,7 +16,7 @@ public class CeramicBucketItem extends AbstractCeramicBucketItem {
     @Nonnull
     @Override
     FluidHandlerItemStack getNewFluidHandlerInstance(@Nonnull ItemStack stack) {
-        return new CeramicBucketFluidHandler(stack, new ItemStack(CeramicBucketItems.FILLED_CERAMIC_BUCKET));
+        return new CeramicBucketFluidHandler(stack);
     }
 
 }

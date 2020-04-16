@@ -2,6 +2,7 @@ package cech12.ceramicbucket.item;
 
 import cech12.ceramicbucket.api.item.CeramicBucketItems;
 
+import cech12.ceramicbucket.util.CeramicBucketUtils;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemGroup;
@@ -19,7 +20,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 
-public class FilledCeramicBucketItem extends AbstractCeramicBucketItem { //implements IItemColor {
+public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
 
     public FilledCeramicBucketItem(Properties builder) {
         super(Fluids.EMPTY.delegate, builder);
@@ -28,7 +29,7 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem { //imple
     @Nonnull
     @Override
     FluidHandlerItemStack getNewFluidHandlerInstance(@Nonnull ItemStack stack) {
-        return new FilledCeramicBucketFluidHandler(stack, new ItemStack(CeramicBucketItems.CERAMIC_BUCKET));
+        return new FilledCeramicBucketFluidHandler(stack);
     }
 
     public ItemStack getFilledInstance(@Nonnull Fluid fluid) {
@@ -47,8 +48,9 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem { //imple
     @Override
     public void fillItemGroup(@Nonnull ItemGroup group, @Nonnull NonNullList<ItemStack> items) {
         if (this.isInGroup(group)) {
-            for(Fluid fluid : ForgeRegistries.FLUIDS) {
-                if (fluid.getDefaultState().isSource() && fluid.getFilledBucket() != null) {
+            for (Fluid fluid : ForgeRegistries.FLUIDS) {
+                //only add non milk source fluids with a bucket item
+                if (fluid.getDefaultState().isSource() && !CeramicBucketUtils.isMilkFluid(fluid) && fluid.getFilledBucket() != null) {
                     items.add(getFilledInstance(fluid));
                     //add a property per fluid
                     this.addPropertyOverride(fluid.getRegistryName(),
@@ -56,7 +58,6 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem { //imple
                                     ((FilledCeramicBucketItem) stack.getItem()).getFluid(stack).getRegistryName().equals(fluid.getRegistryName()) ? 1.0F : 0.0F
                     );
                 }
-
             }
         }
     }

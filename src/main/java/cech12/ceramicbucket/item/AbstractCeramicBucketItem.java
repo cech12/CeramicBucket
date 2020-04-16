@@ -1,6 +1,6 @@
 package cech12.ceramicbucket.item;
 
-import cech12.ceramicbucket.api.item.CeramicBucketItems;
+import cech12.ceramicbucket.util.CeramicBucketUtils;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.IBucketPickupHandler;
@@ -117,8 +117,7 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
         if (player == null || !player.abilities.isCreativeMode) {
             if (stack.getCount() > 1) {
                 stack.shrink(1);
-                ItemStack newStack = new ItemStack(CeramicBucketItems.FILLED_CERAMIC_BUCKET);
-                fill(newStack, new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME));
+                ItemStack newStack = CeramicBucketUtils.getFilledCeramicBucket(fluid);
                 if (player != null && !player.inventory.addItemStackToInventory(newStack)) {
                     player.dropItem(newStack, false);
                 }
