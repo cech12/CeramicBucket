@@ -10,6 +10,7 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.UseAction;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResult;
@@ -63,7 +64,7 @@ public class CeramicMilkBucketItem extends FilledCeramicBucketItem {
     @Override
     @Nonnull
     public ItemStack onItemUseFinish(@Nonnull ItemStack stack, World worldIn, @Nonnull LivingEntity entityLiving) {
-        if (!worldIn.isRemote) entityLiving.curePotionEffects(stack); // FORGE - move up so stack.shrink does not turn stack into air
+        if (!worldIn.isRemote) entityLiving.curePotionEffects(new ItemStack(Items.MILK_BUCKET)); // FORGE - move up so stack.shrink does not turn stack into air
 
         if (entityLiving instanceof ServerPlayerEntity) {
             ServerPlayerEntity serverplayerentity = (ServerPlayerEntity)entityLiving;
