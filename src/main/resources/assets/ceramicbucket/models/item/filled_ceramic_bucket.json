@@ -126,6 +126,15 @@
     },
 
     {
+      "predicate": { "midnight:dark_water": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/midnight/dark_water"
+    },
+    {
+      "predicate": { "midnight:miasma": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/midnight/miasma"
+    },
+
+    {
       "predicate": { "omegacraft:alkene": 1 },
       "model": "ceramicbucket:item/filled_ceramic_buckets/omegacraft/alkene"
     },
