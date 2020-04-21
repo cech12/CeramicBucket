@@ -21,6 +21,9 @@ All fluids of following mods are official supported:
 * [MrCrayfish's Vehicle Mod (1.15) (0.42.7)](https://www.curseforge.com/minecraft/mc-mods/mrcrayfishs-vehicle-mod)
 * [Omega Craft 4.0.9 (1.14 & 1.15)](https://www.curseforge.com/minecraft/mc-mods/omega-craft-mod)
 * [Silent's Mechanisms (1.15.2-0.7.0+50 & 1.14.4-0.6.13+49) (beta)](https://www.curseforge.com/minecraft/mc-mods/silents-mechanisms)
+* [The Midnight (1.14 & 1.15)](https://www.curseforge.com/minecraft/mc-mods/the-midnight)
+* [Ultimate Car (1.14 & 1.15)](https://www.curseforge.com/minecraft/mc-mods/ultimate-car-mod)
+
 
 All milk fluids are supported if they have the fluid tag "forge:milk" or are listed above.
 

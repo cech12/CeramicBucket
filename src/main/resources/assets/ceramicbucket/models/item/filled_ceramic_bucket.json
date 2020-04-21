@@ -15,6 +15,27 @@
     },
 
     {
+      "predicate": { "car:bio_diesel": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/car/bio_diesel"
+    },
+    {
+      "predicate": { "car:canola_methanol_mix": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/car/canola_methanol_mix"
+    },
+    {
+      "predicate": { "car:canola_oil": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/car/canola_oil"
+    },
+    {
+      "predicate": { "car:glycerin": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/car/glycerin"
+    },
+    {
+      "predicate": { "car:methanol": 1 },
+      "model": "ceramicbucket:item/filled_ceramic_buckets/car/methanol"
+    },
+
+    {
       "predicate": { "industrialforegoing:biofuel": 1 },
       "model": "ceramicbucket:item/filled_ceramic_buckets/industrialforegoing/biofuel"
     },
