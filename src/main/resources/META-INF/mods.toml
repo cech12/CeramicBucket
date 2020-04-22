@@ -11,3 +11,15 @@ issueTrackerURL="https://github.com/cech12/CeramicBucket/issues"
     description='''
     A mod which adds a Ceramic Bucket.
     '''
+[[dependencies.ceramicbucket]]
+    modId="forge"
+    mandatory=true
+    versionRange="[28.1,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.ceramicbucket]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.14.4,)"
+    ordering="NONE"
+    side="BOTH"

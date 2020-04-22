@@ -1,13 +1,13 @@
 package cech12.ceramicbucket.compat;
 
-
 import net.minecraft.entity.LivingEntity;
 import net.minecraftforge.fml.ModList;
 
 public class ModCompat {
 
     public static final Mod[] MODS = {
-            new MilkAllTheMobs()
+            new MilkAllTheMobs_1_14(),
+            new MilkAllTheMobs_1_15()
     };
 
     public static boolean canEntityBeMilked(LivingEntity entity) {

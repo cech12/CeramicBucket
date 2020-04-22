@@ -8,9 +8,9 @@ import net.minecraft.entity.passive.horse.HorseEntity;
 import net.minecraft.entity.passive.horse.LlamaEntity;
 import net.minecraft.entity.passive.horse.MuleEntity;
 
-public class MilkAllTheMobs extends ModCompat.Mod implements ModCompat.MobMilkingMod {
+public class MilkAllTheMobs_1_15 extends ModCompat.Mod implements ModCompat.MobMilkingMod {
 
-    public MilkAllTheMobs() {
+    public MilkAllTheMobs_1_15() {
         super("milkatmobs");
     }
 
