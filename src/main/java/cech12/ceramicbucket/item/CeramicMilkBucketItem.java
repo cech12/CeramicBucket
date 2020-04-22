@@ -64,11 +64,12 @@ public class CeramicMilkBucketItem extends FilledCeramicBucketItem {
     @Override
     @Nonnull
     public ItemStack onItemUseFinish(@Nonnull ItemStack stack, World worldIn, @Nonnull LivingEntity entityLiving) {
-        if (!worldIn.isRemote) entityLiving.curePotionEffects(new ItemStack(Items.MILK_BUCKET)); // FORGE - move up so stack.shrink does not turn stack into air
+        ItemStack vanillaStack = new ItemStack(Items.MILK_BUCKET);
+        if (!worldIn.isRemote) entityLiving.curePotionEffects(vanillaStack); // FORGE - move up so stack.shrink does not turn stack into air
 
         if (entityLiving instanceof ServerPlayerEntity) {
             ServerPlayerEntity serverplayerentity = (ServerPlayerEntity)entityLiving;
-            CriteriaTriggers.CONSUME_ITEM.trigger(serverplayerentity, stack);
+            CriteriaTriggers.CONSUME_ITEM.trigger(serverplayerentity, vanillaStack);
             serverplayerentity.addStat(Stats.ITEM_USED.get(this));
         }
 
