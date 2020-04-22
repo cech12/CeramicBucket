@@ -1,11 +1,13 @@
 package cech12.ceramicbucket;
 
 import cech12.ceramicbucket.api.item.CeramicBucketItems;
+import cech12.ceramicbucket.compat.ModCompat;
 import cech12.ceramicbucket.config.Config;
 import cech12.ceramicbucket.item.CeramicFishBucketItem;
 import cech12.ceramicbucket.item.CeramicMilkBucketItem;
 import cech12.ceramicbucket.item.FilledCeramicBucketItem;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.entity.passive.fish.*;
 import net.minecraft.entity.player.PlayerEntity;
@@ -39,12 +41,15 @@ public class CeramicBucketMod {
      */
     @SubscribeEvent
     public static void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
+        if (!(event.getTarget() instanceof LivingEntity)) {
+            return;
+        }
+        LivingEntity entity = (LivingEntity) event.getTarget();
         //only interact with cows and fishes
-        if (event.getTarget() instanceof CowEntity) {
-            CowEntity cowEntity = (CowEntity) event.getTarget();
+        if (entity instanceof CowEntity || ModCompat.canEntityBeMilked(entity)) {
             PlayerEntity player = event.getPlayer();
             ItemStack itemstack = player.getHeldItem(event.getHand());
-            if (itemstack.getItem() == CeramicBucketItems.CERAMIC_BUCKET && !player.abilities.isCreativeMode && !cowEntity.isChild()) {
+            if (itemstack.getItem() == CeramicBucketItems.CERAMIC_BUCKET && !player.abilities.isCreativeMode && !entity.isChild()) {
                 player.playSound(SoundEvents.ENTITY_COW_MILK, 1.0F, 1.0F);
                 if (!event.getWorld().isRemote()) {
                     itemstack.shrink(1);
@@ -57,8 +62,8 @@ public class CeramicBucketMod {
                 event.setCanceled(true);
                 event.setCancellationResult(ActionResultType.SUCCESS);
             }
-        } else if (event.getTarget() instanceof AbstractFishEntity) {
-            AbstractFishEntity fishEntity = (AbstractFishEntity) event.getTarget();
+        } else if (entity instanceof AbstractFishEntity) {
+            AbstractFishEntity fishEntity = (AbstractFishEntity) entity;
             PlayerEntity player = event.getPlayer();
             ItemStack itemstack = player.getHeldItem(event.getHand());
             if (itemstack.getItem() == CeramicBucketItems.FILLED_CERAMIC_BUCKET && ((FilledCeramicBucketItem) itemstack.getItem()).getFluid(itemstack) == Fluids.WATER && fishEntity.isAlive()) {
