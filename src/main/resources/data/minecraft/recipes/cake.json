@@ -7,7 +7,7 @@
   ],
   "key": {
     "A": {
-      "tag": "forge:milk_buckets"
+      "tag": "forge:buckets/milk"
     },
     "B": {
       "item": "minecraft:sugar"
