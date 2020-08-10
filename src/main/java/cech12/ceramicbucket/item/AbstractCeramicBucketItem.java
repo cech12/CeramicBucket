@@ -153,7 +153,8 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
             boolean flag = !material.isSolid();
             boolean flag1 = material.isReplaceable();
             if (worldIn.isAirBlock(posIn) || flag || flag1 || blockstate.getBlock() instanceof ILiquidContainer && ((ILiquidContainer) blockstate.getBlock()).canContainFluid(worldIn, posIn, blockstate, this.getFluid())) {
-                if (worldIn.dimension.doesWaterVaporize() && this.getFluid(stack).isIn(FluidTags.WATER)) {
+                //worldIn.dimension.doesWaterVaporize()
+                if (worldIn.func_230315_m_().func_236040_e_() && this.getFluid(stack).isIn(FluidTags.WATER)) {
                     int i = posIn.getX();
                     int j = posIn.getY();
                     int k = posIn.getZ();

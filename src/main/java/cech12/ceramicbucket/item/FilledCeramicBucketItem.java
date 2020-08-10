@@ -52,11 +52,13 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
                 //only add non milk source fluids with a bucket item
                 if (fluid.getDefaultState().isSource() && !CeramicBucketUtils.isMilkFluid(fluid) && fluid.getFilledBucket() != null) {
                     items.add(getFilledInstance(fluid));
+                    /* TODO properties?
                     //add a property per fluid
                     this.addPropertyOverride(fluid.getRegistryName(),
                             (stack, world, livingEntity) ->
                                     ((FilledCeramicBucketItem) stack.getItem()).getFluid(stack).getRegistryName().equals(fluid.getRegistryName()) ? 1.0F : 0.0F
                     );
+                     */
                 }
             }
         }
@@ -77,7 +79,7 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
             ITextComponent fluidText;
             if (getFluid(stack) == Fluids.WATER || getFluid(stack) == Fluids.LAVA) {
                 //vanilla fluids
-                fluidText = getFluid(stack).getDefaultState().getBlockState().getBlock().getNameTextComponent();
+                fluidText = getFluid(stack).getDefaultState().getBlockState().getBlock().getTranslatedName();
             } else {
                 //fluids registered by mods
                 fluidText = new TranslationTextComponent(Util.makeTranslationKey("fluid", ForgeRegistries.FLUIDS.getKey(getFluid(stack))));

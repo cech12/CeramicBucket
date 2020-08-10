@@ -41,7 +41,7 @@ public class CeramicFishBucketItem extends FilledCeramicBucketItem {
         return super.getFilledInstance(Fluids.WATER);
     }
 
-    public void onLiquidPlaced(World worldIn, ItemStack p_203792_2_, BlockPos pos) {
+    public void onLiquidPlaced(World worldIn, @Nonnull ItemStack p_203792_2_, @Nonnull BlockPos pos) {
         if (!worldIn.isRemote) {
             this.placeFish(worldIn, p_203792_2_, pos);
         }
@@ -64,7 +64,7 @@ public class CeramicFishBucketItem extends FilledCeramicBucketItem {
      * allows items to add custom lines of information to the mouseover description
      */
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
         if (this.fishType == EntityType.TROPICAL_FISH) {
             CompoundNBT compoundnbt = stack.getTag();
             if (compoundnbt != null && compoundnbt.contains("BucketVariantTag", 3)) {
@@ -75,19 +75,23 @@ public class CeramicFishBucketItem extends FilledCeramicBucketItem {
 
                 for(int j = 0; j < TropicalFishEntity.SPECIAL_VARIANTS.length; ++j) {
                     if (i == TropicalFishEntity.SPECIAL_VARIANTS[j]) {
-                        tooltip.add((new TranslationTextComponent(TropicalFishEntity.func_212324_b(j))).applyTextStyles(atextformatting));
+                        //tooltip.add((new TranslationTextComponent(TropicalFishEntity.func_212324_b(j))).applyTextStyles(atextformatting));
+                        tooltip.add((new TranslationTextComponent(TropicalFishEntity.func_212324_b(j))).func_240701_a_(atextformatting));
                         return;
                     }
                 }
 
-                tooltip.add((new TranslationTextComponent(TropicalFishEntity.func_212327_q(i))).applyTextStyles(atextformatting));
-                ITextComponent itextcomponent = new TranslationTextComponent(s);
+                //tooltip.add((new TranslationTextComponent(TropicalFishEntity.func_212327_q(i))).applyTextStyles(atextformatting));
+                tooltip.add((new TranslationTextComponent(TropicalFishEntity.func_212327_q(i))).func_240701_a_(atextformatting));
+                TranslationTextComponent textComponent = new TranslationTextComponent(s);
                 if (!s.equals(s1)) {
-                    itextcomponent.appendText(", ").appendSibling(new TranslationTextComponent(s1));
+                    //textComponent.appendText(", ").appendSibling(new TranslationTextComponent(s1));
+                    textComponent.func_240702_b_(", ").func_230529_a_(new TranslationTextComponent(s1));
                 }
 
-                itextcomponent.applyTextStyles(atextformatting);
-                tooltip.add(itextcomponent);
+                //itextcomponent.applyTextStyles(atextformatting);
+                textComponent.func_240701_a_(atextformatting);
+                tooltip.add(textComponent);
             }
         }
     }
