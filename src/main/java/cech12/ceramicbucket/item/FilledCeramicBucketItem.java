@@ -50,7 +50,7 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
         if (this.isInGroup(group)) {
             for (Fluid fluid : ForgeRegistries.FLUIDS) {
                 //only add non milk source fluids with a bucket item
-                if (fluid.getDefaultState().isSource() && !CeramicBucketUtils.isMilkFluid(fluid) && fluid.getFilledBucket() != null) {
+                if (fluid.getDefaultState().isSource() && !CeramicBucketUtils.isMilkFluid(fluid, false) && fluid.getFilledBucket() != null) {
                     items.add(getFilledInstance(fluid));
                     /* TODO properties?
                     //add a property per fluid

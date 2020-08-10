@@ -42,14 +42,22 @@ public class CeramicMilkBucketItem extends FilledCeramicBucketItem {
     /**
      * Get a milk bucket with the first fluid that is milk. If there is no milk fluid, the bucket gets empty fluid.
      */
-    public ItemStack getFilledInstance() {
+    public ItemStack getFilledInstance(boolean checkTag) {
         for (Fluid fluid : ForgeRegistries.FLUIDS) {
             //search first milk fluid
-            if (fluid.getDefaultState().isSource() && CeramicBucketUtils.isMilkFluid(fluid)) {
+            if (fluid.getDefaultState().isSource() && CeramicBucketUtils.isMilkFluid(fluid, checkTag)) {
                 return super.getFilledInstance(fluid);
             }
         }
         return super.getFilledInstance(Fluids.EMPTY);
+    }
+
+    /**
+     * Get a milk bucket with the first fluid that is milk. If there is no milk fluid, the bucket gets empty fluid.
+     */
+    @Nonnull
+    public ItemStack getFilledInstance() {
+        return this.getFilledInstance(true);
     }
 
     @Nonnull
@@ -115,7 +123,7 @@ public class CeramicMilkBucketItem extends FilledCeramicBucketItem {
     @Override
     public void fillItemGroup(@Nonnull ItemGroup group, @Nonnull NonNullList<ItemStack> items) {
         if (this.isInGroup(group)) {
-            items.add(this.getFilledInstance());
+            items.add(this.getFilledInstance(false));
         }
     }
 
