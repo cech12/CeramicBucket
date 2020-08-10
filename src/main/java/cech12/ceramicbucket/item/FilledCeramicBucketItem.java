@@ -52,13 +52,6 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
                 //only add non milk source fluids with a bucket item
                 if (fluid.getDefaultState().isSource() && !CeramicBucketUtils.isMilkFluid(fluid, false) && fluid.getFilledBucket() != null) {
                     items.add(getFilledInstance(fluid));
-                    /* TODO properties?
-                    //add a property per fluid
-                    this.addPropertyOverride(fluid.getRegistryName(),
-                            (stack, world, livingEntity) ->
-                                    ((FilledCeramicBucketItem) stack.getItem()).getFluid(stack).getRegistryName().equals(fluid.getRegistryName()) ? 1.0F : 0.0F
-                    );
-                     */
                 }
             }
         }
