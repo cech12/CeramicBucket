@@ -23,7 +23,7 @@ issueTrackerURL="https://github.com/cech12/CeramicBucket/issues"
     versionRange="[1.16.1,)"
     ordering="NONE"
     side="BOTH"
-[[dependencies.brickfurnace]]
+[[dependencies.ceramicbucket]]
    modId="jei"
    mandatory=false
    versionRange="[7.0.0.0,)"

@@ -1,7 +1,7 @@
 {
   "item.ceramicbucket.ceramic_bucket": "Keramikeimer",
-  "item.ceramicbucket.ceramic_fish_bucket": "%s-Keramikeimer",
-  "item.ceramicbucket.ceramic_milk_bucket": "Milch-Keramikeimer",
-  "item.ceramicbucket.filled_ceramic_bucket": "%s-Keramikeimer",
+  "item.ceramicbucket.ceramic_fish_bucket": "Keramik-%seimer",
+  "item.ceramicbucket.ceramic_milk_bucket": "Keramik-Milcheimer",
+  "item.ceramicbucket.filled_ceramic_bucket": "Keramik-%seimer",
   "item.ceramicbucket.unfired_clay_bucket": "Ungebrannter Toneimer"
 }
