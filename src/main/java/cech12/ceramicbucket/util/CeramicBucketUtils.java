@@ -5,6 +5,7 @@ import cech12.ceramicbucket.item.CeramicMilkBucketItem;
 import cech12.ceramicbucket.item.FilledCeramicBucketItem;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
@@ -27,6 +28,10 @@ public class CeramicBucketUtils {
      */
     public static boolean isMilkFluid(@Nonnull Fluid fluid) {
         if (fluid.isIn(MILK_TAG)) {
+            return true;
+        }
+        ResourceLocation location = fluid.getFilledBucket().getRegistryName();
+        if (location != null && location.equals(Items.MILK_BUCKET.getRegistryName())) {
             return true;
         }
         for (ResourceLocation name : MILK_FLUIDS) {

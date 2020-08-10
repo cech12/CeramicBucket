@@ -5,6 +5,8 @@ import cech12.ceramicbucket.api.item.CeramicBucketItems;
 import cech12.ceramicbucket.util.CeramicBucketUtils;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.item.BucketItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -19,6 +21,7 @@ import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 
 public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
 
@@ -48,15 +51,21 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
     @Override
     public void fillItemGroup(@Nonnull ItemGroup group, @Nonnull NonNullList<ItemStack> items) {
         if (this.isInGroup(group)) {
+            ArrayList<Fluid> addedFluids = new ArrayList<>();
             for (Fluid fluid : ForgeRegistries.FLUIDS) {
                 //only add non milk source fluids with a bucket item
-                if (fluid.getDefaultState().isSource() && !CeramicBucketUtils.isMilkFluid(fluid) && fluid.getFilledBucket() != null) {
-                    items.add(getFilledInstance(fluid));
-                    //add a property per fluid
-                    this.addPropertyOverride(fluid.getRegistryName(),
-                            (stack, world, livingEntity) ->
-                                    ((FilledCeramicBucketItem) stack.getItem()).getFluid(stack).getRegistryName().equals(fluid.getRegistryName()) ? 1.0F : 0.0F
-                    );
+                Item bucket = fluid.getFilledBucket();
+                if (!CeramicBucketUtils.isMilkFluid(fluid) && bucket != null && bucket instanceof BucketItem) {
+                    Fluid bucketFluid = ((BucketItem) bucket).getFluid();
+                    if (!addedFluids.contains(bucketFluid)) {
+                        items.add(getFilledInstance(bucketFluid));
+                        //add a property per fluid
+                        this.addPropertyOverride(bucketFluid.getRegistryName(),
+                                (stack, world, livingEntity) ->
+                                        ((FilledCeramicBucketItem) stack.getItem()).getFluid(stack).getRegistryName().equals(bucketFluid.getRegistryName()) ? 1.0F : 0.0F
+                        );
+                        addedFluids.add(bucketFluid);
+                    }
                 }
             }
         }

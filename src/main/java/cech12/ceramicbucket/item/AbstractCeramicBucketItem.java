@@ -145,7 +145,11 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
     }
 
     public boolean tryPlaceContainedLiquid(@Nullable PlayerEntity player, World worldIn, BlockPos posIn, @Nullable BlockRayTraceResult raytrace, ItemStack stack) {
-        if (!(this.getFluid(stack) instanceof FlowingFluid)) {
+        Fluid fluid = this.getFluid(stack);
+        FluidAttributes fluidAttributes = fluid.getAttributes();
+        if (!(fluid instanceof FlowingFluid)) {
+            return false;
+        } else if (!fluidAttributes.canBePlacedInWorld(worldIn, posIn, fluid.getDefaultState())) {
             return false;
         } else {
             BlockState blockstate = worldIn.getBlockState(posIn);
@@ -153,7 +157,7 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
             boolean flag = !material.isSolid();
             boolean flag1 = material.isReplaceable();
             if (worldIn.isAirBlock(posIn) || flag || flag1 || blockstate.getBlock() instanceof ILiquidContainer && ((ILiquidContainer) blockstate.getBlock()).canContainFluid(worldIn, posIn, blockstate, this.getFluid())) {
-                if (worldIn.dimension.doesWaterVaporize() && this.getFluid(stack).isIn(FluidTags.WATER)) {
+                if (worldIn.dimension.doesWaterVaporize() && fluid.isIn(FluidTags.WATER)) {
                     int i = posIn.getX();
                     int j = posIn.getY();
                     int k = posIn.getZ();
@@ -162,8 +166,8 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
                     for (int l = 0; l < 8; ++l) {
                         worldIn.addParticle(ParticleTypes.LARGE_SMOKE, (double) i + Math.random(), (double) j + Math.random(), (double) k + Math.random(), 0.0D, 0.0D, 0.0D);
                     }
-                } else if (blockstate.getBlock() instanceof ILiquidContainer && this.getFluid(stack) == Fluids.WATER) {
-                    if (((ILiquidContainer) blockstate.getBlock()).receiveFluid(worldIn, posIn, blockstate, ((FlowingFluid) this.getFluid(stack)).getStillFluidState(false))) {
+                } else if (blockstate.getBlock() instanceof ILiquidContainer && fluid == Fluids.WATER) {
+                    if (((ILiquidContainer) blockstate.getBlock()).receiveFluid(worldIn, posIn, blockstate, ((FlowingFluid) fluid).getStillFluidState(false))) {
                         this.playEmptySound(player, worldIn, posIn);
                     }
                 } else {
@@ -172,7 +176,7 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
                     }
 
                     this.playEmptySound(player, worldIn, posIn);
-                    worldIn.setBlockState(posIn, this.getFluid(stack).getDefaultState().getBlockState(), 11);
+                    worldIn.setBlockState(posIn, fluid.getDefaultState().getBlockState(), 11);
                 }
 
                 return true;
