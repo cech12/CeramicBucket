@@ -1,6 +1,7 @@
 modLoader="javafml"
 loaderVersion="[32,)"
 issueTrackerURL="https://github.com/cech12/CeramicBucket/issues"
+license="The MIT License (MIT)"
 [[mods]]
     modId="ceramicbucket"
     version="${file.jarVersion}"
@@ -14,7 +15,7 @@ issueTrackerURL="https://github.com/cech12/CeramicBucket/issues"
 [[dependencies.ceramicbucket]]
     modId="forge"
     mandatory=true
-    versionRange="[32.0.70,)"
+    versionRange="[32.0.108,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.ceramicbucket]]
