@@ -75,22 +75,18 @@ public class CeramicFishBucketItem extends FilledCeramicBucketItem {
 
                 for(int j = 0; j < TropicalFishEntity.SPECIAL_VARIANTS.length; ++j) {
                     if (i == TropicalFishEntity.SPECIAL_VARIANTS[j]) {
-                        //tooltip.add((new TranslationTextComponent(TropicalFishEntity.func_212324_b(j))).applyTextStyles(atextformatting));
-                        tooltip.add((new TranslationTextComponent(TropicalFishEntity.func_212324_b(j))).func_240701_a_(atextformatting));
+                        tooltip.add((new TranslationTextComponent(TropicalFishEntity.func_212324_b(j))).applyTextStyles(atextformatting));
                         return;
                     }
                 }
 
-                //tooltip.add((new TranslationTextComponent(TropicalFishEntity.func_212327_q(i))).applyTextStyles(atextformatting));
-                tooltip.add((new TranslationTextComponent(TropicalFishEntity.func_212327_q(i))).func_240701_a_(atextformatting));
+                tooltip.add((new TranslationTextComponent(TropicalFishEntity.func_212327_q(i))).applyTextStyles(atextformatting));
                 TranslationTextComponent textComponent = new TranslationTextComponent(s);
                 if (!s.equals(s1)) {
-                    //textComponent.appendText(", ").appendSibling(new TranslationTextComponent(s1));
-                    textComponent.func_240702_b_(", ").func_230529_a_(new TranslationTextComponent(s1));
+                    textComponent.appendText(", ").appendSibling(new TranslationTextComponent(s1));
                 }
 
-                //itextcomponent.applyTextStyles(atextformatting);
-                textComponent.func_240701_a_(atextformatting);
+                textComponent.applyTextStyles(atextformatting);
                 tooltip.add(textComponent);
             }
         }

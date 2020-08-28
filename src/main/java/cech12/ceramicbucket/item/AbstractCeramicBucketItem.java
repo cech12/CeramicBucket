@@ -14,7 +14,6 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.*;
@@ -160,8 +159,7 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
             if (worldIn.isAirBlock(posIn) || flag || flag1 || blockstate.getBlock() instanceof ILiquidContainer && ((ILiquidContainer) blockstate.getBlock()).canContainFluid(worldIn, posIn, blockstate, this.getFluid())) {
                 IFluidHandlerItem fluidHandler = FluidUtil.getFluidHandler(stack).orElse(null);
                 FluidStack fluidStack = fluidHandler != null ? fluidHandler.drain(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE) : null;
-                //worldIn.dimension.doesWaterVaporize()
-                if (fluidStack != null && worldIn.func_230315_m_().func_236040_e_() && this.getFluid(stack).isIn(FluidTags.WATER)) {
+                if (fluidStack != null && worldIn.dimension.doesWaterVaporize() && this.getFluid(stack).isIn(FluidTags.WATER)) {
                     fluidAttributes.vaporize(player, worldIn, posIn, fluidStack);
                 } else if (blockstate.getBlock() instanceof ILiquidContainer && fluid == Fluids.WATER) {
                     if (((ILiquidContainer) blockstate.getBlock()).receiveFluid(worldIn, posIn, blockstate, ((FlowingFluid) fluid).getStillFluidState(false))) {

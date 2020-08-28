@@ -8,7 +8,7 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.ITag;
+import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
@@ -17,7 +17,7 @@ import java.util.List;
 
 public class CeramicBucketUtils {
 
-    private static final ITag.INamedTag<Fluid> MILK_TAG = FluidTags.makeWrapperTag("forge:milk");
+    private static final Tag<Fluid> MILK_TAG = new FluidTags.Wrapper(new ResourceLocation("forge", "milk"));
     private static final List<ResourceLocation> MILK_FLUIDS = new ArrayList<>();
     static {
         MILK_FLUIDS.add(new ResourceLocation("milk")); //like in FluidUtil.getFilledBucket(...)

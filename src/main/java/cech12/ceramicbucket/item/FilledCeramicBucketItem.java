@@ -81,7 +81,7 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
             ITextComponent fluidText;
             if (getFluid(stack) == Fluids.WATER || getFluid(stack) == Fluids.LAVA) {
                 //vanilla fluids
-                fluidText = getFluid(stack).getDefaultState().getBlockState().getBlock().getTranslatedName();
+                fluidText = getFluid(stack).getDefaultState().getBlockState().getBlock().getNameTextComponent();
             } else {
                 //fluids registered by mods
                 fluidText = new TranslationTextComponent(Util.makeTranslationKey("fluid", ForgeRegistries.FLUIDS.getKey(getFluid(stack))));
