@@ -21,6 +21,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -42,22 +43,20 @@ public class CeramicFishBucketItem extends FilledCeramicBucketItem {
     }
 
     public void onLiquidPlaced(World worldIn, @Nonnull ItemStack p_203792_2_, @Nonnull BlockPos pos) {
-        if (!worldIn.isRemote) {
-            this.placeFish(worldIn, p_203792_2_, pos);
+        if (!worldIn.isRemote && worldIn instanceof ServerWorld) {
+            this.placeFish((ServerWorld) worldIn, p_203792_2_, pos);
         }
-
     }
 
     protected void playEmptySound(@Nullable PlayerEntity player, IWorld worldIn, @Nonnull BlockPos pos) {
         worldIn.playSound(player, pos, SoundEvents.ITEM_BUCKET_EMPTY_FISH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
     }
 
-    private void placeFish(World worldIn, ItemStack p_205357_2_, BlockPos pos) {
+    private void placeFish(ServerWorld worldIn, ItemStack p_205357_2_, BlockPos pos) {
         Entity entity = this.fishType.spawn(worldIn, p_205357_2_, null, pos, SpawnReason.BUCKET, true, false);
         if (entity != null) {
             ((AbstractFishEntity)entity).setFromBucket(true);
         }
-
     }
 
     /**
