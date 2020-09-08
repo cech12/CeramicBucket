@@ -133,4 +133,11 @@ public class CeramicMilkBucketItem extends FilledCeramicBucketItem {
         return new TranslationTextComponent("item.ceramicbucket.ceramic_milk_bucket");
     }
 
+    @Override
+    public boolean hasContainerItem(ItemStack stack) {
+        //super method checks if a fluid is inside. Milk does not have to be a fluid.
+        Fluid fluid = this.getFluid(stack);
+        return fluid == Fluids.EMPTY || !CeramicBucketUtils.isFluidTooHotForCeramicBucket(fluid);
+    }
+
 }
