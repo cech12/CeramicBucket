@@ -1,5 +1,6 @@
 package cech12.ceramicbucket.item;
 
+import cech12.ceramicbucket.api.item.CeramicBucketItems;
 import cech12.ceramicbucket.util.CeramicBucketUtils;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.BlockState;
@@ -14,7 +15,6 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.*;
@@ -23,6 +23,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
@@ -219,5 +220,32 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
         return stack;
     }
 
+    @Override
+    public int getBurnTime(ItemStack itemStack) {
+        //get burn time of normal bucket
+        Fluid fluid = this.getFluid(itemStack);
+        if (fluid != Fluids.EMPTY) {
+            //all fluids have their burn time in their bucket item.
+            //get the burn time via ForgeHooks.getBurnTime to let other mods change burn times of buckets of vanilla and other fluids.
+            return ForgeHooks.getBurnTime(new ItemStack(fluid.getFilledBucket()));
+        }
+        return super.getBurnTime(itemStack);
+    }
+
+    @Override
+    public boolean hasContainerItem(ItemStack stack) {
+        //for using a filled bucket as fuel or in crafting recipes, an empty bucket should remain
+        Fluid fluid = this.getFluid(stack);
+        return fluid != Fluids.EMPTY && !CeramicBucketUtils.isFluidTooHotForCeramicBucket(fluid);
+    }
+
+    @Override
+    public ItemStack getContainerItem(ItemStack itemStack) {
+        //for using a filled bucket as fuel or in crafting recipes, an empty bucket should remain
+        if (this.hasContainerItem(itemStack)) {
+            return new ItemStack(CeramicBucketItems.CERAMIC_BUCKET);
+        }
+        return null;
+    }
 
 }
