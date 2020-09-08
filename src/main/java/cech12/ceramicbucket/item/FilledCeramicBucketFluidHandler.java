@@ -1,7 +1,7 @@
 package cech12.ceramicbucket.item;
 
 import cech12.ceramicbucket.api.item.CeramicBucketItems;
-import cech12.ceramicbucket.config.Config;
+import cech12.ceramicbucket.util.CeramicBucketUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
@@ -20,9 +20,8 @@ public class FilledCeramicBucketFluidHandler extends FluidHandlerItemStack {
 
     @Override
     protected void setContainerToEmpty() {
-        int minBreakTemperature = Config.CERAMIC_BUCKET_BREAK_TEMPERATURE.getValue();
-        if (minBreakTemperature >= 0 && FluidUtil.getFluidContained(this.container).orElse(FluidStack.EMPTY).getFluid().getAttributes().getTemperature() >= minBreakTemperature) {
-            //contains hot fluid (configurable temperature, std. 1000) like lava (1300)? no empty bucket remains.
+        if (CeramicBucketUtils.isFluidTooHotForCeramicBucket(FluidUtil.getFluidContained(this.container).orElse(FluidStack.EMPTY).getFluid())) {
+            //contains hot fluid (configurable temperature) bucket is removed
             this.container = ItemStack.EMPTY;
         } else {
             //else empty bucket
