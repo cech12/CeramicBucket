@@ -180,6 +180,7 @@ public class CeramicBucketModel implements IModelGeometry<CeramicBucketModel> {
 
     private static final class ContainedFluidOverrideHandler extends ItemOverrideList
     {
+        private static final ResourceLocation REBAKE_LOCATION = new ResourceLocation("ceramicbucket:bucket_override");
         private final ModelBakery bakery;
 
         private ContainedFluidOverrideHandler(ModelBakery bakery)
@@ -200,7 +201,7 @@ public class CeramicBucketModel implements IModelGeometry<CeramicBucketModel> {
                         if (!model.cache.containsKey(name))
                         {
                             CeramicBucketModel parent = model.parent.withFluid(fluid);
-                            IBakedModel bakedModel = parent.bake(model.owner, bakery, ModelLoader.defaultTextureGetter(), model.originalTransform, model.getOverrides(), new ResourceLocation("forge:bucket_override"));
+                            IBakedModel bakedModel = parent.bake(model.owner, bakery, ModelLoader.defaultTextureGetter(), model.originalTransform, model.getOverrides(), REBAKE_LOCATION);
                             model.cache.put(name, bakedModel);
                             return bakedModel;
                         }
@@ -219,7 +220,6 @@ public class CeramicBucketModel implements IModelGeometry<CeramicBucketModel> {
         private final CeramicBucketModel parent;
         private final Map<String, IBakedModel> cache; // contains all the baked models since they'll never change
         private final IModelTransform originalTransform;
-        private final boolean isSideLit;
 
         BakedModel(ModelBakery bakery,
                    IModelConfiguration owner, CeramicBucketModel parent,
@@ -235,7 +235,6 @@ public class CeramicBucketModel implements IModelGeometry<CeramicBucketModel> {
             this.parent = parent;
             this.cache = cache;
             this.originalTransform = originalTransform;
-            this.isSideLit = isSideLit;
         }
     }
 }
