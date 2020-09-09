@@ -56,7 +56,7 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
             for (Fluid fluid : ForgeRegistries.FLUIDS) {
                 //only add non milk source fluids with a bucket item
                 Item bucket = fluid.getFilledBucket();
-                if (!CeramicBucketUtils.isMilkFluid(fluid, false) && bucket != null && bucket instanceof BucketItem) {
+                if (bucket instanceof BucketItem && !CeramicBucketUtils.isMilkFluid(fluid, false)) {
                     Fluid bucketFluid = ((BucketItem) bucket).getFluid();
                     if (!addedFluids.contains(bucketFluid)) {
                         items.add(getFilledInstance(bucketFluid));
@@ -94,11 +94,9 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
     @Override
     public int getBurnTime(ItemStack itemStack) {
         //get burn time of normal bucket
-        Fluid fluid = this.getFluid(itemStack);
-        if (fluid != Fluids.EMPTY) {
-            //all fluids have their burn time in their bucket item.
-            //get the burn time via ForgeHooks.getBurnTime to let other mods change burn times of buckets of vanilla and other fluids.
-            return ForgeHooks.getBurnTime(new ItemStack(fluid.getFilledBucket()));
+        int burnTime = CeramicBucketUtils.getBurnTimeOfFluid(this.getFluid(itemStack));
+        if (burnTime >= 0) {
+            return burnTime;
         }
         return super.getBurnTime(itemStack);
     }
