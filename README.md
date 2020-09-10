@@ -1,6 +1,6 @@
 # Ceramic Bucket [![Curseforge](http://cf.way2muchnoise.eu/full_ceramic-bucket_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/ceramic-bucket) [![Curseforge](http://cf.way2muchnoise.eu/versions/For%20MC_ceramic-bucket_all.svg)](https://www.curseforge.com/minecraft/mc-mods/ceramic-bucket/files) [![](https://img.shields.io/discord/752506676719910963.svg?style=flat&color=informational&logo=discord&label=Discord)](https://discord.gg/gRUFH5t) [![License](https://img.shields.io/github/license/cech12/CeramicBucket)](http://opensource.org/licenses/MIT)
 
-This is a **Minecraft Forge** mod for version 1.15.2, 1.16.1 or 1.16.2 and adds a **Ceramic Bucket** to the game.
+This is a **Minecraft Forge** mod for version 1.15.2, 1.16.1, 1.16.2 or 1.16.3 and adds a **Ceramic Bucket** to the game.
 The version 1.14.4 is also supported with some missing features.
 
 ![All Buckets](https://raw.githubusercontent.com/cech12/CeramicBucket/1.16/material/all_buckets.png)

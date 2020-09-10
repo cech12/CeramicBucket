@@ -3,6 +3,8 @@ package cech12.ceramicbucket.item;
 import cech12.ceramicbucket.util.CeramicBucketUtils;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.CauldronBlock;
 import net.minecraft.block.IBucketPickupHandler;
 import net.minecraft.block.ILiquidContainer;
 import net.minecraft.block.material.Material;
@@ -95,6 +97,35 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
 
                 }
                 BlockState blockstate = worldIn.getBlockState(blockpos);
+
+                //support cauldron interaction
+                if (blockstate.getBlock() == Blocks.CAULDRON) {
+                    Fluid fluid = this.getFluid(itemstack);
+                    CauldronBlock cauldron = (CauldronBlock) blockstate.getBlock();
+                    int level = blockstate.get(CauldronBlock.LEVEL);
+                    if (fluid.isIn(FluidTags.WATER) && !(itemstack.getItem() instanceof CeramicFishBucketItem)) {
+                        if (level < 3) {
+                            itemstack = this.emptyBucket(itemstack, playerIn);
+                            if (!worldIn.isRemote) {
+                                playerIn.addStat(Stats.FILL_CAULDRON);
+                                cauldron.setWaterLevel(worldIn, blockpos, blockstate, 3);
+                                this.playEmptySound(playerIn, worldIn, blockpos);
+                            }
+                        }
+                        return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
+                    } else if (fluid == Fluids.EMPTY) {
+                        if (level == 3) {
+                            itemstack = this.fillBucket(itemstack, playerIn, Fluids.WATER);
+                            if (!worldIn.isRemote) {
+                                playerIn.addStat(Stats.USE_CAULDRON);
+                                cauldron.setWaterLevel(worldIn, blockpos, blockstate, 0);
+                                worldIn.playSound(null, blockpos, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                            }
+                        }
+                        return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
+                    }
+                }
+
                 BlockPos blockpos1 = blockstate.getBlock() instanceof ILiquidContainer && this.getFluid(itemstack) == Fluids.WATER ? blockpos : blockraytraceresult.getPos().offset(blockraytraceresult.getFace());
                 if (this.tryPlaceContainedLiquid(playerIn, worldIn, blockpos1, blockraytraceresult, itemstack)) {
                     this.onLiquidPlaced(worldIn, itemstack, blockpos1);
