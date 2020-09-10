@@ -182,6 +182,8 @@ public class CeramicBucketModel implements IModelGeometry<CeramicBucketModel> {
 
     private static final class ContainedFluidOverrideHandler extends ItemOverrideList
     {
+        private static final ResourceLocation REBAKE_LOCATION = new ResourceLocation("ceramicbucket:bucket_override");
+
         private final Map<String, IBakedModel> cache = Maps.newHashMap(); // contains all the baked models since they'll never change
         private final ItemOverrideList nested;
         private final ModelBakery bakery;
@@ -209,7 +211,7 @@ public class CeramicBucketModel implements IModelGeometry<CeramicBucketModel> {
                         if (!cache.containsKey(name))
                         {
                             CeramicBucketModel unbaked = this.parent.withFluid(fluid);
-                            IBakedModel bakedModel = unbaked.bake(owner, bakery, ModelLoader.defaultTextureGetter(), ModelRotation.X0_Y0, this, new ResourceLocation("forge:bucket_override"));
+                            IBakedModel bakedModel = unbaked.bake(owner, bakery, ModelLoader.defaultTextureGetter(), ModelRotation.X0_Y0, this, REBAKE_LOCATION);
                             cache.put(name, bakedModel);
                             return bakedModel;
                         }
