@@ -103,7 +103,7 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
                     Fluid fluid = this.getFluid(itemstack);
                     CauldronBlock cauldron = (CauldronBlock) blockstate.getBlock();
                     int level = blockstate.get(CauldronBlock.LEVEL);
-                    if (fluid.isIn(FluidTags.WATER)) {
+                    if (fluid.isIn(FluidTags.WATER) && !(itemstack.getItem() instanceof CeramicFishBucketItem)) {
                         if (level < 3) {
                             itemstack = this.emptyBucket(itemstack, playerIn);
                             if (!worldIn.isRemote) {
