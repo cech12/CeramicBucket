@@ -1,5 +1,0 @@
-{
-  "parent": "ceramicbucket:item/filled_ceramic_buckets/base",
-  "loader": "forge:bucket",
-  "fluid": "mekanism:chlorine"
-}

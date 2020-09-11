@@ -1,7 +1,0 @@
-{
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "silents_mechanisms:item/oil_bucket",
-    "layer1": "ceramicbucket:item/ceramic_bucket_hole_overlay"
-  }
-}

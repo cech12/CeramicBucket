@@ -59,11 +59,6 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
                     Fluid bucketFluid = ((BucketItem) bucket).getFluid();
                     if (!addedFluids.contains(bucketFluid)) {
                         items.add(getFilledInstance(bucketFluid));
-                        //add a property per fluid
-                        this.addPropertyOverride(bucketFluid.getRegistryName(),
-                                (stack, world, livingEntity) ->
-                                        ((FilledCeramicBucketItem) stack.getItem()).getFluid(stack).getRegistryName().equals(bucketFluid.getRegistryName()) ? 1.0F : 0.0F
-                        );
                         addedFluids.add(bucketFluid);
                     }
                 }
