@@ -84,6 +84,11 @@ public class CeramicBucketModel implements IModelGeometry<CeramicBucketModel> {
     @Override
     public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<ResourceLocation, TextureAtlasSprite> spriteGetter, ISprite sprite, VertexFormat format, ItemOverrideList overrides)
     {
+        return bakeInternal(owner, bakery, spriteGetter, sprite, format, owner.getCombinedState());
+    }
+
+    protected IBakedModel bakeInternal(IModelConfiguration owner, ModelBakery bakery, Function<ResourceLocation, TextureAtlasSprite> spriteGetter, ISprite sprite, VertexFormat format, @Nullable IModelState transformsFromModel)
+    {
         ResourceLocation particleLocation = owner.isTexturePresent("particle") ? new ResourceLocation(owner.resolveTexture("particle")) : null;
         ResourceLocation baseLocation = owner.isTexturePresent("base") ? new ResourceLocation(owner.resolveTexture("base")) : null;
         if (this.isCracked && owner.isTexturePresent("crackedBase")) {
@@ -107,8 +112,9 @@ public class CeramicBucketModel implements IModelGeometry<CeramicBucketModel> {
         }
 
         TRSRTransformation transform = state.apply(Optional.empty()).orElse(TRSRTransformation.identity());
-        ImmutableMap<ItemCameraTransforms.TransformType, TRSRTransformation> transformMap =
-                PerspectiveMapWrapper.getTransforms(new ModelStateComposition(owner.getCombinedState(), state));
+        ImmutableMap<ItemCameraTransforms.TransformType, TRSRTransformation> transformMap = transformsFromModel != null ?
+                PerspectiveMapWrapper.getTransforms(new ModelStateComposition(transformsFromModel, state)) :
+                PerspectiveMapWrapper.getTransforms(state);
 
         ImmutableList.Builder<BakedQuad> builder = ImmutableList.builder();
 
@@ -201,7 +207,7 @@ public class CeramicBucketModel implements IModelGeometry<CeramicBucketModel> {
                         if (!model.cache.containsKey(name))
                         {
                             CeramicBucketModel parent = model.parent.withFluid(fluid);
-                            IBakedModel bakedModel = parent.bake(model.owner, bakery, ModelLoader.defaultTextureGetter(), new SimpleModelState(model.transforms), model.format, model.getOverrides());
+                            IBakedModel bakedModel = parent.bakeInternal(model.owner, bakery, ModelLoader.defaultTextureGetter(), new SimpleModelState(model.transforms), model.format, null);
                             model.cache.put(name, bakedModel);
                             return bakedModel;
                         }
