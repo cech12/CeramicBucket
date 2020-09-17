@@ -83,7 +83,7 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
                         if (fluid != Fluids.EMPTY) {
                             playerIn.addStat(Stats.ITEM_USED.get(this));
 
-                            SoundEvent soundevent = this.getFluid(itemstack).getAttributes().getEmptySound();
+                            SoundEvent soundevent = this.getFluid(itemstack).getAttributes().getFillSound();
                             if (soundevent == null) soundevent = fluid.isIn(FluidTags.LAVA) ? SoundEvents.ITEM_BUCKET_FILL_LAVA : SoundEvents.ITEM_BUCKET_FILL;
                             playerIn.playSound(soundevent, 1.0F, 1.0F);
                             ItemStack itemstack1 = this.fillBucket(itemstack, playerIn, fluid);
