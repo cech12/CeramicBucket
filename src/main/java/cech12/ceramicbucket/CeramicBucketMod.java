@@ -6,6 +6,7 @@ import cech12.ceramicbucket.config.Config;
 import cech12.ceramicbucket.item.CeramicFishBucketItem;
 import cech12.ceramicbucket.item.CeramicMilkBucketItem;
 import cech12.ceramicbucket.item.FilledCeramicBucketItem;
+import cech12.ceramicbucket.recipe.FilledCeramicBucketIngredient;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.CowEntity;
@@ -14,14 +15,19 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.SoundEvents;
+import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import static cech12.ceramicbucket.CeramicBucketMod.MOD_ID;
 
@@ -34,6 +40,13 @@ public class CeramicBucketMod {
     public CeramicBucketMod() {
         //Config
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.COMMON, MOD_ID + "-common.toml");
+
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        modEventBus.addGenericListener(IRecipeSerializer.class, this::registerRecipeSerializers);
+    }
+
+    private void registerRecipeSerializers(RegistryEvent.Register<IRecipeSerializer<?>> event) {
+        CraftingHelper.register(FilledCeramicBucketIngredient.Serializer.NAME, FilledCeramicBucketIngredient.Serializer.INSTANCE);
     }
 
     /**
