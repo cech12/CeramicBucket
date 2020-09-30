@@ -1,4 +1,4 @@
-package cech12.ceramicbucket.recipe;
+package cech12.ceramicbucket.api.crafting;
 
 import cech12.ceramicbucket.CeramicBucketMod;
 import cech12.ceramicbucket.api.item.CeramicBucketItems;
@@ -29,6 +29,7 @@ import java.util.stream.Stream;
 public class FilledCeramicBucketIngredient extends Ingredient {
 
     protected final Tag<Fluid> fluidTag;
+    private ItemStack[] matchingStacks;
 
     public FilledCeramicBucketIngredient(Tag<Fluid> fluidTag) {
         super(Stream.of());
@@ -51,11 +52,19 @@ public class FilledCeramicBucketIngredient extends Ingredient {
     @Override
     @Nonnull
     public ItemStack[] getMatchingStacks() {
-        FilledCeramicBucketItem bucketItem = (FilledCeramicBucketItem) CeramicBucketItems.FILLED_CERAMIC_BUCKET;
-        return fluidTag.getAllElements().stream()
-                .map(bucketItem::getFilledInstance)
-                .filter(this)
-                .toArray(ItemStack[]::new);
+        if (this.matchingStacks == null) {
+            FilledCeramicBucketItem bucketItem = (FilledCeramicBucketItem) CeramicBucketItems.FILLED_CERAMIC_BUCKET;
+            this.matchingStacks = this.fluidTag.getAllElements().stream()
+                    .map(bucketItem::getFilledInstance)
+                    .filter(this)
+                    .toArray(ItemStack[]::new);
+        }
+        return this.matchingStacks;
+    }
+
+    @Override
+    public boolean hasNoMatchingItems() {
+        return false;
     }
 
     @Override
@@ -64,8 +73,8 @@ public class FilledCeramicBucketIngredient extends Ingredient {
     }
 
     @Override
-    public boolean hasNoMatchingItems() {
-        return false;
+    protected void invalidate() {
+        this.matchingStacks = null;
     }
 
     @Override
@@ -78,7 +87,7 @@ public class FilledCeramicBucketIngredient extends Ingredient {
     public JsonElement serialize() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("type", Serializer.NAME.toString());
-        jsonObject.addProperty("tag", this.fluidTag.getId().toString());
+        jsonObject.addProperty("tag", this.fluidTag.toString());
         return jsonObject;
     }
 
@@ -102,7 +111,7 @@ public class FilledCeramicBucketIngredient extends Ingredient {
 
         @Override
         public void write(PacketBuffer buffer, FilledCeramicBucketIngredient ingredient) {
-            buffer.writeString(ingredient.fluidTag.getId().toString());
+            buffer.writeString(ingredient.fluidTag.toString());
         }
     }
 }
