@@ -1,12 +1,13 @@
 package cech12.ceramicbucket;
 
 import cech12.ceramicbucket.api.item.CeramicBucketItems;
+import cech12.ceramicbucket.api.crafting.FluidIngredient;
 import cech12.ceramicbucket.compat.ModCompat;
 import cech12.ceramicbucket.config.Config;
 import cech12.ceramicbucket.item.CeramicFishBucketItem;
 import cech12.ceramicbucket.item.CeramicMilkBucketItem;
 import cech12.ceramicbucket.item.FilledCeramicBucketItem;
-import cech12.ceramicbucket.recipe.FilledCeramicBucketIngredient;
+import cech12.ceramicbucket.api.crafting.FilledCeramicBucketIngredient;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.CowEntity;
@@ -46,6 +47,7 @@ public class CeramicBucketMod {
     }
 
     private void registerRecipeSerializers(RegistryEvent.Register<IRecipeSerializer<?>> event) {
+        CraftingHelper.register(FluidIngredient.Serializer.NAME, FluidIngredient.Serializer.INSTANCE);
         CraftingHelper.register(FilledCeramicBucketIngredient.Serializer.NAME, FilledCeramicBucketIngredient.Serializer.INSTANCE);
     }
 
