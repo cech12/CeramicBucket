@@ -1,0 +1,37 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "cobblefordays"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "RRR",
+    "WGL",
+    "RRR"
+  ],
+  "key": {
+    "W": {
+      "type": "ceramicbucket:fluid",
+      "tag": "forge:water",
+      "amount": 1000,
+      "exact": true
+    },
+    "L": {
+      "type": "ceramicbucket:fluid",
+      "tag": "forge:lava",
+      "amount": 1000,
+      "exact": true
+    },
+    "G": {
+      "item": "minecraft:glass"
+    },
+    "R": {
+      "tag": "minecraft:logs"
+    }
+  },
+  "result": {
+    "item": "cobblefordays:tier_1"
+  }
+}
