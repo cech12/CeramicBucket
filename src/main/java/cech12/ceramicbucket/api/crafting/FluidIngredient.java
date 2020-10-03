@@ -1,9 +1,11 @@
 package cech12.ceramicbucket.api.crafting;
 
 import cech12.ceramicbucket.CeramicBucketMod;
+import cech12.ceramicbucket.util.CeramicBucketUtils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
@@ -16,6 +18,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 
@@ -62,11 +65,19 @@ public class FluidIngredient extends Ingredient {
     @Nonnull
     public ItemStack[] getMatchingStacks() {
         if (this.matchingStacks == null) {
-            this.matchingStacks = this.fluidTag.getAllElements().stream()
-                    .map(fluid -> new FluidStack(fluid, amount))
-                    .map(FluidUtil::getFilledBucket) //TODO other item stacks than only normal buckets?
-                    .filter(this)
-                    .toArray(ItemStack[]::new);
+            ArrayList<ItemStack> stacks = new ArrayList<>();
+            ArrayList<Fluid> addedFluids = new ArrayList<>();
+            this.fluidTag.getAllElements().forEach(fluid -> {
+                //only fluid buckets which are obtainable
+                ItemStack bucket = FluidUtil.getFilledBucket(new FluidStack(fluid, amount));
+                Fluid bucketFluid = FluidUtil.getFluidContained(bucket).orElse(FluidStack.EMPTY).getFluid();
+                if (bucketFluid != Fluids.EMPTY && !addedFluids.contains(bucketFluid)) {
+                    stacks.add(bucket);
+                    stacks.add(CeramicBucketUtils.getFilledCeramicBucket(bucketFluid));
+                    addedFluids.add(bucketFluid);
+                }
+            });
+            this.matchingStacks = stacks.toArray(new ItemStack[0]);
         }
         return this.matchingStacks;
     }
