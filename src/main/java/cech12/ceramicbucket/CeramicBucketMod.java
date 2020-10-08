@@ -60,7 +60,7 @@ public class CeramicBucketMod {
             return;
         }
         LivingEntity entity = (LivingEntity) event.getTarget();
-        //only interact with cows and fishes
+        //only interact with cows and fish
         if (entity instanceof CowEntity || ModCompat.canEntityBeMilked(entity)) {
             PlayerEntity player = event.getPlayer();
             ItemStack itemstack = player.getHeldItem(event.getHand());
@@ -77,15 +77,13 @@ public class CeramicBucketMod {
                 event.setCanceled(true);
                 event.setCancellationResult(ActionResultType.SUCCESS);
             }
-        } else if (entity instanceof AbstractFishEntity) {
+        } else if (Config.FISH_OBTAINING_ENABLED.getValue() && entity instanceof AbstractFishEntity) {
             AbstractFishEntity fishEntity = (AbstractFishEntity) entity;
             PlayerEntity player = event.getPlayer();
             ItemStack itemstack = player.getHeldItem(event.getHand());
             if (itemstack.getItem() == CeramicBucketItems.FILLED_CERAMIC_BUCKET && ((FilledCeramicBucketItem) itemstack.getItem()).getFluid(itemstack) == Fluids.WATER && fishEntity.isAlive()) {
                 fishEntity.playSound(SoundEvents.ITEM_BUCKET_FILL_FISH, 1.0F, 1.0F);
                 if (!event.getWorld().isRemote()) {
-                    itemstack.shrink(1);
-                    //-------------------------------------------
                     //get ceramic variant
                     ItemStack bucket;
                     if (fishEntity instanceof PufferfishEntity) {
@@ -94,9 +92,13 @@ public class CeramicBucketMod {
                         bucket = ((CeramicFishBucketItem) CeramicBucketItems.COD_CERAMIC_BUCKET).getFilledInstance();
                     } else if (fishEntity instanceof TropicalFishEntity) {
                         bucket = ((CeramicFishBucketItem) CeramicBucketItems.TROPICAL_FISH_CERAMIC_BUCKET).getFilledInstance();
-                    } else {
+                    } else if (fishEntity instanceof SalmonEntity) {
                         bucket = ((CeramicFishBucketItem) CeramicBucketItems.SALMON_CERAMIC_BUCKET).getFilledInstance();
+                    } else {
+                        //other fish types are not supported for now
+                        return;
                     }
+                    itemstack.shrink(1);
                     //setBucketData
                     if (fishEntity.hasCustomName()) {
                         bucket.setDisplayName(fishEntity.getCustomName());
@@ -105,7 +107,7 @@ public class CeramicBucketMod {
                         CompoundNBT compoundnbt = bucket.getOrCreateTag();
                         compoundnbt.putInt("BucketVariantTag", ((TropicalFishEntity)fishEntity).getVariant());
                     }
-                    //-------------------------------------------
+
                     if (!fishEntity.world.isRemote) {
                         CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayerEntity) player, bucket);
                     }

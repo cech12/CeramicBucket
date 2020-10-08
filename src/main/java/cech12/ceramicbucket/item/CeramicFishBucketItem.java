@@ -1,5 +1,6 @@
 package cech12.ceramicbucket.item;
 
+import cech12.ceramicbucket.config.Config;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -26,6 +27,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class CeramicFishBucketItem extends FilledCeramicBucketItem {
@@ -90,6 +94,16 @@ public class CeramicFishBucketItem extends FilledCeramicBucketItem {
                 tooltip.add(textComponent);
             }
         }
+    }
+
+    @Override
+    public Collection<ItemGroup> getCreativeTabs() {
+        //only add the fish buckets to creative tab if obtaining is enabled
+        if (Config.FISH_OBTAINING_ENABLED.getValue()) {
+            //TODO ItemGroup.SEARCH is set before config is loaded!
+            return Arrays.asList(ItemGroup.MISC, ItemGroup.SEARCH);
+        }
+        return Collections.singletonList(null);
     }
 
     /**
