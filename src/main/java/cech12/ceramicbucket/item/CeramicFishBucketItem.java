@@ -101,11 +101,10 @@ public class CeramicFishBucketItem extends FilledCeramicBucketItem {
 
     @Override
     public Collection<ItemGroup> getCreativeTabs() {
-        //only add the fish buckets to creative tab if obtaining is enabled
-        if (Config.FISH_OBTAINING_ENABLED.getValue()) {
-            //TODO ItemGroup.SEARCH is set before config is loaded!
-            return Arrays.asList(ItemGroup.MISC, ItemGroup.SEARCH);
-        }
+        //do nothing
+        //if (Config.FISH_OBTAINING_ENABLED.get()) {
+        //    return Arrays.asList(ItemGroup.MISC, ItemGroup.SEARCH);
+        //}
         return Collections.singletonList(null);
     }
 
@@ -114,14 +113,15 @@ public class CeramicFishBucketItem extends FilledCeramicBucketItem {
      */
     @Override
     public void fillItemGroup(@Nonnull ItemGroup group, @Nonnull NonNullList<ItemStack> items) {
-        if (this.isInGroup(group)) {
-            items.add(this.getFilledInstance());
-        }
+        //do nothing
+        //if (this.isInGroup(group)) {
+        //    items.add(this.getFilledInstance());
+        //}
     }
 
     @Override
     @Nonnull
     public ITextComponent getDisplayName(@Nonnull ItemStack stack) {
-        return new TranslationTextComponent("item.ceramicbucket.ceramic_fish_bucket", fishType.getName());
+        return new TranslationTextComponent("item.ceramicbucket.ceramic_entity_bucket", fishType.getName());
     }
 }

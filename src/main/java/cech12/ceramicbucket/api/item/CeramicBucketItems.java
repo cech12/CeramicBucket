@@ -9,6 +9,9 @@ public class CeramicBucketItems {
     public static Item CERAMIC_MILK_BUCKET;
     public static Item UNFIRED_CLAY_BUCKET;
 
+    public static Item CERAMIC_ENTITY_BUCKET;
+
+    //TODO fish buckets can be removed on 1.17 update
     public static Item PUFFERFISH_CERAMIC_BUCKET;
     public static Item SALMON_CERAMIC_BUCKET;
     public static Item COD_CERAMIC_BUCKET;

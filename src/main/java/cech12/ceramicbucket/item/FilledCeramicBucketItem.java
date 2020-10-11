@@ -40,6 +40,7 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
     }
 
     @Nonnull
+    @Override
     @OnlyIn(Dist.CLIENT)
     public ItemStack getDefaultInstance() {
         return this.getFilledInstance(Fluids.WATER);
@@ -113,7 +114,7 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
         if (this.hasContainerItem(itemStack)) {
             return new ItemStack(CeramicBucketItems.CERAMIC_BUCKET);
         }
-        return null;
+        return ItemStack.EMPTY;
     }
 
 }

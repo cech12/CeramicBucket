@@ -23,6 +23,7 @@ public class ModJEIPlugin implements IModPlugin {
     @Override
     public void registerItemSubtypes(ISubtypeRegistration registration) {
         registration.useNbtForSubtypes(CeramicBucketItems.FILLED_CERAMIC_BUCKET);
+        registration.useNbtForSubtypes(CeramicBucketItems.CERAMIC_ENTITY_BUCKET);
     }
 
 }

@@ -61,7 +61,7 @@ public class CeramicBucketUtils {
      * @return true if the temperature of the fluid is more than the break temperature, else false
      */
     public static boolean isFluidTooHotForCeramicBucket(@Nonnull Fluid fluid) {
-        int minBreakTemperature = Config.CERAMIC_BUCKET_BREAK_TEMPERATURE.getValue();
+        int minBreakTemperature = Config.CERAMIC_BUCKET_BREAK_TEMPERATURE.get();
         return minBreakTemperature >= 0 && fluid.getAttributes().getTemperature() >= minBreakTemperature;
     }
 

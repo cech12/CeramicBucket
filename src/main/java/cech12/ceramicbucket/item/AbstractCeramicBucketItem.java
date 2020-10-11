@@ -190,7 +190,7 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
             boolean canContainFluid = canBlockContainFluid(worldIn, posIn, blockstate, stack);
             if (worldIn.isAirBlock(posIn) || flag || flag1 || canContainFluid) {
                 IFluidHandlerItem fluidHandler = FluidUtil.getFluidHandler(stack).orElse(null);
-                FluidStack fluidStack = fluidHandler != null ? fluidHandler.drain(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE) : null;
+                FluidStack fluidStack = fluidHandler != null ? fluidHandler.drain(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.SIMULATE) : null;
                 //worldIn.dimension.doesWaterVaporize()
                 if (fluidStack != null && worldIn.func_230315_m_().func_236040_e_() && this.getFluid(stack).isIn(FluidTags.WATER)) {
                     fluidAttributes.vaporize(player, worldIn, posIn, fluidStack);
