@@ -153,7 +153,7 @@ public class CeramicEntityBucketItem extends FilledCeramicBucketItem {
     }
 
     @Nullable
-    private EntityType<?> getEntityTypeFromStack(ItemStack stack) {
+    public EntityType<?> getEntityTypeFromStack(ItemStack stack) {
         if (stack.hasTag()) {
             return EntityType.byKey(stack.getTag().getString("entity")).orElse(null);
         }
