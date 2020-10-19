@@ -12,15 +12,18 @@ import java.util.List;
 
 public class MinecraftCompat extends ModCompat.Mod implements ModCompat.MobMilkingMod, ModCompat.EntityTypeObtainingMod {
 
-    List<ObtainableEntityType> obtainableEntityTypes;
+    List<ObtainableEntityType> obtainableEntityTypes = new ArrayList<>();
 
     public MinecraftCompat() {
         super("minecraft");
-        this.obtainableEntityTypes = new ArrayList<>();
-        this.obtainableEntityTypes.add(new ObtainableEntityType.Builder(EntityType.PUFFERFISH, Fluids.WATER).build());
-        this.obtainableEntityTypes.add(new ObtainableEntityType.Builder(EntityType.SALMON, Fluids.WATER).addFluidTag(FluidTags.WATER).build());
-        this.obtainableEntityTypes.add(new ObtainableEntityType.Builder(EntityType.COD, Fluids.WATER).addFluidTag(FluidTags.WATER).build());
-        this.obtainableEntityTypes.add(new ObtainableEntityType.Builder(EntityType.TROPICAL_FISH, Fluids.WATER).addFluidTag(FluidTags.WATER).build());
+        this.addFish(EntityType.PUFFERFISH);
+        this.addFish(EntityType.SALMON);
+        this.addFish(EntityType.COD);
+        this.addFish(EntityType.TROPICAL_FISH);
+    }
+
+    private void addFish(EntityType<?> fish) {
+        this.obtainableEntityTypes.add(new ObtainableEntityType.Builder(fish, Fluids.WATER).addFluidTag(FluidTags.WATER).build());
     }
 
     @Override
