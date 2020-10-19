@@ -1,7 +1,9 @@
 package cech12.ceramicbucket.item;
 
+import cech12.ceramicbucket.api.data.ObtainableEntityType;
 import cech12.ceramicbucket.compat.ModCompat;
 import cech12.ceramicbucket.config.Config;
+import cech12.ceramicbucket.util.CeramicBucketUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.fish.AbstractFishEntity;
@@ -17,7 +19,7 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
@@ -84,9 +86,13 @@ public class CeramicEntityBucketItem extends FilledCeramicBucketItem {
         }
     }
 
-    protected void playEmptySound(@Nullable PlayerEntity player, IWorld worldIn, @Nonnull BlockPos pos) {
-        //TODO other sounds?
-        worldIn.playSound(player, pos, SoundEvents.ITEM_BUCKET_EMPTY_FISH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+    @Override
+    protected void playEmptySound(@org.jetbrains.annotations.Nullable PlayerEntity player, @Nonnull IWorld worldIn, @Nonnull BlockPos pos, @Nonnull ItemStack stack) {
+        ObtainableEntityType type = ModCompat.getObtainableEntityType(this.getEntityTypeFromStack(stack));
+        if (type != null) {
+            SoundEvent soundevent = type.getEmptySound();
+            worldIn.playSound(player, pos, soundevent, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        }
     }
 
     @Override
@@ -105,8 +111,8 @@ public class CeramicEntityBucketItem extends FilledCeramicBucketItem {
     @Override
     public void fillItemGroup(@Nonnull ItemGroup group, @Nonnull NonNullList<ItemStack> items) {
         if (this.isInGroup(group)) {
-            for (ModCompat.ObtainableEntityType type : ModCompat.getObtainableEntityTypes()) {
-                items.add(this.getFilledInstance(type.getFluid(), type.getEntityType()));
+            for (ObtainableEntityType type : ModCompat.getObtainableEntityTypes()) {
+                items.add(this.getFilledInstance(type.getOneFluid(), type.getEntityType()));
             }
         }
     }
@@ -162,7 +168,13 @@ public class CeramicEntityBucketItem extends FilledCeramicBucketItem {
 
     @Override
     public boolean hasContainerItem(ItemStack stack) {
-        //TODO
-        return true;
+        ObtainableEntityType type = ModCompat.getObtainableEntityType(this.getEntityTypeFromStack(stack));
+        if (type != null) {
+            Boolean cracksBucket = type.cracksBucket();
+            if (cracksBucket != null) {
+                return cracksBucket;
+            }
+        }
+        return !CeramicBucketUtils.isFluidTooHotForCeramicBucket(getFluid(stack));
     }
 }

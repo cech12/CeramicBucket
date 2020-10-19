@@ -1,24 +1,26 @@
 package cech12.ceramicbucket.compat;
 
+import cech12.ceramicbucket.api.data.ObtainableEntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.tags.FluidTags;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MinecraftCompat extends ModCompat.Mod implements ModCompat.MobMilkingMod, ModCompat.EntityTypeObtainingMod {
 
-    List<ModCompat.ObtainableEntityType> obtainableEntityTypes;
+    List<ObtainableEntityType> obtainableEntityTypes;
 
     public MinecraftCompat() {
         super("minecraft");
         this.obtainableEntityTypes = new ArrayList<>();
-        this.obtainableEntityTypes.add(new ModCompat.ObtainableEntityType(Fluids.WATER, EntityType.PUFFERFISH));
-        this.obtainableEntityTypes.add(new ModCompat.ObtainableEntityType(Fluids.WATER, EntityType.SALMON));
-        this.obtainableEntityTypes.add(new ModCompat.ObtainableEntityType(Fluids.WATER, EntityType.COD));
-        this.obtainableEntityTypes.add(new ModCompat.ObtainableEntityType(Fluids.WATER, EntityType.TROPICAL_FISH));
+        this.obtainableEntityTypes.add(new ObtainableEntityType.Builder(EntityType.PUFFERFISH, Fluids.WATER).build());
+        this.obtainableEntityTypes.add(new ObtainableEntityType.Builder(EntityType.SALMON, Fluids.WATER).addFluidTag(FluidTags.WATER).build());
+        this.obtainableEntityTypes.add(new ObtainableEntityType.Builder(EntityType.COD, Fluids.WATER).addFluidTag(FluidTags.WATER).build());
+        this.obtainableEntityTypes.add(new ObtainableEntityType.Builder(EntityType.TROPICAL_FISH, Fluids.WATER).addFluidTag(FluidTags.WATER).build());
     }
 
     @Override
@@ -32,7 +34,7 @@ public class MinecraftCompat extends ModCompat.Mod implements ModCompat.MobMilki
     }
 
     @Override
-    public List<ModCompat.ObtainableEntityType> getObtainableEntityTypes() {
+    public List<ObtainableEntityType> getObtainableEntityTypes() {
         return this.obtainableEntityTypes;
     }
 

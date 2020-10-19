@@ -1,6 +1,7 @@
 package cech12.ceramicbucket.client;
 
 import cech12.ceramicbucket.CeramicBucketMod;
+import cech12.ceramicbucket.api.data.ObtainableEntityType;
 import cech12.ceramicbucket.client.model.CeramicBucketModel;
 import cech12.ceramicbucket.client.model.CeramicEntityBucketModel;
 import cech12.ceramicbucket.compat.ModCompat;
@@ -26,7 +27,7 @@ public class ClientEvents {
     @SubscribeEvent
     public static void onTextureStitch(TextureStitchEvent.Pre event){
         if (event.getMap().getTextureLocation().equals(PlayerContainer.LOCATION_BLOCKS_TEXTURE)) { //AtlasTexture.LOCATION_BLOCKS_TEXTURE
-            for (ModCompat.ObtainableEntityType entityType : ModCompat.getObtainableEntityTypes()) {
+            for (ObtainableEntityType entityType : ModCompat.getObtainableEntityTypes()) {
                 event.addSprite(CeramicEntityBucketModel.getEntityTexture(EntityType.getKey(entityType.getEntityType())));
             }
         }

@@ -1,12 +1,12 @@
 package cech12.ceramicbucket.compat;
 
+import cech12.ceramicbucket.api.data.ObtainableEntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraftforge.fml.ModList;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +46,15 @@ public class ModCompat {
         return false;
     }
 
+    public static ObtainableEntityType getObtainableEntityType(EntityType<?> entityType) {
+        for (ObtainableEntityType type : getObtainableEntityTypes()) {
+            if (type.getEntityType() == entityType) {
+                return type;
+            }
+        }
+        return null;
+    }
+
     public static class Mod {
 
         protected String name;
@@ -72,31 +81,11 @@ public class ModCompat {
 
         default boolean canEntityTypeBeObtained(Fluid fluid, EntityType<?> entityType) {
             for (ObtainableEntityType type : this.getObtainableEntityTypes()) {
-                if (type.getFluid() == fluid && type.getEntityType() == entityType){
+                if (type.getEntityType() == entityType && type.isCorrectFluid(fluid)){
                     return true;
                 }
             }
             return false;
-        }
-
-    }
-
-    public static class ObtainableEntityType {
-
-        private final Fluid fluid;
-        private final EntityType<?> entityType;
-
-        public ObtainableEntityType(@Nonnull Fluid fluid, @Nonnull EntityType<?> entityType) {
-            this.fluid = fluid;
-            this.entityType = entityType;
-        }
-
-        public Fluid getFluid() {
-            return this.fluid;
-        }
-
-        public EntityType<?> getEntityType() {
-            return this.entityType;
         }
 
     }

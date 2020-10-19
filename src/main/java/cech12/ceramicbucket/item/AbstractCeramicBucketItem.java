@@ -23,6 +23,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -59,6 +60,12 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
                         : LazyOptional.empty();
             }
         };
+    }
+
+    protected void playEmptySound(@Nullable PlayerEntity player, @Nonnull IWorld worldIn, @Nonnull BlockPos pos, @Nonnull ItemStack stack) {
+        SoundEvent soundevent = this.getFluid(stack).getAttributes().getEmptySound();
+        if (soundevent == null) soundevent = this.getFluid(stack).isIn(FluidTags.LAVA) ? SoundEvents.ITEM_BUCKET_EMPTY_LAVA : SoundEvents.ITEM_BUCKET_EMPTY;
+        worldIn.playSound(player, pos, soundevent, SoundCategory.BLOCKS, 1.0F, 1.0F);
     }
 
     @Override
@@ -103,14 +110,15 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
                     Fluid fluid = this.getFluid(itemstack);
                     CauldronBlock cauldron = (CauldronBlock) blockstate.getBlock();
                     int level = blockstate.get(CauldronBlock.LEVEL);
-                    if (fluid.isIn(FluidTags.WATER) && !(itemstack.getItem() instanceof CeramicFishBucketItem)) {
+                    if (fluid.isIn(FluidTags.WATER) && !(itemstack.getItem() instanceof CeramicFishBucketItem)) { //TODO
                         if (level < 3) {
-                            itemstack = this.emptyBucket(itemstack, playerIn);
+                            ItemStack emptyStack = this.emptyBucket(itemstack, playerIn);
                             if (!worldIn.isRemote) {
                                 playerIn.addStat(Stats.FILL_CAULDRON);
                                 cauldron.setWaterLevel(worldIn, blockpos, blockstate, 3);
-                                this.playEmptySound(playerIn, worldIn, blockpos);
+                                this.playEmptySound(playerIn, worldIn, blockpos, itemstack);
                             }
+                            itemstack = emptyStack;
                         }
                         return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
                     } else if (fluid == Fluids.EMPTY) {
@@ -196,14 +204,14 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
                     fluidAttributes.vaporize(player, worldIn, posIn, fluidStack);
                 } else if (canContainFluid) {
                     if (((ILiquidContainer) blockstate.getBlock()).receiveFluid(worldIn, posIn, blockstate, ((FlowingFluid) fluid).getStillFluidState(false))) {
-                        this.playEmptySound(player, worldIn, posIn);
+                        this.playEmptySound(player, worldIn, posIn, stack);
                     }
                 } else {
                     if (!worldIn.isRemote && (flag || flag1) && !material.isLiquid()) {
                         worldIn.destroyBlock(posIn, true);
                     }
 
-                    this.playEmptySound(player, worldIn, posIn);
+                    this.playEmptySound(player, worldIn, posIn, stack);
                     worldIn.setBlockState(posIn, fluid.getDefaultState().getBlockState(), 11);
                 }
 
