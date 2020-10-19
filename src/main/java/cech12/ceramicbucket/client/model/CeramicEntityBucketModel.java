@@ -33,6 +33,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelTransformComposition;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.resource.IResourceType;
 import net.minecraftforge.resource.VanillaResourceType;
 
@@ -83,7 +84,7 @@ public class CeramicEntityBucketModel implements IModelGeometry<CeramicEntityBuc
         }
         RenderMaterial entityLocation = null;
         if (this.entityType != null) {
-            entityLocation = new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, getEntityTexture(EntityType.getKey(this.entityType))); //AtlasTexture.LOCATION_BLOCKS_TEXTURE
+            entityLocation = new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, getEntityTexture(ForgeRegistries.ENTITIES.getKey(this.entityType))); //AtlasTexture.LOCATION_BLOCKS_TEXTURE
         }
         TextureAtlasSprite entitySprite = entityLocation != null ? spriteGetter.apply(entityLocation) : null;
 
@@ -179,22 +180,24 @@ public class CeramicEntityBucketModel implements IModelGeometry<CeramicEntityBuc
         @Override
         public IBakedModel func_239290_a_(IBakedModel originalModel, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity)
         {
-            IBakedModel overriden = nested.func_239290_a_(originalModel, stack, world, entity);
-            if (overriden != originalModel) return overriden;
+            IBakedModel overridden = nested.func_239290_a_(originalModel, stack, world, entity);
+            if (overridden != originalModel) return overridden;
             if (stack.getItem() instanceof CeramicEntityBucketItem) {
                 CeramicEntityBucketItem bucket = (CeramicEntityBucketItem) stack.getItem();
                 EntityType<?> containedEntityType = bucket.getEntityTypeFromStack(stack);
-                boolean isCracked = false; //TODO
                 if (containedEntityType != null) {
-                    String name = EntityType.getKey(containedEntityType).toString();
-                    if (!cache.containsKey(name))
-                    {
-                        CeramicEntityBucketModel unbaked = this.parent.withEntityType(containedEntityType, isCracked);
-                        IBakedModel bakedModel = unbaked.bake(owner, bakery, ModelLoader.defaultTextureGetter(), ModelRotation.X0_Y0, this, REBAKE_LOCATION);
-                        cache.put(name, bakedModel);
-                        return bakedModel;
+                    ResourceLocation typeName = ForgeRegistries.ENTITIES.getKey(containedEntityType);
+                    if (typeName != null) {
+                        String name = typeName.toString();
+                        if (!cache.containsKey(name))
+                        {
+                            CeramicEntityBucketModel unbaked = this.parent.withEntityType(containedEntityType, bucket.cracksBucket(stack));
+                            IBakedModel bakedModel = unbaked.bake(owner, bakery, ModelLoader.defaultTextureGetter(), ModelRotation.X0_Y0, this, REBAKE_LOCATION);
+                            cache.put(name, bakedModel);
+                            return bakedModel;
+                        }
+                        return cache.get(name);
                     }
-                    return cache.get(name);
                 }
             }
             return originalModel;

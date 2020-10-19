@@ -6,6 +6,7 @@ import cech12.ceramicbucket.config.Config;
 import cech12.ceramicbucket.util.CeramicBucketUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.passive.fish.AbstractFishEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
@@ -81,17 +82,29 @@ public class CeramicEntityBucketItem extends FilledCeramicBucketItem {
                 worldIn.addEntity(entity);
                 if (entity instanceof AbstractFishEntity) {
                     ((AbstractFishEntity)entity).setFromBucket(true);
+                } else if (entity instanceof MobEntity) {
+                    ((MobEntity)entity).enablePersistence(); //TODO really?
                 }
             }
         }
     }
 
     @Override
-    protected void playEmptySound(@org.jetbrains.annotations.Nullable PlayerEntity player, @Nonnull IWorld worldIn, @Nonnull BlockPos pos, @Nonnull ItemStack stack) {
+    protected void playEmptySound(@Nullable PlayerEntity player, @Nonnull IWorld worldIn, @Nonnull BlockPos pos, @Nonnull ItemStack stack) {
         ObtainableEntityType type = ModCompat.getObtainableEntityType(this.getEntityTypeFromStack(stack));
         if (type != null) {
             SoundEvent soundevent = type.getEmptySound();
             worldIn.playSound(player, pos, soundevent, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        }
+    }
+
+    @Override
+    protected void playFillSound(@Nullable PlayerEntity player, @Nonnull ItemStack stack) {
+        if (player == null) return;
+        ObtainableEntityType type = ModCompat.getObtainableEntityType(this.getEntityTypeFromStack(stack));
+        if (type != null) {
+            SoundEvent soundevent = type.getFillSound();
+            player.playSound(soundevent, 1.0F, 1.0F);
         }
     }
 
@@ -166,8 +179,7 @@ public class CeramicEntityBucketItem extends FilledCeramicBucketItem {
         return null;
     }
 
-    @Override
-    public boolean hasContainerItem(ItemStack stack) {
+    public boolean cracksBucket(ItemStack stack) {
         ObtainableEntityType type = ModCompat.getObtainableEntityType(this.getEntityTypeFromStack(stack));
         if (type != null) {
             Boolean cracksBucket = type.cracksBucket();
@@ -175,6 +187,11 @@ public class CeramicEntityBucketItem extends FilledCeramicBucketItem {
                 return cracksBucket;
             }
         }
-        return !CeramicBucketUtils.isFluidTooHotForCeramicBucket(getFluid(stack));
+        return CeramicBucketUtils.isFluidTooHotForCeramicBucket(getFluid(stack));
+    }
+
+    @Override
+    public boolean hasContainerItem(ItemStack stack) {
+        return !this.cracksBucket(stack);
     }
 }

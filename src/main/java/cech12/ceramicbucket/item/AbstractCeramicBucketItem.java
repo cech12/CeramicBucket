@@ -68,6 +68,14 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
         worldIn.playSound(player, pos, soundevent, SoundCategory.BLOCKS, 1.0F, 1.0F);
     }
 
+    protected void playFillSound(@Nullable PlayerEntity player, @Nonnull ItemStack stack) {
+        if (player != null) {
+            SoundEvent soundevent = this.getFluid(stack).getAttributes().getEmptySound();
+            if (soundevent == null) soundevent = this.getFluid(stack).isIn(FluidTags.LAVA) ? SoundEvents.ITEM_BUCKET_FILL_LAVA : SoundEvents.ITEM_BUCKET_FILL;
+            player.playSound(soundevent, 1.0F, 1.0F);
+        }
+    }
+
     @Override
     @Nonnull
     public ActionResult<ItemStack> onItemRightClick(@Nonnull World worldIn, PlayerEntity playerIn, @Nonnull Hand handIn) {
@@ -90,10 +98,8 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
                         if (fluid != Fluids.EMPTY) {
                             playerIn.addStat(Stats.ITEM_USED.get(this));
 
-                            SoundEvent soundevent = this.getFluid(itemstack).getAttributes().getFillSound();
-                            if (soundevent == null) soundevent = fluid.isIn(FluidTags.LAVA) ? SoundEvents.ITEM_BUCKET_FILL_LAVA : SoundEvents.ITEM_BUCKET_FILL;
-                            playerIn.playSound(soundevent, 1.0F, 1.0F);
                             ItemStack itemstack1 = this.fillBucket(itemstack, playerIn, fluid);
+                            this.playFillSound(playerIn, itemstack1);
                             if (!worldIn.isRemote) {
                                 CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayerEntity) playerIn, new ItemStack(fluid.getFilledBucket()));
                             }
@@ -127,7 +133,7 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
                             if (!worldIn.isRemote) {
                                 playerIn.addStat(Stats.USE_CAULDRON);
                                 cauldron.setWaterLevel(worldIn, blockpos, blockstate, 0);
-                                worldIn.playSound(null, blockpos, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                                this.playFillSound(playerIn, itemstack);
                             }
                         }
                         return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
