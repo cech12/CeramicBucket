@@ -76,26 +76,28 @@ public class CeramicBucketMod {
                 return;
             }
         }
-        //check if filled ceramic bucket is there and contains a fluid
-        //or ceramic bucket is there
-        Fluid fluid = FluidUtil.getFluidContained(itemstack).orElse(FluidStack.EMPTY).getFluid();
-        if ((fluid != Fluids.EMPTY && itemstack.getItem() != CeramicBucketItems.FILLED_CERAMIC_BUCKET)
-            || (fluid == Fluids.EMPTY && itemstack.getItem() != CeramicBucketItems.CERAMIC_BUCKET)) {
-            return;
-        }
-        //check if the entity can be inside of a ceramic entity bucket
-        if (ModCompat.canEntityTypeBeObtained(fluid, entity.getType())) {
-            if (!event.getWorld().isRemote()) {
-                itemstack.shrink(1);
-                ItemStack filledBucket = ((CeramicEntityBucketItem)CeramicBucketItems.CERAMIC_ENTITY_BUCKET).getFilledInstance(fluid, entity);
-                if (itemstack.isEmpty()) {
-                    player.setHeldItem(event.getHand(), filledBucket);
-                } else if (!player.inventory.addItemStackToInventory(filledBucket)) {
-                    player.dropItem(filledBucket, false);
-                }
+        if (Config.FISH_OBTAINING_ENABLED.get()) {
+            //check if filled ceramic bucket is there and contains a fluid
+            //or ceramic bucket is there
+            Fluid fluid = FluidUtil.getFluidContained(itemstack).orElse(FluidStack.EMPTY).getFluid();
+            if ((fluid != Fluids.EMPTY && itemstack.getItem() != CeramicBucketItems.FILLED_CERAMIC_BUCKET)
+                    || (fluid == Fluids.EMPTY && itemstack.getItem() != CeramicBucketItems.CERAMIC_BUCKET)) {
+                return;
             }
-            event.setCanceled(true);
-            event.setCancellationResult(ActionResultType.SUCCESS);
+            //check if the entity can be inside of a ceramic entity bucket
+            if (ModCompat.canEntityTypeBeObtained(fluid, entity.getType())) {
+                if (!event.getWorld().isRemote()) {
+                    itemstack.shrink(1);
+                    ItemStack filledBucket = ((CeramicEntityBucketItem)CeramicBucketItems.CERAMIC_ENTITY_BUCKET).getFilledInstance(fluid, entity);
+                    if (itemstack.isEmpty()) {
+                        player.setHeldItem(event.getHand(), filledBucket);
+                    } else if (!player.inventory.addItemStackToInventory(filledBucket)) {
+                        player.dropItem(filledBucket, false);
+                    }
+                }
+                event.setCanceled(true);
+                event.setCancellationResult(ActionResultType.SUCCESS);
+            }
         }
     }
 
