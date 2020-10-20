@@ -23,7 +23,7 @@ import java.util.stream.Stream;
 /**
  * A Ceramic Bucket filled with a fluid can be used in recipes with this ingredient class.
  * Usage is the same as for a vanilla ingredient.
- * Example JSON object: { "type": "ceramicbucket:filled_ceramic_bucket", "tag": "forge:lava" }
+ * Example JSON object: { "type": "ceramicbucket:filled_ceramic_bucket", "tag": "minecraft:lava" }
  * The tag is a fluid tag of the fluid that the Ceramic Bucket should contain.
  */
 public class FilledCeramicBucketIngredient extends Ingredient {
