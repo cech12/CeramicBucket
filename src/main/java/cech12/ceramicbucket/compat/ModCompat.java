@@ -18,7 +18,8 @@ public class ModCompat {
             new MinecraftCompat(),
             new AquacultureCompat(),
             new CombustiveFishingCompat(),
-            new MilkAllTheMobs()
+            new MilkAllTheMobs(),
+            new UpgradeAquaticCompat()
     };
 
     public static boolean canEntityBeMilked(Entity entity) {
