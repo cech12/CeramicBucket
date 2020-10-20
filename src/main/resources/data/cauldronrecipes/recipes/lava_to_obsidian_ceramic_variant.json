@@ -8,7 +8,7 @@
   "type": "cauldronrecipes:cauldron_recipe",
   "input": {
     "type": "ceramicbucket:filled_ceramic_bucket",
-    "tag": "forge:lava"
+    "tag": "minecraft:lava"
   },
   "fluidLevel": 3,
   "result": ["minecraft:obsidian"]

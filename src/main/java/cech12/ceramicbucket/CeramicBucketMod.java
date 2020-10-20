@@ -4,20 +4,17 @@ import cech12.ceramicbucket.api.item.CeramicBucketItems;
 import cech12.ceramicbucket.api.crafting.FluidIngredient;
 import cech12.ceramicbucket.compat.ModCompat;
 import cech12.ceramicbucket.config.Config;
-import cech12.ceramicbucket.item.CeramicFishBucketItem;
+import cech12.ceramicbucket.item.CeramicEntityBucketItem;
 import cech12.ceramicbucket.item.CeramicMilkBucketItem;
-import cech12.ceramicbucket.item.FilledCeramicBucketItem;
 import cech12.ceramicbucket.api.crafting.FilledCeramicBucketIngredient;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.CowEntity;
-import net.minecraft.entity.passive.fish.*;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.SoundEvents;
 import net.minecraftforge.common.crafting.CraftingHelper;
@@ -25,6 +22,8 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -52,19 +51,18 @@ public class CeramicBucketMod {
     }
 
     /**
-     * Add cow and fish interaction.
+     * Add milking and obtaining interaction.
      */
     @SubscribeEvent
     public static void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
-        if (!(event.getTarget() instanceof LivingEntity)) {
-            return;
-        }
-        LivingEntity entity = (LivingEntity) event.getTarget();
-        //only interact with cows and fish
-        if (entity instanceof CowEntity || ModCompat.canEntityBeMilked(entity)) {
-            PlayerEntity player = event.getPlayer();
-            ItemStack itemstack = player.getHeldItem(event.getHand());
-            if (itemstack.getItem() == CeramicBucketItems.CERAMIC_BUCKET && !player.abilities.isCreativeMode && !entity.isChild()) {
+        Entity entity = event.getTarget();
+        if (entity == null) return;
+
+        PlayerEntity player = event.getPlayer();
+        ItemStack itemstack = player.getHeldItem(event.getHand());
+
+        if (Config.MILKING_ENABLED.get() && ModCompat.canEntityBeMilked(entity)) {
+            if (itemstack.getItem() == CeramicBucketItems.CERAMIC_BUCKET && !player.abilities.isCreativeMode) {
                 player.playSound(SoundEvents.ENTITY_COW_MILK, 1.0F, 1.0F);
                 if (!event.getWorld().isRemote()) {
                     itemstack.shrink(1);
@@ -77,46 +75,28 @@ public class CeramicBucketMod {
                 event.setCanceled(true);
                 event.setCancellationResult(ActionResultType.SUCCESS);
             }
-        } else if (Config.FISH_OBTAINING_ENABLED.getValue() && entity instanceof AbstractFishEntity) {
-            AbstractFishEntity fishEntity = (AbstractFishEntity) entity;
-            PlayerEntity player = event.getPlayer();
-            ItemStack itemstack = player.getHeldItem(event.getHand());
-            if (itemstack.getItem() == CeramicBucketItems.FILLED_CERAMIC_BUCKET && ((FilledCeramicBucketItem) itemstack.getItem()).getFluid(itemstack) == Fluids.WATER && fishEntity.isAlive()) {
-                fishEntity.playSound(SoundEvents.ITEM_BUCKET_FILL_FISH, 1.0F, 1.0F);
+        } else if (Config.FISH_OBTAINING_ENABLED.get()) {
+            //check if filled ceramic bucket is there and contains a fluid
+            //or ceramic bucket is there
+            Fluid fluid = FluidUtil.getFluidContained(itemstack).orElse(FluidStack.EMPTY).getFluid();
+            if ((fluid != Fluids.EMPTY && itemstack.getItem() != CeramicBucketItems.FILLED_CERAMIC_BUCKET)
+                    || (fluid == Fluids.EMPTY && itemstack.getItem() != CeramicBucketItems.CERAMIC_BUCKET)) {
+                return;
+            }
+            //check if the entity can be inside of a ceramic entity bucket
+            if (ModCompat.canEntityTypeBeObtained(fluid, entity.getType())) {
+                ItemStack filledBucket = ((CeramicEntityBucketItem)CeramicBucketItems.CERAMIC_ENTITY_BUCKET).getFilledInstance(fluid, entity);
+                ((CeramicEntityBucketItem) CeramicBucketItems.CERAMIC_ENTITY_BUCKET).playFillSound(player, filledBucket);
                 if (!event.getWorld().isRemote()) {
-                    //get ceramic variant
-                    ItemStack bucket;
-                    if (fishEntity instanceof PufferfishEntity) {
-                        bucket = ((CeramicFishBucketItem) CeramicBucketItems.PUFFERFISH_CERAMIC_BUCKET).getFilledInstance();
-                    } else if (fishEntity instanceof CodEntity) {
-                        bucket = ((CeramicFishBucketItem) CeramicBucketItems.COD_CERAMIC_BUCKET).getFilledInstance();
-                    } else if (fishEntity instanceof TropicalFishEntity) {
-                        bucket = ((CeramicFishBucketItem) CeramicBucketItems.TROPICAL_FISH_CERAMIC_BUCKET).getFilledInstance();
-                    } else if (fishEntity instanceof SalmonEntity) {
-                        bucket = ((CeramicFishBucketItem) CeramicBucketItems.SALMON_CERAMIC_BUCKET).getFilledInstance();
-                    } else {
-                        //other fish types are not supported for now
-                        return;
-                    }
                     itemstack.shrink(1);
-                    //setBucketData
-                    if (fishEntity.hasCustomName()) {
-                        bucket.setDisplayName(fishEntity.getCustomName());
-                    }
-                    if (fishEntity instanceof TropicalFishEntity) {
-                        CompoundNBT compoundnbt = bucket.getOrCreateTag();
-                        compoundnbt.putInt("BucketVariantTag", ((TropicalFishEntity)fishEntity).getVariant());
-                    }
-
-                    if (!fishEntity.world.isRemote) {
-                        CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayerEntity) player, bucket);
+                    if (player instanceof ServerPlayerEntity) {
+                        CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayerEntity) player, filledBucket);
                     }
                     if (itemstack.isEmpty()) {
-                        player.setHeldItem(event.getHand(), bucket);
-                    } else if (!player.inventory.addItemStackToInventory(bucket)) {
-                        player.dropItem(bucket, false);
+                        player.setHeldItem(event.getHand(), filledBucket);
+                    } else if (!player.inventory.addItemStackToInventory(filledBucket)) {
+                        player.dropItem(filledBucket, false);
                     }
-                    fishEntity.remove();
                 }
                 event.setCanceled(true);
                 event.setCancellationResult(ActionResultType.SUCCESS);

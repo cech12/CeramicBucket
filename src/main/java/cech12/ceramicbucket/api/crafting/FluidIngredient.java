@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 
 /**
  * This ingredient class enables to define fluids as ingredient.
- * Example JSON object: { "type": "ceramicbucket:fluid", "tag": "forge:lava", "amount": 1000, "exact":true }
+ * Example JSON object: { "type": "ceramicbucket:fluid", "tag": "minecraft:lava", "amount": 1000, "exact":true }
  * The tag is a fluid tag of the fluid that a fluid container should contain to be a fitting ingredient.
  * If "exact" is true, the fluid container must contain exactly the defined amount.
  * If "exact" is not set or false, the fluid container must contain at least the defined amount.

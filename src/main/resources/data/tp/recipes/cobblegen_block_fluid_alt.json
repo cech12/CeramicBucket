@@ -17,7 +17,7 @@
     },
     "W": {
       "type": "ceramicbucket:fluid",
-      "tag": "forge:water",
+      "tag": "minecraft:water",
       "amount": 1000,
       "exact": true
     },
@@ -26,7 +26,7 @@
     },
     "L": {
       "type": "ceramicbucket:fluid",
-      "tag": "forge:lava",
+      "tag": "minecraft:lava",
       "amount": 1000,
       "exact": true
     }
