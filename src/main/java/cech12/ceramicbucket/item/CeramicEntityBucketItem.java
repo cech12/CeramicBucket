@@ -7,6 +7,7 @@ import cech12.ceramicbucket.util.CeramicBucketUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.passive.fish.AbstractFishEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
@@ -29,6 +30,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -74,12 +76,12 @@ public class CeramicEntityBucketItem extends FilledCeramicBucketItem {
         return super.onItemRightClick(worldIn, playerIn, handIn);
     }
 
+    @Override
     public void onLiquidPlaced(World worldIn, @Nonnull ItemStack stack, @Nonnull BlockPos blockPos) {
-        if (!worldIn.isRemote) {
-            Entity entity = getEntityFromStack(stack, worldIn);
-            if (entity != null) {
-                entity.setPositionAndRotation(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
-                worldIn.addEntity(entity);
+        if (!worldIn.isRemote && worldIn instanceof ServerWorld) {
+            EntityType<?> entityType = getEntityTypeFromStack(stack);
+            if (entityType != null) {
+                Entity entity = entityType.spawn((ServerWorld) worldIn, stack, null, blockPos, SpawnReason.BUCKET, true, false);
                 if (entity instanceof AbstractFishEntity) {
                     ((AbstractFishEntity)entity).setFromBucket(true);
                 } else if (entity instanceof MobEntity) {
@@ -141,14 +143,14 @@ public class CeramicEntityBucketItem extends FilledCeramicBucketItem {
         return new TranslationTextComponent("item.ceramicbucket.ceramic_entity_bucket", name);
     }
 
-    public boolean containsEntity(ItemStack stack) {
-        return !stack.isEmpty() && stack.hasTag() && stack.getTag().contains("entity");
-    }
-
     public ItemStack putEntityInStack(ItemStack stack, Entity entity) {
         CompoundNBT nbt = stack.getOrCreateTag();
-        nbt.putString("entity", EntityType.getKey(entity.getType()).toString());
-        entity.writeWithoutTypeId(nbt);
+        nbt.putString("EntityType", EntityType.getKey(entity.getType()).toString());
+        CompoundNBT entityNbt = entity.writeWithoutTypeId(new CompoundNBT());
+        entityNbt.remove("Pos");
+        entityNbt.remove("Motion");
+        entityNbt.remove("FallDistance");
+        nbt.put("EntityTag", entityNbt); //is read by spawn method
         stack.setTag(nbt);
         entity.remove(true);
         return stack;
@@ -156,28 +158,15 @@ public class CeramicEntityBucketItem extends FilledCeramicBucketItem {
 
     private ItemStack putEntityTypeInStack(ItemStack stack, EntityType<?> type) {
         CompoundNBT nbt = stack.getOrCreateTag();
-        nbt.putString("entity", EntityType.getKey(type).toString());
+        nbt.putString("EntityType", EntityType.getKey(type).toString());
         stack.setTag(nbt);
         return stack;
     }
 
     @Nullable
-    public Entity getEntityFromStack(@Nonnull ItemStack stack, World world) {
-        EntityType<?> type = getEntityTypeFromStack(stack);
-        if (type != null) {
-            Entity entity = type.create(world);
-            if (entity != null && stack.hasTag()) {
-                entity.read(stack.getTag());
-            }
-            return entity;
-        }
-        return null;
-    }
-
-    @Nullable
     public EntityType<?> getEntityTypeFromStack(ItemStack stack) {
         if (stack.hasTag()) {
-            return EntityType.byKey(stack.getTag().getString("entity")).orElse(null);
+            return EntityType.byKey(stack.getTag().getString("EntityType")).orElse(null);
         }
         return null;
     }

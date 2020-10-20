@@ -34,7 +34,10 @@ public class ObtainableEntityType {
 
     @Nullable
     public EntityType<?> getEntityType() {
-        return ForgeRegistries.ENTITIES.getValue(this.entityType);
+        if (ForgeRegistries.ENTITIES.containsKey(this.entityType)) {
+            return ForgeRegistries.ENTITIES.getValue(this.entityType);
+        }
+        return null;
     }
 
     public Fluid getOneFluid() {
