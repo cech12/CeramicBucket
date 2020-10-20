@@ -116,27 +116,29 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
                     Fluid fluid = this.getFluid(itemstack);
                     CauldronBlock cauldron = (CauldronBlock) blockstate.getBlock();
                     int level = blockstate.get(CauldronBlock.LEVEL);
-                    if (fluid.isIn(FluidTags.WATER) && !(itemstack.getItem() instanceof CeramicFishBucketItem)) { //TODO
-                        if (level < 3) {
-                            ItemStack emptyStack = this.emptyBucket(itemstack, playerIn);
-                            if (!worldIn.isRemote) {
-                                playerIn.addStat(Stats.FILL_CAULDRON);
-                                cauldron.setWaterLevel(worldIn, blockpos, blockstate, 3);
-                                this.playEmptySound(playerIn, worldIn, blockpos, itemstack);
+                    if (!(itemstack.getItem() instanceof CeramicEntityBucketItem)) {
+                        if (fluid.isIn(FluidTags.WATER)) {
+                            if (level < 3) {
+                                ItemStack emptyStack = this.emptyBucket(itemstack, playerIn);
+                                if (!worldIn.isRemote) {
+                                    playerIn.addStat(Stats.FILL_CAULDRON);
+                                    cauldron.setWaterLevel(worldIn, blockpos, blockstate, 3);
+                                    this.playEmptySound(playerIn, worldIn, blockpos, itemstack);
+                                }
+                                itemstack = emptyStack;
                             }
-                            itemstack = emptyStack;
-                        }
-                        return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
-                    } else if (fluid == Fluids.EMPTY) {
-                        if (level == 3) {
-                            itemstack = this.fillBucket(itemstack, playerIn, Fluids.WATER);
-                            if (!worldIn.isRemote) {
-                                playerIn.addStat(Stats.USE_CAULDRON);
-                                cauldron.setWaterLevel(worldIn, blockpos, blockstate, 0);
-                                this.playFillSound(playerIn, itemstack);
+                            return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
+                        } else if (fluid == Fluids.EMPTY) {
+                            if (level == 3) {
+                                itemstack = this.fillBucket(itemstack, playerIn, Fluids.WATER);
+                                if (!worldIn.isRemote) {
+                                    playerIn.addStat(Stats.USE_CAULDRON);
+                                    cauldron.setWaterLevel(worldIn, blockpos, blockstate, 0);
+                                    this.playFillSound(playerIn, itemstack);
+                                }
                             }
+                            return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
                         }
-                        return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
                     }
                 }
 
