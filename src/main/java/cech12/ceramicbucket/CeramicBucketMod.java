@@ -7,8 +7,10 @@ import cech12.ceramicbucket.config.Config;
 import cech12.ceramicbucket.item.CeramicEntityBucketItem;
 import cech12.ceramicbucket.item.CeramicMilkBucketItem;
 import cech12.ceramicbucket.api.crafting.FilledCeramicBucketIngredient;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
@@ -87,6 +89,9 @@ public class CeramicBucketMod {
                 ((CeramicEntityBucketItem) CeramicBucketItems.CERAMIC_ENTITY_BUCKET).playFillSound(player, filledBucket);
                 if (!event.getWorld().isRemote()) {
                     itemstack.shrink(1);
+                    if (player instanceof ServerPlayerEntity) {
+                        CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayerEntity) player, filledBucket);
+                    }
                     if (itemstack.isEmpty()) {
                         player.setHeldItem(event.getHand(), filledBucket);
                     } else if (!player.inventory.addItemStackToInventory(filledBucket)) {
