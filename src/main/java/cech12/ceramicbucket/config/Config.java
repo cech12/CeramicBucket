@@ -6,6 +6,7 @@ public class Config {
     public static ForgeConfigSpec COMMON;
 
     public static final ForgeConfigSpec.IntValue CERAMIC_BUCKET_BREAK_TEMPERATURE;
+    public static final ForgeConfigSpec.BooleanValue MILKING_ENABLED;
     public static final ForgeConfigSpec.BooleanValue FISH_OBTAINING_ENABLED;
 
     static {
@@ -16,6 +17,10 @@ public class Config {
         CERAMIC_BUCKET_BREAK_TEMPERATURE = common
                 .comment("Minimum temperature of fluid at which the Ceramic Bucket breaks when emptied. (-1 means that bucket never breaks caused by high fluid temperature)")
                 .defineInRange("ceramicBucketBreakTemperature", 1000, -1, 10000);
+
+        MILKING_ENABLED = common
+                .comment("Whether or not milking entities with a Ceramic Bucket should be enabled.")
+                .define("milkingEnabled", true);
 
         FISH_OBTAINING_ENABLED = common
                 .comment("Whether or not obtaining fish with a Ceramic Bucket should be enabled.")

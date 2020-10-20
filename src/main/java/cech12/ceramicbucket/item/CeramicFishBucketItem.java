@@ -1,6 +1,5 @@
 package cech12.ceramicbucket.item;
 
-import cech12.ceramicbucket.config.Config;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -8,7 +7,6 @@ import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.passive.fish.AbstractFishEntity;
 import net.minecraft.entity.passive.fish.TropicalFishEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -28,11 +26,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+//TODO can be removed with 1.17 update
+@Deprecated
 public class CeramicFishBucketItem extends FilledCeramicBucketItem {
 
     private final EntityType<?> fishType;
@@ -40,10 +39,6 @@ public class CeramicFishBucketItem extends FilledCeramicBucketItem {
     public CeramicFishBucketItem(EntityType<?> fishTypeIn, Item.Properties builder) {
         super(builder);
         this.fishType = fishTypeIn;
-    }
-
-    public ItemStack getFilledInstance() {
-        return super.getFilledInstance(Fluids.WATER);
     }
 
     public void onLiquidPlaced(World worldIn, @Nonnull ItemStack p_203792_2_, @Nonnull BlockPos pos) {
@@ -102,9 +97,6 @@ public class CeramicFishBucketItem extends FilledCeramicBucketItem {
     @Override
     public Collection<ItemGroup> getCreativeTabs() {
         //do nothing
-        //if (Config.FISH_OBTAINING_ENABLED.get()) {
-        //    return Arrays.asList(ItemGroup.MISC, ItemGroup.SEARCH);
-        //}
         return Collections.singletonList(null);
     }
 
@@ -114,9 +106,6 @@ public class CeramicFishBucketItem extends FilledCeramicBucketItem {
     @Override
     public void fillItemGroup(@Nonnull ItemGroup group, @Nonnull NonNullList<ItemStack> items) {
         //do nothing
-        //if (this.isInGroup(group)) {
-        //    items.add(this.getFilledInstance());
-        //}
     }
 
     @Override

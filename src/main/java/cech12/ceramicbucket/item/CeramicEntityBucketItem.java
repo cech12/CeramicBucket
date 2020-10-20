@@ -90,7 +90,7 @@ public class CeramicEntityBucketItem extends FilledCeramicBucketItem {
     }
 
     @Override
-    protected void playEmptySound(@Nullable PlayerEntity player, @Nonnull IWorld worldIn, @Nonnull BlockPos pos, @Nonnull ItemStack stack) {
+    public void playEmptySound(@Nullable PlayerEntity player, @Nonnull IWorld worldIn, @Nonnull BlockPos pos, @Nonnull ItemStack stack) {
         ObtainableEntityType type = ModCompat.getObtainableEntityType(this.getEntityTypeFromStack(stack));
         if (type != null) {
             SoundEvent soundevent = type.getEmptySound();
@@ -99,7 +99,7 @@ public class CeramicEntityBucketItem extends FilledCeramicBucketItem {
     }
 
     @Override
-    protected void playFillSound(@Nullable PlayerEntity player, @Nonnull ItemStack stack) {
+    public void playFillSound(@Nullable PlayerEntity player, @Nonnull ItemStack stack) {
         if (player == null) return;
         ObtainableEntityType type = ModCompat.getObtainableEntityType(this.getEntityTypeFromStack(stack));
         if (type != null) {

@@ -62,13 +62,13 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
         };
     }
 
-    protected void playEmptySound(@Nullable PlayerEntity player, @Nonnull IWorld worldIn, @Nonnull BlockPos pos, @Nonnull ItemStack stack) {
+    public void playEmptySound(@Nullable PlayerEntity player, @Nonnull IWorld worldIn, @Nonnull BlockPos pos, @Nonnull ItemStack stack) {
         SoundEvent soundevent = this.getFluid(stack).getAttributes().getEmptySound();
         if (soundevent == null) soundevent = this.getFluid(stack).isIn(FluidTags.LAVA) ? SoundEvents.ITEM_BUCKET_EMPTY_LAVA : SoundEvents.ITEM_BUCKET_EMPTY;
         worldIn.playSound(player, pos, soundevent, SoundCategory.BLOCKS, 1.0F, 1.0F);
     }
 
-    protected void playFillSound(@Nullable PlayerEntity player, @Nonnull ItemStack stack) {
+    public void playFillSound(@Nullable PlayerEntity player, @Nonnull ItemStack stack) {
         if (player != null) {
             SoundEvent soundevent = this.getFluid(stack).getAttributes().getEmptySound();
             if (soundevent == null) soundevent = this.getFluid(stack).isIn(FluidTags.LAVA) ? SoundEvents.ITEM_BUCKET_FILL_LAVA : SoundEvents.ITEM_BUCKET_FILL;

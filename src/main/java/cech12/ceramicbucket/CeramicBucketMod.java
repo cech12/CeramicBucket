@@ -7,7 +7,7 @@ import cech12.ceramicbucket.config.Config;
 import cech12.ceramicbucket.item.CeramicEntityBucketItem;
 import cech12.ceramicbucket.item.CeramicMilkBucketItem;
 import cech12.ceramicbucket.api.crafting.FilledCeramicBucketIngredient;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
@@ -49,18 +49,17 @@ public class CeramicBucketMod {
     }
 
     /**
-     * Add cow and fish interaction.
+     * Add milking and obtaining interaction.
      */
     @SubscribeEvent
     public static void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
-        if (!(event.getTarget() instanceof LivingEntity)) {
-            return;
-        }
+        Entity entity = event.getTarget();
+        if (entity == null) return;
+
         PlayerEntity player = event.getPlayer();
         ItemStack itemstack = player.getHeldItem(event.getHand());
-        LivingEntity entity = (LivingEntity) event.getTarget();
-        //only interact with cows and fish
-        if (ModCompat.canEntityBeMilked(entity)) {
+
+        if (Config.MILKING_ENABLED.get() && ModCompat.canEntityBeMilked(entity)) {
             if (itemstack.getItem() == CeramicBucketItems.CERAMIC_BUCKET && !player.abilities.isCreativeMode) {
                 player.playSound(SoundEvents.ENTITY_COW_MILK, 1.0F, 1.0F);
                 if (!event.getWorld().isRemote()) {
@@ -73,10 +72,8 @@ public class CeramicBucketMod {
                 }
                 event.setCanceled(true);
                 event.setCancellationResult(ActionResultType.SUCCESS);
-                return;
             }
-        }
-        if (Config.FISH_OBTAINING_ENABLED.get()) {
+        } else if (Config.FISH_OBTAINING_ENABLED.get()) {
             //check if filled ceramic bucket is there and contains a fluid
             //or ceramic bucket is there
             Fluid fluid = FluidUtil.getFluidContained(itemstack).orElse(FluidStack.EMPTY).getFluid();
@@ -86,9 +83,10 @@ public class CeramicBucketMod {
             }
             //check if the entity can be inside of a ceramic entity bucket
             if (ModCompat.canEntityTypeBeObtained(fluid, entity.getType())) {
+                ItemStack filledBucket = ((CeramicEntityBucketItem)CeramicBucketItems.CERAMIC_ENTITY_BUCKET).getFilledInstance(fluid, entity);
+                ((CeramicEntityBucketItem) CeramicBucketItems.CERAMIC_ENTITY_BUCKET).playFillSound(player, filledBucket);
                 if (!event.getWorld().isRemote()) {
                     itemstack.shrink(1);
-                    ItemStack filledBucket = ((CeramicEntityBucketItem)CeramicBucketItems.CERAMIC_ENTITY_BUCKET).getFilledInstance(fluid, entity);
                     if (itemstack.isEmpty()) {
                         player.setHeldItem(event.getHand(), filledBucket);
                     } else if (!player.inventory.addItemStackToInventory(filledBucket)) {
