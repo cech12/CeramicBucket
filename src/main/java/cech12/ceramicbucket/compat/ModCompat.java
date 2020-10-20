@@ -7,6 +7,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraftforge.fml.ModList;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,19 +41,23 @@ public class ModCompat {
         return types;
     }
 
-    public static boolean canEntityTypeBeObtained(Fluid fluid, EntityType<?> entity) {
-        for (Mod mod : MODS) {
-            if (mod.isLoaded() && mod instanceof EntityTypeObtainingMod && ((EntityTypeObtainingMod)mod).canEntityTypeBeObtained(fluid, entity)) {
-                return true;
+    public static boolean canEntityTypeBeObtained(@Nonnull Fluid fluid, @Nullable EntityType<?> entityType) {
+        if (entityType != null) {
+            for (Mod mod : MODS) {
+                if (mod.isLoaded() && mod instanceof EntityTypeObtainingMod && ((EntityTypeObtainingMod)mod).canEntityTypeBeObtained(fluid, entityType)) {
+                    return true;
+                }
             }
         }
         return false;
     }
 
-    public static ObtainableEntityType getObtainableEntityType(EntityType<?> entityType) {
-        for (ObtainableEntityType type : getObtainableEntityTypes()) {
-            if (type.getEntityType() == entityType) {
-                return type;
+    public static ObtainableEntityType getObtainableEntityType(@Nullable EntityType<?> entityType) {
+        if (entityType != null) {
+            for (ObtainableEntityType type : getObtainableEntityTypes()) {
+                if (type.getEntityType() == entityType) {
+                    return type;
+                }
             }
         }
         return null;
@@ -81,7 +87,7 @@ public class ModCompat {
 
         List<ObtainableEntityType> getObtainableEntityTypes();
 
-        default boolean canEntityTypeBeObtained(Fluid fluid, EntityType<?> entityType) {
+        default boolean canEntityTypeBeObtained(@Nonnull Fluid fluid, @Nonnull EntityType<?> entityType) {
             for (ObtainableEntityType type : this.getObtainableEntityTypes()) {
                 if (type.getEntityType() == entityType && type.isCorrectFluid(fluid)){
                     return true;

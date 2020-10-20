@@ -10,6 +10,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +32,7 @@ public class ObtainableEntityType {
         this.fillSound = fillSound;
     }
 
+    @Nullable
     public EntityType<?> getEntityType() {
         return ForgeRegistries.ENTITIES.getValue(this.entityType);
     }

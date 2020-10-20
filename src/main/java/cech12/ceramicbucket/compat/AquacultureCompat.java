@@ -45,11 +45,6 @@ public class AquacultureCompat extends ModCompat.Mod implements ModCompat.Entity
         this.addFish("tuna");
     }
 
-    @Override
-    public boolean isLoaded() {
-        return true;
-    }
-
     private void addFish(String fish) {
         this.obtainableEntityTypes.add(new ObtainableEntityType.Builder(new ResourceLocation(this.name, fish), Fluids.WATER).addFluidTag(FluidTags.WATER).build());
     }

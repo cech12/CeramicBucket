@@ -18,11 +18,6 @@ public class CombustiveFishingCompat extends ModCompat.Mod implements ModCompat.
     }
 
     @Override
-    public boolean isLoaded() {
-        return true;
-    }
-
-    @Override
     public List<ObtainableEntityType> getObtainableEntityTypes() {
         return this.obtainableEntityTypes;
     }

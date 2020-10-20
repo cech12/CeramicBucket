@@ -5,7 +5,6 @@ import cech12.ceramicbucket.api.data.ObtainableEntityType;
 import cech12.ceramicbucket.client.model.CeramicBucketModel;
 import cech12.ceramicbucket.client.model.CeramicEntityBucketModel;
 import cech12.ceramicbucket.compat.ModCompat;
-import net.minecraft.entity.EntityType;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -14,6 +13,7 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 
 @Mod.EventBusSubscriber(modid= CeramicBucketMod.MOD_ID, bus= Mod.EventBusSubscriber.Bus.MOD, value= Dist.CLIENT)
 public class ClientEvents {
@@ -28,7 +28,10 @@ public class ClientEvents {
     public static void onTextureStitch(TextureStitchEvent.Pre event){
         if (event.getMap().getTextureLocation().equals(PlayerContainer.LOCATION_BLOCKS_TEXTURE)) { //AtlasTexture.LOCATION_BLOCKS_TEXTURE
             for (ObtainableEntityType entityType : ModCompat.getObtainableEntityTypes()) {
-                event.addSprite(CeramicEntityBucketModel.getEntityTexture(EntityType.getKey(entityType.getEntityType())));
+                ResourceLocation entityTypeKey = ForgeRegistries.ENTITIES.getKey(entityType.getEntityType());
+                if (entityTypeKey != null) {
+                    event.addSprite(CeramicEntityBucketModel.getEntityTexture(entityTypeKey));
+                }
             }
         }
     }

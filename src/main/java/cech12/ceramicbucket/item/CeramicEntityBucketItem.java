@@ -125,7 +125,10 @@ public class CeramicEntityBucketItem extends FilledCeramicBucketItem {
     public void fillItemGroup(@Nonnull ItemGroup group, @Nonnull NonNullList<ItemStack> items) {
         if (this.isInGroup(group)) {
             for (ObtainableEntityType type : ModCompat.getObtainableEntityTypes()) {
-                items.add(this.getFilledInstance(type.getOneFluid(), type.getEntityType()));
+                EntityType<?> entityType = type.getEntityType();
+                if (entityType != null) {
+                    items.add(this.getFilledInstance(type.getOneFluid(), entityType));
+                }
             }
         }
     }
