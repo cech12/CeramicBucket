@@ -1,6 +1,6 @@
 {
   "item.ceramicbucket.ceramic_bucket": "Cubo de cerámica",
-  "item.ceramicbucket.ceramic_fish_bucket": "Cubo de cerámica con %s",
+  "item.ceramicbucket.ceramic_entity_bucket": "Cubo de cerámica con %s",
   "item.ceramicbucket.ceramic_milk_bucket": "Cubo de cerámica con leche",
   "item.ceramicbucket.filled_ceramic_bucket": "Cubo de cerámica con %s",
   "item.ceramicbucket.unfired_clay_bucket": "Cubo de arcilla sin cocer"

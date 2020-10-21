@@ -1,6 +1,5 @@
 package cech12.ceramicbucket.item;
 
-import cech12.ceramicbucket.config.Config;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -8,7 +7,6 @@ import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.passive.fish.AbstractFishEntity;
 import net.minecraft.entity.passive.fish.TropicalFishEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -27,11 +25,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+@Deprecated
 public class CeramicFishBucketItem extends FilledCeramicBucketItem {
 
     private final EntityType<?> fishType;
@@ -41,15 +39,10 @@ public class CeramicFishBucketItem extends FilledCeramicBucketItem {
         this.fishType = fishTypeIn;
     }
 
-    public ItemStack getFilledInstance() {
-        return super.getFilledInstance(Fluids.WATER);
-    }
-
     public void onLiquidPlaced(World worldIn, ItemStack p_203792_2_, BlockPos pos) {
         if (!worldIn.isRemote) {
             this.placeFish(worldIn, p_203792_2_, pos);
         }
-
     }
 
     protected void playEmptySound(@Nullable PlayerEntity player, IWorld worldIn, @Nonnull BlockPos pos) {
@@ -61,14 +54,13 @@ public class CeramicFishBucketItem extends FilledCeramicBucketItem {
         if (entity != null) {
             ((AbstractFishEntity)entity).setFromBucket(true);
         }
-
     }
 
     /**
      * allows items to add custom lines of information to the mouseover description
      */
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
         if (this.fishType == EntityType.TROPICAL_FISH) {
             CompoundNBT compoundnbt = stack.getTag();
             if (compoundnbt != null && compoundnbt.contains("BucketVariantTag", 3)) {
@@ -98,11 +90,7 @@ public class CeramicFishBucketItem extends FilledCeramicBucketItem {
 
     @Override
     public Collection<ItemGroup> getCreativeTabs() {
-        //only add the fish buckets to creative tab if obtaining is enabled
-        if (Config.FISH_OBTAINING_ENABLED.getValue()) {
-            //TODO ItemGroup.SEARCH is set before config is loaded!
-            return Arrays.asList(ItemGroup.MISC, ItemGroup.SEARCH);
-        }
+        //do nothing
         return Collections.singletonList(null);
     }
 
@@ -111,14 +99,12 @@ public class CeramicFishBucketItem extends FilledCeramicBucketItem {
      */
     @Override
     public void fillItemGroup(@Nonnull ItemGroup group, @Nonnull NonNullList<ItemStack> items) {
-        if (this.isInGroup(group)) {
-            items.add(this.getFilledInstance());
-        }
+        //do nothing
     }
 
     @Override
     @Nonnull
     public ITextComponent getDisplayName(@Nonnull ItemStack stack) {
-        return new TranslationTextComponent("item.ceramicbucket.ceramic_fish_bucket", fishType.getName());
+        return new TranslationTextComponent("item.ceramicbucket.ceramic_entity_bucket", fishType.getName());
     }
 }
