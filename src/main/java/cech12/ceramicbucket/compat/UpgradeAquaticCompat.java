@@ -15,10 +15,10 @@ public class UpgradeAquaticCompat extends ModCompat.Mod implements ModCompat.Ent
 
     public UpgradeAquaticCompat() {
         super("upgrade_aquatic");
-        this.addJellyfish("box_jellyfish");
-        this.addJellyfish("cassiopea_jellyfish");
+        this.addFish("box_jellyfish");
+        this.addFish("cassiopea_jellyfish");
         //this.addFish("glow_squid"); //added in 1.16
-        this.addJellyfish("immortal_jellyfish");
+        this.addFish("immortal_jellyfish");
         this.addFish("lionfish");
         this.addFish("nautilus");
         this.addFish("pike");
@@ -31,13 +31,6 @@ public class UpgradeAquaticCompat extends ModCompat.Mod implements ModCompat.Ent
 
     private void addFish(String fish) {
         this.obtainableEntityTypes.add(this.getWaterFishBuilder(fish).build());
-    }
-
-    private void addJellyfish(String fish) {
-        this.obtainableEntityTypes.add(this.getWaterFishBuilder(fish)
-                .setEmptySound(new ResourceLocation(this.name, "item.bucket.empty_jellyfish"))
-                .setFillSound(new ResourceLocation(this.name, "item.bucket.fill_jellyfish"))
-                .build());
     }
 
     private void addSquid() {
