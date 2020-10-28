@@ -1,0 +1,18 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "botanypots"
+    }
+  ],
+  "type": "botanypots:soil",
+  "input": {
+    "type": "ceramicbucket:filled_ceramic_bucket",
+    "tag": "minecraft:water"
+  },
+  "display": {
+    "block": "minecraft:water"
+  },
+  "categories": ["water", "fluid", "liquid"],
+  "growthModifier": 0
+}
