@@ -17,6 +17,7 @@ public class ModCompat {
     public static final Mod[] MODS = {
             new MinecraftCompat(),
             new AquacultureCompat(),
+            new AxolotlCompat(),
             new CombustiveFishingCompat(),
             new MilkAllTheMobs(),
             new UpgradeAquaticCompat()
