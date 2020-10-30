@@ -1,5 +1,6 @@
 package cech12.ceramicbucket.client.model;
 
+import cech12.ceramicbucket.config.ServerConfig;
 import cech12.ceramicbucket.util.CeramicBucketUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -198,6 +199,13 @@ public class CeramicBucketModel implements IModelGeometry<CeramicBucketModel> {
                         Fluid fluid = fluidStack.getFluid();
                         String name = fluid.getRegistryName().toString();
 
+                        //reset cache if temperature config changed
+                        int breakTemperature = ServerConfig.CERAMIC_BUCKET_BREAK_TEMPERATURE.get();
+                        if (model.breakTemperature != breakTemperature) {
+                            model.breakTemperature = breakTemperature;
+                            model.cache.clear();
+                        }
+
                         if (!model.cache.containsKey(name))
                         {
                             CeramicBucketModel parent = model.parent.withFluid(fluid);
@@ -221,6 +229,8 @@ public class CeramicBucketModel implements IModelGeometry<CeramicBucketModel> {
         private final Map<String, IBakedModel> cache; // contains all the baked models since they'll never change
         private final IModelTransform originalTransform;
 
+        private int breakTemperature;
+
         BakedModel(ModelBakery bakery,
                    IModelConfiguration owner, CeramicBucketModel parent,
                    ImmutableList<BakedQuad> quads,
@@ -235,6 +245,7 @@ public class CeramicBucketModel implements IModelGeometry<CeramicBucketModel> {
             this.parent = parent;
             this.cache = cache;
             this.originalTransform = originalTransform;
+            this.breakTemperature = ServerConfig.CERAMIC_BUCKET_BREAK_TEMPERATURE.get();
         }
     }
 }

@@ -1,34 +1,44 @@
 package cech12.ceramicbucket.config;
 
+import com.electronwill.nightconfig.core.file.CommentedFileConfig;
+import com.electronwill.nightconfig.core.io.WritingMode;
 import net.minecraftforge.common.ForgeConfigSpec;
 
-public class Config {
-    public static ForgeConfigSpec COMMON;
+import java.nio.file.Path;
+
+public class ServerConfig {
+    public static ForgeConfigSpec SERVER_CONFIG;
 
     public static final ForgeConfigSpec.IntValue CERAMIC_BUCKET_BREAK_TEMPERATURE;
     public static final ForgeConfigSpec.BooleanValue MILKING_ENABLED;
     public static final ForgeConfigSpec.BooleanValue FISH_OBTAINING_ENABLED;
 
     static {
-        final ForgeConfigSpec.Builder common = new ForgeConfigSpec.Builder();
+        final ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 
-        common.push("Balance Options");
+        builder.push("Balance Options");
 
-        CERAMIC_BUCKET_BREAK_TEMPERATURE = common
+        CERAMIC_BUCKET_BREAK_TEMPERATURE = builder
                 .comment("Minimum temperature of fluid at which the Ceramic Bucket breaks when emptied. (-1 means that bucket never breaks caused by high fluid temperature)")
                 .defineInRange("ceramicBucketBreakTemperature", 1000, -1, 10000);
 
-        MILKING_ENABLED = common
+        MILKING_ENABLED = builder
                 .comment("Whether or not milking entities with a Ceramic Bucket should be enabled.")
                 .define("milkingEnabled", true);
 
-        FISH_OBTAINING_ENABLED = common
+        FISH_OBTAINING_ENABLED = builder
                 .comment("Whether or not obtaining fish with a Ceramic Bucket should be enabled.")
                 .define("fishObtainingEnabled", true);
 
-        common.pop();
+        builder.pop();
 
-        COMMON = common.build();
+        SERVER_CONFIG = builder.build();
+    }
+
+    public static void loadConfig(ForgeConfigSpec spec, Path path) {
+        final CommentedFileConfig configData = CommentedFileConfig.builder(path).sync().autosave().writingMode(WritingMode.REPLACE).build();
+        configData.load();
+        spec.setConfig(configData);
     }
 
 }
