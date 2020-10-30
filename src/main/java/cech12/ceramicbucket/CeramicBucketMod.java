@@ -3,7 +3,7 @@ package cech12.ceramicbucket;
 import cech12.ceramicbucket.api.item.CeramicBucketItems;
 import cech12.ceramicbucket.api.crafting.FluidIngredient;
 import cech12.ceramicbucket.compat.ModCompat;
-import cech12.ceramicbucket.config.Config;
+import cech12.ceramicbucket.config.ServerConfig;
 import cech12.ceramicbucket.item.CeramicEntityBucketItem;
 import cech12.ceramicbucket.item.CeramicMilkBucketItem;
 import cech12.ceramicbucket.api.crafting.FilledCeramicBucketIngredient;
@@ -28,6 +28,8 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLConfig;
+import net.minecraftforge.fml.loading.FMLPaths;
 
 import static cech12.ceramicbucket.CeramicBucketMod.MOD_ID;
 
@@ -39,7 +41,8 @@ public class CeramicBucketMod {
 
     public CeramicBucketMod() {
         //Config
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.COMMON, MOD_ID + "-common.toml");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfig.SERVER_CONFIG);
+        ServerConfig.loadConfig(ServerConfig.SERVER_CONFIG, FMLPaths.GAMEDIR.get().resolve(FMLConfig.defaultConfigPath()).resolve(MOD_ID + "-server.toml"));
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addGenericListener(IRecipeSerializer.class, this::registerRecipeSerializers);
@@ -61,7 +64,7 @@ public class CeramicBucketMod {
         PlayerEntity player = event.getPlayer();
         ItemStack itemstack = player.getHeldItem(event.getHand());
 
-        if (Config.MILKING_ENABLED.get() && ModCompat.canEntityBeMilked(entity)) {
+        if (ServerConfig.MILKING_ENABLED.get() && ModCompat.canEntityBeMilked(entity)) {
             if (itemstack.getItem() == CeramicBucketItems.CERAMIC_BUCKET && !player.abilities.isCreativeMode) {
                 player.playSound(SoundEvents.ENTITY_COW_MILK, 1.0F, 1.0F);
                 if (!event.getWorld().isRemote()) {
@@ -75,7 +78,7 @@ public class CeramicBucketMod {
                 event.setCanceled(true);
                 event.setCancellationResult(ActionResultType.SUCCESS);
             }
-        } else if (Config.FISH_OBTAINING_ENABLED.get()) {
+        } else if (ServerConfig.FISH_OBTAINING_ENABLED.get()) {
             //check if filled ceramic bucket is there and contains a fluid
             //or ceramic bucket is there
             Fluid fluid = FluidUtil.getFluidContained(itemstack).orElse(FluidStack.EMPTY).getFluid();

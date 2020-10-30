@@ -1,5 +1,6 @@
 package cech12.ceramicbucket.client.model;
 
+import cech12.ceramicbucket.config.ServerConfig;
 import cech12.ceramicbucket.item.CeramicEntityBucketItem;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -184,6 +185,12 @@ public class CeramicEntityBucketModel implements IModelGeometry<CeramicEntityBuc
                     ResourceLocation typeName = ForgeRegistries.ENTITIES.getKey(containedEntityType);
                     if (typeName != null) {
                         String name = typeName.toString();
+                        //reset cache if temperature config changed
+                        int breakTemperature = ServerConfig.CERAMIC_BUCKET_BREAK_TEMPERATURE.get();
+                        if (model.breakTemperature != breakTemperature) {
+                            model.breakTemperature = breakTemperature;
+                            model.cache.clear();
+                        }
                         if (!model.cache.containsKey(name))
                         {
                             CeramicEntityBucketModel unbaked = model.parent.withEntityType(containedEntityType, bucket.cracksBucket(stack));
@@ -208,6 +215,8 @@ public class CeramicEntityBucketModel implements IModelGeometry<CeramicEntityBuc
         private final Map<String, IBakedModel> cache; // contains all the baked models since they'll never change
         private final VertexFormat format;
 
+        private int breakTemperature;
+
         BakedModel(ModelBakery bakery,
                    IModelConfiguration owner, CeramicEntityBucketModel parent,
                    ImmutableList<BakedQuad> quads,
@@ -223,6 +232,7 @@ public class CeramicEntityBucketModel implements IModelGeometry<CeramicEntityBuc
             this.cache = cache;
             this.transforms = transforms;
             this.format = format;
+            this.breakTemperature = ServerConfig.CERAMIC_BUCKET_BREAK_TEMPERATURE.get();
         }
     }
 }

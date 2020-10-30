@@ -1,5 +1,6 @@
 package cech12.ceramicbucket.client.model;
 
+import cech12.ceramicbucket.config.ServerConfig;
 import cech12.ceramicbucket.util.CeramicBucketUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -46,7 +47,6 @@ import javax.vecmath.Quat4f;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -204,6 +204,13 @@ public class CeramicBucketModel implements IModelGeometry<CeramicBucketModel> {
                         Fluid fluid = fluidStack.getFluid();
                         String name = fluid.getRegistryName().toString();
 
+                        //reset cache if temperature config changed
+                        int breakTemperature = ServerConfig.CERAMIC_BUCKET_BREAK_TEMPERATURE.get();
+                        if (model.breakTemperature != breakTemperature) {
+                            model.breakTemperature = breakTemperature;
+                            model.cache.clear();
+                        }
+
                         if (!model.cache.containsKey(name))
                         {
                             CeramicBucketModel parent = model.parent.withFluid(fluid);
@@ -228,6 +235,8 @@ public class CeramicBucketModel implements IModelGeometry<CeramicBucketModel> {
         private final Map<String, IBakedModel> cache; // contains all the baked models since they'll never change
         private final VertexFormat format;
 
+        private int breakTemperature;
+
         BakedModel(ModelBakery bakery,
                    IModelConfiguration owner, CeramicBucketModel parent,
                    ImmutableList<BakedQuad> quads,
@@ -243,6 +252,7 @@ public class CeramicBucketModel implements IModelGeometry<CeramicBucketModel> {
             this.cache = cache;
             this.transforms = transforms;
             this.format = format;
+            this.breakTemperature = ServerConfig.CERAMIC_BUCKET_BREAK_TEMPERATURE.get();
         }
     }
 }
