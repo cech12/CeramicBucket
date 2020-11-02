@@ -7,17 +7,24 @@ import cech12.ceramicbucket.config.ServerConfig;
 import cech12.ceramicbucket.item.CeramicEntityBucketItem;
 import cech12.ceramicbucket.item.CeramicMilkBucketItem;
 import cech12.ceramicbucket.api.crafting.FilledCeramicBucketIngredient;
+import cech12.ceramicbucket.util.CeramicBucketUtils;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.SoundEvents;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -30,6 +37,8 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLConfig;
 import net.minecraftforge.fml.loading.FMLPaths;
+
+import java.util.Map;
 
 import static cech12.ceramicbucket.CeramicBucketMod.MOD_ID;
 
@@ -103,6 +112,38 @@ public class CeramicBucketMod {
                 }
                 event.setCanceled(true);
                 event.setCancellationResult(ActionResultType.SUCCESS);
+            }
+        }
+    }
+
+    /**
+     * Add Anvil recipe for filled ceramic buckets if infinity enchanting is enabled.
+     */
+    @SubscribeEvent
+    public static void onAnvilUpdate(AnvilUpdateEvent event) {
+        if (ServerConfig.INFINITY_ENCHANTMENT_ENABLED.get()) {
+            ItemStack left = event.getLeft();
+            if (left.getItem() == CeramicBucketItems.FILLED_CERAMIC_BUCKET) {
+                FluidUtil.getFluidContained(left).ifPresent(fluidStack -> {
+                    Fluid fluid = fluidStack.getFluid();
+                    if (fluid instanceof FlowingFluid && CeramicBucketUtils.canFluidSourcesMultiply((FlowingFluid) fluid)) {
+                        ItemStack right = event.getRight();
+                        int infinityLevel = 0;
+                        if (right.getItem() == Items.ENCHANTED_BOOK) {
+                            infinityLevel = EnchantmentHelper.getEnchantments(right).get(Enchantments.INFINITY);
+                        } else if (right.getItem() == left.getItem()) {
+                            infinityLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, right);
+                        }
+                        if (infinityLevel > 0) {
+                            ItemStack result = left.copy();
+                            Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(result);
+                            map.put(Enchantments.INFINITY, infinityLevel);
+                            EnchantmentHelper.setEnchantments(map, result);
+                            event.setOutput(result);
+                            event.setCost(ServerConfig.INFINITY_ENCHANTMENT_COST.get());
+                        }
+                    }
+                });
             }
         }
     }

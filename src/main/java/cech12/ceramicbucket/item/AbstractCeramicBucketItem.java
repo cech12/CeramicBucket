@@ -1,5 +1,6 @@
 package cech12.ceramicbucket.item;
 
+import cech12.ceramicbucket.config.ServerConfig;
 import cech12.ceramicbucket.util.CeramicBucketUtils;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.BlockState;
@@ -8,6 +9,8 @@ import net.minecraft.block.CauldronBlock;
 import net.minecraft.block.IBucketPickupHandler;
 import net.minecraft.block.ILiquidContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.fluid.FlowingFluid;
@@ -38,6 +41,7 @@ import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 public abstract class AbstractCeramicBucketItem extends BucketItem {
@@ -179,10 +183,21 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
     @Override
     @Nonnull
     public ItemStack emptyBucket(@Nonnull ItemStack stack, @Nullable PlayerEntity player) {
-        if (player == null || !player.abilities.isCreativeMode) {
-            return drain(stack, FluidAttributes.BUCKET_VOLUME);
+        if (player != null && player.abilities.isCreativeMode) {
+            return stack;
         }
-        return stack;
+        if (ServerConfig.INFINITY_ENCHANTMENT_ENABLED.get()) {
+            Optional<FluidStack> optionalFluid = FluidUtil.getFluidContained(stack);
+            if (optionalFluid.isPresent()) {
+                Fluid fluid = optionalFluid.get().getFluid();
+                if (EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0
+                        && fluid instanceof FlowingFluid
+                        && CeramicBucketUtils.canFluidSourcesMultiply((FlowingFluid) fluid)) {
+                    return stack;
+                }
+            }
+        }
+        return drain(stack, FluidAttributes.BUCKET_VOLUME);
     }
 
     @Deprecated

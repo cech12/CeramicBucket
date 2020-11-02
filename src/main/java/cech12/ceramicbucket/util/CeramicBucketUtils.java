@@ -4,6 +4,7 @@ import cech12.ceramicbucket.api.item.CeramicBucketItems;
 import cech12.ceramicbucket.config.ServerConfig;
 import cech12.ceramicbucket.item.CeramicMilkBucketItem;
 import cech12.ceramicbucket.item.FilledCeramicBucketItem;
+import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
@@ -14,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeHooks;
 
 import javax.annotation.Nonnull;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,6 +87,28 @@ public class CeramicBucketUtils {
             return ForgeHooks.getBurnTime(new ItemStack(fluid.getFilledBucket()));
         }
         return -1;
+    }
+
+    /**
+     * Checks if the sources of the given fluid can generate new sources (like water).
+     * @param fluid - Fluid to check
+     * @return boolean
+     */
+    public static boolean canFluidSourcesMultiply(@Nonnull FlowingFluid fluid) {
+        // use reflection because the "canSourcesMultiply" method is protected and
+        // overridden by all sub classes.
+        Class<?> clazz = fluid.getClass();
+        boolean lastClass;
+        do {
+            lastClass = clazz == FlowingFluid.class;
+            try {
+                Method method = clazz.getDeclaredMethod("canSourcesMultiply");
+                method.setAccessible(true);
+                return (boolean) method.invoke(fluid);
+            } catch (Exception ignored) {}
+            clazz = clazz.getSuperclass();
+        } while (!lastClass);
+        return false;
     }
 
 }
