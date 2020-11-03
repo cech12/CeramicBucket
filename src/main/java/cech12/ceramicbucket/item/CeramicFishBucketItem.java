@@ -1,6 +1,7 @@
 package cech12.ceramicbucket.item;
 
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
@@ -106,5 +107,10 @@ public class CeramicFishBucketItem extends FilledCeramicBucketItem {
     @Nonnull
     public ITextComponent getDisplayName(@Nonnull ItemStack stack) {
         return new TranslationTextComponent("item.ceramicbucket.ceramic_entity_bucket", fishType.getName());
+    }
+
+    @Override
+    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+        return enchantment.type.canEnchantItem(stack.getItem());
     }
 }
