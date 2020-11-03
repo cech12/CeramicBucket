@@ -179,10 +179,10 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
     @Override
     @Nonnull
     public ItemStack emptyBucket(@Nonnull ItemStack stack, @Nullable PlayerEntity player) {
-        if (player == null || !player.abilities.isCreativeMode) {
-            return drain(stack, FluidAttributes.BUCKET_VOLUME);
+        if (player != null && player.abilities.isCreativeMode) {
+            return stack;
         }
-        return stack;
+        return drain(stack, FluidAttributes.BUCKET_VOLUME);
     }
 
     @Deprecated

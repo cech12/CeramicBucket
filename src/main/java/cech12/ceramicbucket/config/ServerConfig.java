@@ -12,6 +12,7 @@ public class ServerConfig {
     public static final ForgeConfigSpec.IntValue CERAMIC_BUCKET_BREAK_TEMPERATURE;
     public static final ForgeConfigSpec.BooleanValue MILKING_ENABLED;
     public static final ForgeConfigSpec.BooleanValue FISH_OBTAINING_ENABLED;
+    public static final ForgeConfigSpec.BooleanValue INFINITY_ENCHANTMENT_ENABLED;
 
     static {
         final ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -29,6 +30,10 @@ public class ServerConfig {
         FISH_OBTAINING_ENABLED = builder
                 .comment("Whether or not obtaining fish with a Ceramic Bucket should be enabled.")
                 .define("fishObtainingEnabled", true);
+
+        INFINITY_ENCHANTMENT_ENABLED = builder
+                .comment("Whether or not Infinity enchantment for Ceramic Buckets filled with multiplying sources like water should be enabled.")
+                .define("infinityEnchantmentEnabled", false);
 
         builder.pop();
 

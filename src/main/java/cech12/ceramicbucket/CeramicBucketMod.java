@@ -39,6 +39,9 @@ public class CeramicBucketMod {
 
     public static final String MOD_ID = "ceramicbucket";
 
+    // Use for data generation and development
+    public static final boolean DEVELOPMENT_MODE = Boolean.parseBoolean(System.getProperty(MOD_ID + ".developmentMode", "false"));
+
     public CeramicBucketMod() {
         //Config
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfig.SERVER_CONFIG);
