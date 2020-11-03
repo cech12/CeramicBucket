@@ -3,6 +3,7 @@ package cech12.ceramicbucket.item;
 import cech12.ceramicbucket.api.data.ObtainableEntityType;
 import cech12.ceramicbucket.compat.ModCompat;
 import cech12.ceramicbucket.util.CeramicBucketUtils;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
@@ -171,5 +172,10 @@ public class CeramicEntityBucketItem extends FilledCeramicBucketItem {
     @Override
     public boolean hasContainerItem(ItemStack stack) {
         return !this.cracksBucket(stack);
+    }
+
+    @Override
+    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+        return enchantment.type.canEnchantItem(stack.getItem());
     }
 }

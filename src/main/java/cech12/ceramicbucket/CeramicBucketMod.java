@@ -8,6 +8,8 @@ import cech12.ceramicbucket.item.CeramicEntityBucketItem;
 import cech12.ceramicbucket.item.CeramicMilkBucketItem;
 import cech12.ceramicbucket.api.crafting.FilledCeramicBucketIngredient;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -86,7 +88,10 @@ public class CeramicBucketMod {
             //or ceramic bucket is there
             Fluid fluid = FluidUtil.getFluidContained(itemstack).orElse(FluidStack.EMPTY).getFluid();
             if ((fluid != Fluids.EMPTY && itemstack.getItem() != CeramicBucketItems.FILLED_CERAMIC_BUCKET)
-                    || (fluid == Fluids.EMPTY && itemstack.getItem() != CeramicBucketItems.CERAMIC_BUCKET)) {
+                    || (fluid == Fluids.EMPTY && itemstack.getItem() != CeramicBucketItems.CERAMIC_BUCKET)
+                    || (itemstack.getItem() == CeramicBucketItems.FILLED_CERAMIC_BUCKET
+                        && itemstack.canApplyAtEnchantingTable(Enchantments.INFINITY)
+                        && EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, itemstack) > 0)) {
                 return;
             }
             //check if the entity can be inside of a ceramic entity bucket
