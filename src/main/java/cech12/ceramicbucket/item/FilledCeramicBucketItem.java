@@ -2,7 +2,11 @@ package cech12.ceramicbucket.item;
 
 import cech12.ceramicbucket.api.item.CeramicBucketItems;
 
+import cech12.ceramicbucket.config.ServerConfig;
 import cech12.ceramicbucket.util.CeramicBucketUtils;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BucketItem;
@@ -115,6 +119,17 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
             return new ItemStack(CeramicBucketItems.CERAMIC_BUCKET);
         }
         return ItemStack.EMPTY;
+    }
+
+    @Override
+    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+        if (enchantment == Enchantments.INFINITY && ServerConfig.INFINITY_ENCHANTMENT_ENABLED.get()) {
+            Fluid fluid = this.getFluid(stack);
+            if (fluid instanceof FlowingFluid && CeramicBucketUtils.canFluidSourcesMultiply((FlowingFluid) fluid)) {
+                return true;
+            }
+        }
+        return super.canApplyAtEnchantingTable(stack, enchantment);
     }
 
 }

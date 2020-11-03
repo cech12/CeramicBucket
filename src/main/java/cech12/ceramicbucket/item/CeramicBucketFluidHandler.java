@@ -11,9 +11,6 @@ import javax.annotation.Nonnull;
 
 public class CeramicBucketFluidHandler extends FluidHandlerItemStack {
 
-    protected final ItemStack filledContainer = new ItemStack(CeramicBucketItems.FILLED_CERAMIC_BUCKET);
-    protected final ItemStack filledMilkContainer = new ItemStack(CeramicBucketItems.CERAMIC_MILK_BUCKET);
-
     public CeramicBucketFluidHandler(@Nonnull ItemStack container) {
         super(container, FluidAttributes.BUCKET_VOLUME);
     }
@@ -21,9 +18,9 @@ public class CeramicBucketFluidHandler extends FluidHandlerItemStack {
     @Override
     protected void setFluid(FluidStack fluid) {
         if (CeramicBucketUtils.isMilkFluid(fluid.getFluid())) {
-            this.container = this.filledMilkContainer;
+            this.container = new ItemStack(CeramicBucketItems.CERAMIC_MILK_BUCKET);
         } else {
-            this.container = this.filledContainer;
+            this.container = new ItemStack(CeramicBucketItems.FILLED_CERAMIC_BUCKET);
         }
         super.setFluid(fluid);
     }
