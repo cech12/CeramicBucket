@@ -180,10 +180,11 @@ public class CeramicEntityBucketModel implements IModelGeometry<CeramicEntityBuc
             this.parent = parent;
         }
 
+        @Nullable
         @Override
-        public IBakedModel func_239290_a_(IBakedModel originalModel, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity)
+        public IBakedModel getOverrideModel(IBakedModel originalModel, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity)
         {
-            IBakedModel overridden = nested.func_239290_a_(originalModel, stack, world, entity);
+            IBakedModel overridden = nested.getOverrideModel(originalModel, stack, world, entity);
             if (overridden != originalModel) return overridden;
             if (stack.getItem() instanceof CeramicEntityBucketItem) {
                 CeramicEntityBucketItem bucket = (CeramicEntityBucketItem) stack.getItem();

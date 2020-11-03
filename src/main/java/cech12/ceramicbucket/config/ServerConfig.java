@@ -13,7 +13,6 @@ public class ServerConfig {
     public static final ForgeConfigSpec.BooleanValue MILKING_ENABLED;
     public static final ForgeConfigSpec.BooleanValue FISH_OBTAINING_ENABLED;
     public static final ForgeConfigSpec.BooleanValue INFINITY_ENCHANTMENT_ENABLED;
-    public static final ForgeConfigSpec.IntValue INFINITY_ENCHANTMENT_COST;
 
     static {
         final ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -35,10 +34,6 @@ public class ServerConfig {
         INFINITY_ENCHANTMENT_ENABLED = builder
                 .comment("Whether or not Infinity enchantment for Ceramic Buckets filled with multiplying sources like water should be enabled.")
                 .define("infinityEnchantmentEnabled", false);
-
-        INFINITY_ENCHANTMENT_COST = builder
-                .comment("Level cost of enchanting filled Ceramic Buckets with Infinity enchantment. (if enabled)")
-                .defineInRange("infinityEnchantmentCost", 10, 1, 1000);
 
         builder.pop();
 

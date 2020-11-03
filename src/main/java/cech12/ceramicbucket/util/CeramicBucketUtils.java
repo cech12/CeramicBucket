@@ -1,5 +1,6 @@
 package cech12.ceramicbucket.util;
 
+import cech12.ceramicbucket.CeramicBucketMod;
 import cech12.ceramicbucket.api.item.CeramicBucketItems;
 import cech12.ceramicbucket.config.ServerConfig;
 import cech12.ceramicbucket.item.CeramicMilkBucketItem;
@@ -98,11 +99,12 @@ public class CeramicBucketUtils {
         // use reflection because the "canSourcesMultiply" method is protected and
         // overridden by all sub classes.
         Class<?> clazz = fluid.getClass();
+        String methodName = (CeramicBucketMod.DEVELOPMENT_MODE) ? "canSourcesMultiply" : "func_205579_d";
         boolean lastClass;
         do {
             lastClass = clazz == FlowingFluid.class;
             try {
-                Method method = clazz.getDeclaredMethod("canSourcesMultiply");
+                Method method = clazz.getDeclaredMethod(methodName);
                 method.setAccessible(true);
                 return (boolean) method.invoke(fluid);
             } catch (Exception ignored) {}
