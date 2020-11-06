@@ -4,7 +4,6 @@ import cech12.ceramicbucket.CeramicBucketMod;
 import cech12.ceramicbucket.api.item.CeramicBucketItems;
 import cech12.ceramicbucket.config.ServerConfig;
 import cech12.ceramicbucket.item.FilledCeramicBucketItem;
-import cech12.ceramicbucket.util.CeramicBucketUtils;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaRecipeCategoryUid;
@@ -13,7 +12,6 @@ import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.ItemStack;
@@ -53,8 +51,7 @@ public class ModJEIPlugin implements IModPlugin {
             for (Fluid fluid : ForgeRegistries.FLUIDS) {
                 FluidUtil.getFluidContained(new ItemStack(fluid.getFilledBucket())).ifPresent(bucketFluidStack -> {
                     Fluid bucketFluid = bucketFluidStack.getFluid();
-                    if (bucketFluid instanceof FlowingFluid && !addedFluids.contains(bucketFluid)
-                            && CeramicBucketUtils.canFluidSourcesMultiply((FlowingFluid) bucketFluid)) {
+                    if (!addedFluids.contains(bucketFluid) && ServerConfig.canFluidBeEnchantedWithInfinity(bucketFluid)) {
                         addedFluids.add(bucketFluid);
                         ItemStack bucket = ((FilledCeramicBucketItem) CeramicBucketItems.FILLED_CERAMIC_BUCKET).getFilledInstance(bucketFluid.getFluid());
                         ItemStack enchantedBucket = bucket.copy();
