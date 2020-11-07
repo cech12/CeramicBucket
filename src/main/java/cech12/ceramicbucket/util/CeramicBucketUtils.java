@@ -1,24 +1,19 @@
 package cech12.ceramicbucket.util;
 
-import cech12.ceramicbucket.CeramicBucketMod;
 import cech12.ceramicbucket.api.item.CeramicBucketItems;
 import cech12.ceramicbucket.config.ServerConfig;
 import cech12.ceramicbucket.item.CeramicMilkBucketItem;
 import cech12.ceramicbucket.item.FilledCeramicBucketItem;
-import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.Tag;
-import net.minecraft.tileentity.AbstractFurnaceTileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.common.ForgeHooks;
 
 import javax.annotation.Nonnull;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,36 +72,10 @@ public class CeramicBucketUtils {
     public static int getBurnTimeOfFluid(@Nonnull Fluid fluid) {
         if (fluid != Fluids.EMPTY) {
             //all fluids have their burn time in their bucket item.
-            //get the burn time via ForgeEventFactory.getItemBurnTime to let other mods change burn times of buckets of vanilla and other fluids.
-            Item bucket = fluid.getFilledBucket();
-            ItemStack bucketStack = new ItemStack(bucket);
-            int burnTime = bucketStack.getBurnTime();
-            return ForgeEventFactory.getItemBurnTime(bucketStack, burnTime == -1 ? AbstractFurnaceTileEntity.getBurnTimes().getOrDefault(bucket, 0) : burnTime);
+            //get the burn time via ForgeHooks.getBurnTime to let other mods change burn times of buckets of vanilla and other fluids.
+            return ForgeHooks.getBurnTime(new ItemStack(fluid.getFilledBucket()));
         }
         return -1;
-    }
-
-    /**
-     * Checks if the sources of the given fluid can generate new sources (like water).
-     * @param fluid - Fluid to check
-     * @return boolean
-     */
-    public static boolean canFluidSourcesMultiply(@Nonnull FlowingFluid fluid) {
-        // use reflection because the "canSourcesMultiply" method is protected and
-        // overridden by all sub classes.
-        Class<?> clazz = fluid.getClass();
-        String methodName = (CeramicBucketMod.DEVELOPMENT_MODE) ? "canSourcesMultiply" : "func_205579_d";
-        boolean lastClass;
-        do {
-            lastClass = clazz == FlowingFluid.class;
-            try {
-                Method method = clazz.getDeclaredMethod(methodName);
-                method.setAccessible(true);
-                return (boolean) method.invoke(fluid);
-            } catch (Exception ignored) {}
-            clazz = clazz.getSuperclass();
-        } while (!lastClass);
-        return false;
     }
 
 }
