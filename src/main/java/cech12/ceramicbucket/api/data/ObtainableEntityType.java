@@ -81,8 +81,8 @@ public class ObtainableEntityType {
         private final List<Fluid> fluids = new ArrayList<>();
         private final List<ITag<Fluid>> fluidTags = new ArrayList<>();
         private Boolean cracksBucket = null;
-        private ResourceLocation emptySound = SoundEvents.ITEM_BUCKET_EMPTY_FISH.getName();
-        private ResourceLocation fillSound = SoundEvents.ITEM_BUCKET_FILL_FISH.getName();
+        private ResourceLocation emptySound = ForgeRegistries.SOUND_EVENTS.getKey(SoundEvents.ITEM_BUCKET_EMPTY_FISH);
+        private ResourceLocation fillSound = ForgeRegistries.SOUND_EVENTS.getKey(SoundEvents.ITEM_BUCKET_FILL_FISH);
 
         public Builder(@Nonnull EntityType<?> entityType, Fluid fluid) {
             this.entityType = ForgeRegistries.ENTITIES.getKey(entityType);
