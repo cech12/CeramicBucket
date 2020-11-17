@@ -95,7 +95,7 @@ public class CeramicBucketMod {
                 return;
             }
             //check if the entity can be inside of a ceramic entity bucket
-            if (ModCompat.canEntityTypeBeObtained(fluid, entity.getType())) {
+            if (ModCompat.canEntityBeObtained(fluid, entity)) {
                 ItemStack filledBucket = ((CeramicEntityBucketItem)CeramicBucketItems.CERAMIC_ENTITY_BUCKET).getFilledInstance(fluid, entity);
                 ((CeramicEntityBucketItem) CeramicBucketItems.CERAMIC_ENTITY_BUCKET).playFillSound(player, filledBucket);
                 if (!event.getWorld().isRemote()) {
