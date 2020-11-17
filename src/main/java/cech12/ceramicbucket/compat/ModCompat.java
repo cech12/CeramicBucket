@@ -20,6 +20,7 @@ public class ModCompat {
             new AxolotlCompat(),
             new CombustiveFishingCompat(),
             new MilkAllTheMobs(),
+            new QuarkCompat(),
             new UpgradeAquaticCompat()
     };
 
@@ -43,10 +44,10 @@ public class ModCompat {
         return types;
     }
 
-    public static boolean canEntityTypeBeObtained(@Nonnull Fluid fluid, @Nullable EntityType<?> entityType) {
-        if (entityType != null) {
+    public static boolean canEntityBeObtained(@Nonnull Fluid fluid, @Nullable Entity entity) {
+        if (entity != null) {
             for (Mod mod : MODS) {
-                if (mod.isLoaded() && mod instanceof EntityTypeObtainingMod && ((EntityTypeObtainingMod)mod).canEntityTypeBeObtained(fluid, entityType)) {
+                if (mod.isLoaded() && mod instanceof EntityTypeObtainingMod && ((EntityTypeObtainingMod)mod).canEntityBeObtained(fluid, entity)) {
                     return true;
                 }
             }
@@ -89,7 +90,8 @@ public class ModCompat {
 
         List<ObtainableEntityType> getObtainableEntityTypes();
 
-        default boolean canEntityTypeBeObtained(@Nonnull Fluid fluid, @Nonnull EntityType<?> entityType) {
+        default boolean canEntityBeObtained(@Nonnull Fluid fluid, @Nonnull Entity entity) {
+            EntityType<?> entityType = entity.getType();
             for (ObtainableEntityType type : this.getObtainableEntityTypes()) {
                 if (type.getEntityType() == entityType && type.isCorrectFluid(fluid)){
                     return true;
