@@ -3,6 +3,7 @@ package cech12.ceramicbucket.item;
 import cech12.ceramicbucket.api.item.CeramicBucketItems;
 
 import cech12.ceramicbucket.config.ServerConfig;
+import cech12.ceramicbucket.init.ModTags;
 import cech12.ceramicbucket.util.CeramicBucketUtils;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
@@ -104,11 +105,14 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
         return super.getBurnTime(itemStack);
     }
 
+    public boolean isCrackedBucket(ItemStack stack) {
+        return CeramicBucketUtils.isFluidTooHotForCeramicBucket(this.getFluid(stack));
+    }
+
     @Override
     public boolean hasContainerItem(ItemStack stack) {
         //for using a filled bucket as fuel or in crafting recipes, an empty bucket should remain
-        Fluid fluid = this.getFluid(stack);
-        return fluid != Fluids.EMPTY && !CeramicBucketUtils.isFluidTooHotForCeramicBucket(fluid);
+        return !this.isCrackedBucket(stack);
     }
 
     @Override
@@ -124,7 +128,7 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
         if (enchantment == Enchantments.INFINITY
                 && ServerConfig.INFINITY_ENCHANTMENT_ENABLED.get()
-                && ServerConfig.canFluidBeEnchantedWithInfinity(this.getFluid(stack))) {
+                && this.getFluid(stack).isIn(ModTags.Fluids.INFINITY_ENCHANTABLE)) {
             return true;
         }
         return super.canApplyAtEnchantingTable(stack, enchantment);

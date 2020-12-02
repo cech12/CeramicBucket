@@ -1,6 +1,5 @@
 package cech12.ceramicbucket.client.model;
 
-import cech12.ceramicbucket.config.ServerConfig;
 import cech12.ceramicbucket.item.CeramicEntityBucketItem;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -18,9 +17,7 @@ import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.model.ItemOverrideList;
 import net.minecraft.client.renderer.model.Material;
 import net.minecraft.client.renderer.model.ModelBakery;
-import net.minecraft.client.renderer.model.ModelRotation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.container.PlayerContainer;
@@ -184,14 +181,13 @@ public class CeramicEntityBucketModel implements IModelGeometry<CeramicEntityBuc
                     if (typeName != null) {
                         String name = typeName.toString();
                         //reset cache if temperature config changed
-                        int breakTemperature = ServerConfig.CERAMIC_BUCKET_BREAK_TEMPERATURE.get();
-                        if (model.breakTemperature != breakTemperature) {
-                            model.breakTemperature = breakTemperature;
+                        boolean cracksBucket = bucket.isCrackedBucket(stack);
+                        if (model.cracksBucket != cracksBucket) {
+                            model.cracksBucket = cracksBucket;
                             model.cache.clear();
                         }
-                        if (!cache.containsKey(name))
-                        {
-                            CeramicEntityBucketModel unbaked = model.parent.withEntityType(containedEntityType, bucket.cracksBucket(stack));
+                        if (!cache.containsKey(name)) {
+                            CeramicEntityBucketModel unbaked = model.parent.withEntityType(containedEntityType, cracksBucket);
                             IBakedModel bakedModel = unbaked.bake(model.owner, bakery, ModelLoader.defaultTextureGetter(), model.originalTransform, model.getOverrides(), REBAKE_LOCATION);
                             cache.put(name, bakedModel);
                             return bakedModel;
@@ -212,7 +208,7 @@ public class CeramicEntityBucketModel implements IModelGeometry<CeramicEntityBuc
         private final Map<String, IBakedModel> cache; // contains all the baked models since they'll never change
         private final IModelTransform originalTransform;
 
-        private int breakTemperature;
+        private boolean cracksBucket;
 
         BakedModel(ModelBakery bakery,
                    IModelConfiguration owner, CeramicEntityBucketModel parent,
@@ -228,7 +224,6 @@ public class CeramicEntityBucketModel implements IModelGeometry<CeramicEntityBuc
             this.parent = parent;
             this.cache = cache;
             this.originalTransform = originalTransform;
-            this.breakTemperature = ServerConfig.CERAMIC_BUCKET_BREAK_TEMPERATURE.get();
         }
     }
 }
