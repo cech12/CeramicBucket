@@ -2,6 +2,7 @@ package cech12.ceramicbucket.util;
 
 import cech12.ceramicbucket.api.item.CeramicBucketItems;
 import cech12.ceramicbucket.config.ServerConfig;
+import cech12.ceramicbucket.init.ModTags;
 import cech12.ceramicbucket.item.CeramicMilkBucketItem;
 import cech12.ceramicbucket.item.FilledCeramicBucketItem;
 import net.minecraft.fluid.Fluid;
@@ -52,8 +53,12 @@ public class CeramicBucketUtils {
      * @return true if the temperature of the fluid is more than the break temperature, else false
      */
     public static boolean isFluidTooHotForCeramicBucket(@Nonnull Fluid fluid) {
+        if (fluid == Fluids.EMPTY) {
+            return false;
+        }
         int minBreakTemperature = ServerConfig.CERAMIC_BUCKET_BREAK_TEMPERATURE.get();
-        return minBreakTemperature >= 0 && fluid.getAttributes().getTemperature() >= minBreakTemperature;
+        return (minBreakTemperature >= 0 && fluid.getAttributes().getTemperature() >= minBreakTemperature)
+                || (fluid.isIn(ModTags.Fluids.CERAMIC_CRACKING));
     }
 
 
