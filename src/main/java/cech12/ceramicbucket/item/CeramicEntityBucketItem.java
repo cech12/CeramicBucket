@@ -2,7 +2,6 @@ package cech12.ceramicbucket.item;
 
 import cech12.ceramicbucket.api.data.ObtainableEntityType;
 import cech12.ceramicbucket.compat.ModCompat;
-import cech12.ceramicbucket.util.CeramicBucketUtils;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -158,7 +157,8 @@ public class CeramicEntityBucketItem extends FilledCeramicBucketItem {
         return null;
     }
 
-    public boolean cracksBucket(ItemStack stack) {
+    @Override
+    public boolean isCrackedBucket(ItemStack stack) {
         ObtainableEntityType type = ModCompat.getObtainableEntityType(this.getEntityTypeFromStack(stack));
         if (type != null) {
             Boolean cracksBucket = type.cracksBucket();
@@ -166,12 +166,7 @@ public class CeramicEntityBucketItem extends FilledCeramicBucketItem {
                 return cracksBucket;
             }
         }
-        return CeramicBucketUtils.isFluidTooHotForCeramicBucket(getFluid(stack));
-    }
-
-    @Override
-    public boolean hasContainerItem(ItemStack stack) {
-        return !this.cracksBucket(stack);
+        return super.isCrackedBucket(stack);
     }
 
     @Override

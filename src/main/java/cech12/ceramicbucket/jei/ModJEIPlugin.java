@@ -3,6 +3,7 @@ package cech12.ceramicbucket.jei;
 import cech12.ceramicbucket.CeramicBucketMod;
 import cech12.ceramicbucket.api.item.CeramicBucketItems;
 import cech12.ceramicbucket.config.ServerConfig;
+import cech12.ceramicbucket.init.ModTags;
 import cech12.ceramicbucket.item.FilledCeramicBucketItem;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -51,7 +52,7 @@ public class ModJEIPlugin implements IModPlugin {
             for (Fluid fluid : ForgeRegistries.FLUIDS) {
                 FluidUtil.getFluidContained(new ItemStack(fluid.getFilledBucket())).ifPresent(bucketFluidStack -> {
                     Fluid bucketFluid = bucketFluidStack.getFluid();
-                    if (!addedFluids.contains(bucketFluid) && ServerConfig.canFluidBeEnchantedWithInfinity(bucketFluid)) {
+                    if (!addedFluids.contains(bucketFluid) && bucketFluid.isIn(ModTags.Fluids.INFINITY_ENCHANTABLE)) {
                         addedFluids.add(bucketFluid);
                         ItemStack bucket = ((FilledCeramicBucketItem) CeramicBucketItems.FILLED_CERAMIC_BUCKET).getFilledInstance(bucketFluid.getFluid());
                         ItemStack enchantedBucket = bucket.copy();

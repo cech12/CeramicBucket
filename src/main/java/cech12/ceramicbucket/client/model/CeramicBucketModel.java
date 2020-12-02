@@ -1,6 +1,5 @@
 package cech12.ceramicbucket.client.model;
 
-import cech12.ceramicbucket.config.ServerConfig;
 import cech12.ceramicbucket.util.CeramicBucketUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -66,10 +65,10 @@ public class CeramicBucketModel implements IModelGeometry<CeramicBucketModel> {
 
     private final boolean isCracked;
 
-    public CeramicBucketModel(@Nonnull Fluid fluid)
+    public CeramicBucketModel(@Nonnull Fluid fluid, boolean isCracked)
     {
         this.fluid = fluid;
-        this.isCracked = CeramicBucketUtils.isFluidTooHotForCeramicBucket(fluid);
+        this.isCracked = isCracked;
     }
 
     /**
@@ -78,7 +77,7 @@ public class CeramicBucketModel implements IModelGeometry<CeramicBucketModel> {
      */
     public CeramicBucketModel withFluid(Fluid newFluid)
     {
-        return new CeramicBucketModel(newFluid);
+        return new CeramicBucketModel(newFluid, CeramicBucketUtils.isFluidTooHotForCeramicBucket(newFluid));
     }
 
     @Override
@@ -177,7 +176,7 @@ public class CeramicBucketModel implements IModelGeometry<CeramicBucketModel> {
         public CeramicBucketModel read(JsonDeserializationContext deserializationContext, JsonObject modelContents)
         {
             // create new model
-            return new CeramicBucketModel(Fluids.EMPTY);
+            return new CeramicBucketModel(Fluids.EMPTY, false);
         }
     }
 
@@ -191,7 +190,7 @@ public class CeramicBucketModel implements IModelGeometry<CeramicBucketModel> {
         private final IModelConfiguration owner;
         private final CeramicBucketModel parent;
 
-        private int breakTemperature;
+        private boolean isCracked;
 
         private ContainedFluidOverrideHandler(ItemOverrideList nested, ModelBakery bakery, IModelConfiguration owner, CeramicBucketModel parent)
         {
@@ -213,13 +212,12 @@ public class CeramicBucketModel implements IModelGeometry<CeramicBucketModel> {
                         String name = fluid.getRegistryName().toString();
 
                         //reset cache if temperature config changed
-                        int breakTemperature = ServerConfig.CERAMIC_BUCKET_BREAK_TEMPERATURE.get();
-                        if (this.breakTemperature != breakTemperature) {
-                            this.breakTemperature = breakTemperature;
+                        boolean isCracked = CeramicBucketUtils.isFluidTooHotForCeramicBucket(fluid);
+                        if (this.isCracked != isCracked) {
+                            this.isCracked = isCracked;
                             cache.clear();
                         }
-                        if (!cache.containsKey(name))
-                        {
+                        if (!cache.containsKey(name)) {
                             CeramicBucketModel unbaked = this.parent.withFluid(fluid);
                             IBakedModel bakedModel = unbaked.bake(owner, bakery, ModelLoader.defaultTextureGetter(), ModelRotation.X0_Y0, this, REBAKE_LOCATION);
                             cache.put(name, bakedModel);

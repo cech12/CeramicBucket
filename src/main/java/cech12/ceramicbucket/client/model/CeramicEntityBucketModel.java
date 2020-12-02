@@ -1,6 +1,5 @@
 package cech12.ceramicbucket.client.model;
 
-import cech12.ceramicbucket.config.ServerConfig;
 import cech12.ceramicbucket.item.CeramicEntityBucketItem;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -170,7 +169,7 @@ public class CeramicEntityBucketModel implements IModelGeometry<CeramicEntityBuc
         private final IModelConfiguration owner;
         private final CeramicEntityBucketModel parent;
 
-        private int breakTemperature;
+        private boolean cracksBucket;
 
         private ContainedFluidOverrideHandler(ItemOverrideList nested, ModelBakery bakery, IModelConfiguration owner, CeramicEntityBucketModel parent)
         {
@@ -194,14 +193,13 @@ public class CeramicEntityBucketModel implements IModelGeometry<CeramicEntityBuc
                     if (typeName != null) {
                         String name = typeName.toString();
                         //reset cache if temperature config changed
-                        int breakTemperature = ServerConfig.CERAMIC_BUCKET_BREAK_TEMPERATURE.get();
-                        if (this.breakTemperature != breakTemperature) {
-                            this.breakTemperature = breakTemperature;
+                        boolean cracksBucket = bucket.isCrackedBucket(stack);
+                        if (this.cracksBucket != cracksBucket) {
+                            this.cracksBucket = cracksBucket;
                             cache.clear();
                         }
-                        if (!cache.containsKey(name))
-                        {
-                            CeramicEntityBucketModel unbaked = this.parent.withEntityType(containedEntityType, bucket.cracksBucket(stack));
+                        if (!cache.containsKey(name)) {
+                            CeramicEntityBucketModel unbaked = this.parent.withEntityType(containedEntityType, cracksBucket);
                             IBakedModel bakedModel = unbaked.bake(owner, bakery, ModelLoader.defaultTextureGetter(), ModelRotation.X0_Y0, this, REBAKE_LOCATION);
                             cache.put(name, bakedModel);
                             return bakedModel;

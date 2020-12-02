@@ -1,0 +1,6 @@
+{
+  "replace": false,
+  "_comment" : "All listed fluids are breaking an ceramic bucket unrelated to the ceramicBucketBreakTemperature config.",
+  "values": [
+  ]
+}

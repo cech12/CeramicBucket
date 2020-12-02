@@ -1,6 +1,7 @@
 package cech12.ceramicbucket.item;
 
 import cech12.ceramicbucket.config.ServerConfig;
+import cech12.ceramicbucket.init.ModTags;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ItemStack;
@@ -28,7 +29,7 @@ public class FilledCeramicBucketFluidHandler extends FluidHandlerItemStack {
         if (action == FluidAction.EXECUTE
                 && ServerConfig.INFINITY_ENCHANTMENT_ENABLED.get()
                 && EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, this.getContainer()) > 0
-                && ServerConfig.canFluidBeEnchantedWithInfinity(this.getFluid().getFluid())) {
+                && this.getFluid().getFluid().isIn(ModTags.Fluids.INFINITY_ENCHANTABLE)) {
             //simulate drain to simulate infinity effect
             return super.drain(maxDrain, FluidAction.SIMULATE);
         }
