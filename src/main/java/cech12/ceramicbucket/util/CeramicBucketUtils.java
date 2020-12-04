@@ -72,9 +72,11 @@ public class CeramicBucketUtils {
     }
 
     public static ItemStack getFilledCeramicBucket(Fluid fluid, ItemStack emptyBucket) {
-        ItemStack filledBucket = ((FilledCeramicBucketItem) CeramicBucketItems.FILLED_CERAMIC_BUCKET).getFilledInstance(fluid);
+        ItemStack filledBucket;
         if (CeramicBucketUtils.isMilkFluid(fluid)) {
             filledBucket = ((CeramicMilkBucketItem) CeramicBucketItems.CERAMIC_MILK_BUCKET).getFilledInstance(fluid);
+        } else {
+            filledBucket = ((FilledCeramicBucketItem) CeramicBucketItems.FILLED_CERAMIC_BUCKET).getFilledInstance(fluid);
         }
         if (emptyBucket != null) {
             CeramicBucketUtils.copyBucketColor(emptyBucket, filledBucket);
