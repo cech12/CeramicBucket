@@ -110,7 +110,8 @@ public class CeramicEntityBucketModel implements IModelGeometry<CeramicEntityBuc
         {
             TextureAtlasSprite baseSprite = spriteGetter.apply(baseLocation);
             if (baseSprite != null) {
-                builder.addAll(ItemLayerModel.getQuadsForSprite(1, baseSprite, format, state.apply(Optional.empty())));
+                //tint of 0 to enable vanilla coloring
+                builder.addAll(ItemLayerModel.getQuadsForSprite(0, baseSprite, format, state.apply(Optional.empty())));
             }
         }
 
