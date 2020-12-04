@@ -1,6 +1,5 @@
 package cech12.ceramicbucket.item;
 
-import cech12.ceramicbucket.api.item.CeramicBucketItems;
 import cech12.ceramicbucket.util.CeramicBucketUtils;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.LivingEntity;

@@ -73,7 +73,7 @@ public class FluidIngredient extends Ingredient {
                 Fluid bucketFluid = FluidUtil.getFluidContained(bucket).orElse(FluidStack.EMPTY).getFluid();
                 if (bucketFluid != Fluids.EMPTY && !addedFluids.contains(bucketFluid)) {
                     stacks.add(bucket);
-                    stacks.add(CeramicBucketUtils.getFilledCeramicBucket(bucketFluid));
+                    stacks.add(CeramicBucketUtils.getFilledCeramicBucket(bucketFluid, null));
                     addedFluids.add(bucketFluid);
                 }
             });

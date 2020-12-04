@@ -166,8 +166,8 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
     private ItemStack fillBucket(ItemStack stack, PlayerEntity player, Fluid fluid) {
         if (player == null || !player.abilities.isCreativeMode) {
             if (stack.getCount() > 1) {
+                ItemStack newStack = CeramicBucketUtils.getFilledCeramicBucket(fluid, stack);
                 stack.shrink(1);
-                ItemStack newStack = CeramicBucketUtils.getFilledCeramicBucket(fluid);
                 if (player != null && !player.inventory.addItemStackToInventory(newStack)) {
                     player.dropItem(newStack, false);
                 }
