@@ -17,11 +17,13 @@ public class CeramicBucketFluidHandler extends FluidHandlerItemStack {
 
     @Override
     protected void setFluid(FluidStack fluid) {
+        ItemStack newContainer;
         if (CeramicBucketUtils.isMilkFluid(fluid.getFluid())) {
-            this.container = new ItemStack(CeramicBucketItems.CERAMIC_MILK_BUCKET);
+            newContainer = new ItemStack(CeramicBucketItems.CERAMIC_MILK_BUCKET);
         } else {
-            this.container = new ItemStack(CeramicBucketItems.FILLED_CERAMIC_BUCKET);
+            newContainer = new ItemStack(CeramicBucketItems.FILLED_CERAMIC_BUCKET);
         }
+        this.container = CeramicBucketUtils.copyBucketColor(this.container, newContainer);
         super.setFluid(fluid);
     }
 

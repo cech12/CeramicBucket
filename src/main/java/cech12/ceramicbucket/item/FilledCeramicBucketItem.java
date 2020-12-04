@@ -105,10 +105,6 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
         return super.getBurnTime(itemStack);
     }
 
-    public boolean isCrackedBucket(ItemStack stack) {
-        return CeramicBucketUtils.isFluidTooHotForCeramicBucket(this.getFluid(stack));
-    }
-
     @Override
     public boolean hasContainerItem(ItemStack stack) {
         //for using a filled bucket as fuel or in crafting recipes, an empty bucket should remain
@@ -119,7 +115,7 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
     public ItemStack getContainerItem(ItemStack itemStack) {
         //for using a filled bucket as fuel or in crafting recipes, an empty bucket should remain
         if (this.hasContainerItem(itemStack)) {
-            return new ItemStack(CeramicBucketItems.CERAMIC_BUCKET);
+            return CeramicBucketUtils.copyBucketColor(itemStack, new ItemStack(CeramicBucketItems.CERAMIC_BUCKET));
         }
         return ItemStack.EMPTY;
     }
