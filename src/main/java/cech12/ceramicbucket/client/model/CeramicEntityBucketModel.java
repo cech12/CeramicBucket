@@ -109,6 +109,7 @@ public class CeramicEntityBucketModel implements IModelGeometry<CeramicEntityBuc
 
         if (entitySprite != null)
         {
+            //tint of -1 to avoid coloring the entity layer
             builder.addQuads(ItemLayerModel.getLayerRenderType(false), ItemLayerModel.getQuadsForSprite(-1, entitySprite, transform));
         }
 
