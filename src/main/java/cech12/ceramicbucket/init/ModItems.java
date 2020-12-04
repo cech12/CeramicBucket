@@ -66,7 +66,7 @@ public class ModItems {
                     if (!(fluid instanceof FlowingFluid)) {
                         return super.dispenseStack(source, stack);
                     } else {
-                        ItemStack bucket = CeramicBucketUtils.getFilledCeramicBucket(fluid);
+                        ItemStack bucket = CeramicBucketUtils.copyBucketColor(stack, CeramicBucketUtils.getFilledCeramicBucket(fluid));
                         stack.shrink(1);
                         if (stack.isEmpty()) {
                             return bucket;

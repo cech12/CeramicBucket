@@ -107,9 +107,10 @@ public class CeramicEntityBucketModel implements IModelGeometry<CeramicEntityBuc
             builder.addAll(ItemLayerModel.getQuadsForSprites(ImmutableList.of(baseLocation), transform, spriteGetter));
         }
 
-        if (entityLocation != null)
+        if (entitySprite != null)
         {
-            builder.addAll(ItemLayerModel.getQuadsForSprites(ImmutableList.of(entityLocation), transform, spriteGetter));
+            //tint of -1 to avoid coloring the entity layer
+            builder.addAll(ItemLayerModel.getQuadsForSprite(-1, entitySprite, transform));
         }
 
         return new BakedModel(bakery, owner, this, builder.build(), particleSprite, Maps.immutableEnumMap(transformMap), Maps.newHashMap(), transform.isIdentity(), modelTransform, owner.isSideLit());
@@ -181,13 +182,13 @@ public class CeramicEntityBucketModel implements IModelGeometry<CeramicEntityBuc
                     if (typeName != null) {
                         String name = typeName.toString();
                         //reset cache if temperature config changed
-                        boolean cracksBucket = bucket.isCrackedBucket(stack);
-                        if (model.cracksBucket != cracksBucket) {
-                            model.cracksBucket = cracksBucket;
+                        boolean isCracked = bucket.isCrackedBucket(stack);
+                        if (model.isCracked != isCracked) {
+                            model.isCracked = isCracked;
                             model.cache.clear();
                         }
                         if (!cache.containsKey(name)) {
-                            CeramicEntityBucketModel unbaked = model.parent.withEntityType(containedEntityType, cracksBucket);
+                            CeramicEntityBucketModel unbaked = model.parent.withEntityType(containedEntityType, isCracked);
                             IBakedModel bakedModel = unbaked.bake(model.owner, bakery, ModelLoader.defaultTextureGetter(), model.originalTransform, model.getOverrides(), REBAKE_LOCATION);
                             cache.put(name, bakedModel);
                             return bakedModel;
@@ -208,7 +209,7 @@ public class CeramicEntityBucketModel implements IModelGeometry<CeramicEntityBuc
         private final Map<String, IBakedModel> cache; // contains all the baked models since they'll never change
         private final IModelTransform originalTransform;
 
-        private boolean cracksBucket;
+        private boolean isCracked;
 
         BakedModel(ModelBakery bakery,
                    IModelConfiguration owner, CeramicEntityBucketModel parent,

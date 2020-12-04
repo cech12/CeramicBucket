@@ -14,6 +14,8 @@ import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BucketItem;
+import net.minecraft.item.DyeItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.stats.Stats;
@@ -38,6 +40,7 @@ import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.function.Supplier;
 
 public abstract class AbstractCeramicBucketItem extends BucketItem {
@@ -164,7 +167,7 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
         if (player == null || !player.abilities.isCreativeMode) {
             if (stack.getCount() > 1) {
                 stack.shrink(1);
-                ItemStack newStack = CeramicBucketUtils.getFilledCeramicBucket(fluid);
+                ItemStack newStack = CeramicBucketUtils.copyBucketColor(stack, CeramicBucketUtils.getFilledCeramicBucket(fluid));
                 if (player != null && !player.inventory.addItemStackToInventory(newStack)) {
                     player.dropItem(newStack, false);
                 }
@@ -268,4 +271,86 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
     private boolean canBlockContainFluid(World worldIn, BlockPos posIn, BlockState blockstate, ItemStack itemStack) {
         return blockstate.getBlock() instanceof ILiquidContainer && ((ILiquidContainer)blockstate.getBlock()).canContainFluid(worldIn, posIn, blockstate, this.getFluid(itemStack));
     }
+
+    public boolean isCrackedBucket(ItemStack stack) {
+        return CeramicBucketUtils.isFluidTooHotForCeramicBucket(this.getFluid(stack));
+    }
+
+    public static boolean hasColor(ItemStack stack) {
+        CompoundNBT compoundnbt = stack.getChildTag("display");
+        return compoundnbt != null && compoundnbt.contains("color", 99);
+    }
+
+    public static int getColor(ItemStack stack) {
+        CompoundNBT compoundnbt = stack.getChildTag("display");
+        //rawColorFromRGB(219, 107, 76);
+        return compoundnbt != null && compoundnbt.contains("color", 99) ? compoundnbt.getInt("color") : 14379852;
+    }
+
+    public static void removeColor(ItemStack stack) {
+        CompoundNBT compoundnbt = stack.getChildTag("display");
+        if (compoundnbt != null && compoundnbt.contains("color")) {
+            compoundnbt.remove("color");
+        }
+    }
+
+    public static void setColor(ItemStack stack, int color) {
+        stack.getOrCreateChildTag("display").putInt("color", color);
+    }
+
+    public static ItemStack dyeItem(ItemStack stack, List<DyeItem> dyes) {
+        ItemStack resultStack = ItemStack.EMPTY;
+        int[] color = new int[3];
+        int i = 0;
+        int j = 0;
+        AbstractCeramicBucketItem bucketItem = null;
+        Item item = stack.getItem();
+        if (item instanceof AbstractCeramicBucketItem) {
+            bucketItem = (AbstractCeramicBucketItem)item;
+            resultStack = stack.copy();
+            resultStack.setCount(1);
+            if (hasColor(stack)) {
+                int k = getColor(resultStack);
+                float f = (float)(k >> 16 & 255) / 255.0F;
+                float f1 = (float)(k >> 8 & 255) / 255.0F;
+                float f2 = (float)(k & 255) / 255.0F;
+                i = (int)((float)i + Math.max(f, Math.max(f1, f2)) * 255.0F);
+                color[0] = (int)((float)color[0] + f * 255.0F);
+                color[1] = (int)((float)color[1] + f1 * 255.0F);
+                color[2] = (int)((float)color[2] + f2 * 255.0F);
+                ++j;
+            }
+
+            for (DyeItem dyeitem : dyes) {
+                float[] afloat = dyeitem.getDyeColor().getColorComponentValues();
+                int i2 = (int)(afloat[0] * 255.0F);
+                int l = (int)(afloat[1] * 255.0F);
+                int i1 = (int)(afloat[2] * 255.0F);
+                i += Math.max(i2, Math.max(l, i1));
+                color[0] += i2;
+                color[1] += l;
+                color[2] += i1;
+                ++j;
+            }
+        }
+
+        if (bucketItem == null) {
+            return ItemStack.EMPTY;
+        } else {
+            int j1 = color[0] / j;
+            int k1 = color[1] / j;
+            int l1 = color[2] / j;
+            float f3 = (float)i / (float)j;
+            float f4 = (float)Math.max(j1, Math.max(k1, l1));
+            j1 = (int)((float)j1 * f3 / f4);
+            k1 = (int)((float)k1 * f3 / f4);
+            l1 = (int)((float)l1 * f3 / f4);
+            int j2 = (j1 << 8) + k1;
+            j2 = (j2 << 8) + l1;
+            setColor(resultStack, j2);
+            return resultStack;
+        }
+    }
+
+
 }

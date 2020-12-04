@@ -1,6 +1,6 @@
 package cech12.ceramicbucket.client.model;
 
-import cech12.ceramicbucket.util.CeramicBucketUtils;
+import cech12.ceramicbucket.item.AbstractCeramicBucketItem;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
@@ -75,9 +75,9 @@ public class CeramicBucketModel implements IModelGeometry<CeramicBucketModel> {
      * Returns a new ModelDynBucket representing the given fluid, but with the same
      * other properties (flipGas, tint, coverIsMask).
      */
-    public CeramicBucketModel withFluid(Fluid newFluid)
+    public CeramicBucketModel withFluid(Fluid newFluid, boolean isCracked)
     {
-        return new CeramicBucketModel(newFluid, CeramicBucketUtils.isFluidTooHotForCeramicBucket(newFluid));
+        return new CeramicBucketModel(newFluid, isCracked);
     }
 
     @Override
@@ -191,31 +191,26 @@ public class CeramicBucketModel implements IModelGeometry<CeramicBucketModel> {
         @Override
         public IBakedModel getModelWithOverrides(IBakedModel originalModel, ItemStack stack, @Nullable World world, @Nullable LivingEntity entity)
         {
-            return FluidUtil.getFluidContained(stack)
-                    .map(fluidStack -> {
-                        CeramicBucketModel.BakedModel model = (BakedModel)originalModel;
-
-                        Fluid fluid = fluidStack.getFluid();
-                        String name = fluid.getRegistryName().toString();
-
-                        //reset cache if temperature config changed
-                        boolean isCracked = CeramicBucketUtils.isFluidTooHotForCeramicBucket(fluid);
-                        if (model.isCracked != isCracked) {
-                            model.isCracked = isCracked;
-                            model.cache.clear();
-                        }
-
-                        if (!model.cache.containsKey(name)) {
-                            CeramicBucketModel parent = model.parent.withFluid(fluid);
-                            IBakedModel bakedModel = parent.bake(model.owner, bakery, ModelLoader.defaultTextureGetter(), model.originalTransform, model.getOverrides(), REBAKE_LOCATION);
-                            model.cache.put(name, bakedModel);
-                            return bakedModel;
-                        }
-
-                        return model.cache.get(name);
-                    })
-                    // not a fluid item apparently
-                    .orElse(originalModel); // empty bucket
+            if (stack.getItem() instanceof AbstractCeramicBucketItem) {
+                AbstractCeramicBucketItem bucket = (AbstractCeramicBucketItem) stack.getItem();
+                CeramicBucketModel.BakedModel model = (BakedModel)originalModel;
+                Fluid fluid = bucket.getFluid(stack);
+                String name = fluid.getRegistryName().toString();
+                //reset cache if temperature config changed
+                boolean isCracked = bucket.isCrackedBucket(stack);
+                if (model.isCracked != isCracked) {
+                    model.isCracked = isCracked;
+                    model.cache.clear();
+                }
+                if (!model.cache.containsKey(name)) {
+                    CeramicBucketModel parent = model.parent.withFluid(fluid, isCracked);
+                    IBakedModel bakedModel = parent.bake(model.owner, bakery, ModelLoader.defaultTextureGetter(), model.originalTransform, model.getOverrides(), REBAKE_LOCATION);
+                    model.cache.put(name, bakedModel);
+                    return bakedModel;
+                }
+                return model.cache.get(name);
+            }
+            return originalModel;
         }
     }
 
