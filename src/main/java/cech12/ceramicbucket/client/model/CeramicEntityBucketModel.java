@@ -107,9 +107,9 @@ public class CeramicEntityBucketModel implements IModelGeometry<CeramicEntityBuc
             builder.addQuads(ItemLayerModel.getLayerRenderType(false), ItemLayerModel.getQuadsForSprites(ImmutableList.of(baseLocation), transform, spriteGetter));
         }
 
-        if (entityLocation != null)
+        if (entitySprite != null)
         {
-            builder.addQuads(ItemLayerModel.getLayerRenderType(false), ItemLayerModel.getQuadsForSprites(ImmutableList.of(entityLocation), transform, spriteGetter));
+            builder.addQuads(ItemLayerModel.getLayerRenderType(false), ItemLayerModel.getQuadsForSprite(-1, entitySprite, transform));
         }
 
         builder.setParticle(particleSprite);
@@ -169,7 +169,7 @@ public class CeramicEntityBucketModel implements IModelGeometry<CeramicEntityBuc
         private final IModelConfiguration owner;
         private final CeramicEntityBucketModel parent;
 
-        private boolean cracksBucket;
+        private boolean isCracked;
 
         private ContainedFluidOverrideHandler(ItemOverrideList nested, ModelBakery bakery, IModelConfiguration owner, CeramicEntityBucketModel parent)
         {
@@ -193,13 +193,13 @@ public class CeramicEntityBucketModel implements IModelGeometry<CeramicEntityBuc
                     if (typeName != null) {
                         String name = typeName.toString();
                         //reset cache if temperature config changed
-                        boolean cracksBucket = bucket.isCrackedBucket(stack);
-                        if (this.cracksBucket != cracksBucket) {
-                            this.cracksBucket = cracksBucket;
+                        boolean isCracked = bucket.isCrackedBucket(stack);
+                        if (this.isCracked != isCracked) {
+                            this.isCracked = isCracked;
                             cache.clear();
                         }
                         if (!cache.containsKey(name)) {
-                            CeramicEntityBucketModel unbaked = this.parent.withEntityType(containedEntityType, cracksBucket);
+                            CeramicEntityBucketModel unbaked = this.parent.withEntityType(containedEntityType, isCracked);
                             IBakedModel bakedModel = unbaked.bake(owner, bakery, ModelLoader.defaultTextureGetter(), ModelRotation.X0_Y0, this, REBAKE_LOCATION);
                             cache.put(name, bakedModel);
                             return bakedModel;

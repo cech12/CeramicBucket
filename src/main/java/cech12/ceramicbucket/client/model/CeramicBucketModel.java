@@ -1,5 +1,6 @@
 package cech12.ceramicbucket.client.model;
 
+import cech12.ceramicbucket.item.AbstractCeramicBucketItem;
 import cech12.ceramicbucket.util.CeramicBucketUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -18,6 +19,7 @@ import net.minecraft.client.renderer.model.ModelRotation;
 import net.minecraft.client.renderer.model.RenderMaterial;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
@@ -38,7 +40,6 @@ import net.minecraftforge.client.model.ModelTransformComposition;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.client.model.SimpleModelTransform;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
-import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.resource.IResourceType;
 import net.minecraftforge.resource.VanillaResourceType;
 
@@ -206,28 +207,25 @@ public class CeramicBucketModel implements IModelGeometry<CeramicBucketModel> {
         {
             IBakedModel overriden = nested.getOverrideModel(originalModel, stack, world, entity);
             if (overriden != originalModel) return overriden;
-            return FluidUtil.getFluidContained(stack)
-                    .map(fluidStack -> {
-                        Fluid fluid = fluidStack.getFluid();
-                        String name = fluid.getRegistryName().toString();
-
-                        //reset cache if temperature config changed
-                        boolean isCracked = CeramicBucketUtils.isFluidTooHotForCeramicBucket(fluid);
-                        if (this.isCracked != isCracked) {
-                            this.isCracked = isCracked;
-                            cache.clear();
-                        }
-                        if (!cache.containsKey(name)) {
-                            CeramicBucketModel unbaked = this.parent.withFluid(fluid);
-                            IBakedModel bakedModel = unbaked.bake(owner, bakery, ModelLoader.defaultTextureGetter(), ModelRotation.X0_Y0, this, REBAKE_LOCATION);
-                            cache.put(name, bakedModel);
-                            return bakedModel;
-                        }
-
-                        return cache.get(name);
-                    })
-                    // not a fluid item apparently
-                    .orElse(originalModel); // empty bucket
+            if (stack.getItem() instanceof AbstractCeramicBucketItem) {
+                AbstractCeramicBucketItem bucket = (AbstractCeramicBucketItem) stack.getItem();
+                Fluid fluid = bucket.getFluid(stack);
+                String name = fluid.getRegistryName().toString();
+                //reset cache if temperature config changed
+                boolean isCracked = bucket.isCrackedBucket(stack);
+                if (this.isCracked != isCracked) {
+                    this.isCracked = isCracked;
+                    cache.clear();
+                }
+                if (!cache.containsKey(name)) {
+                    CeramicBucketModel unbaked = this.parent.withFluid(fluid);
+                    IBakedModel bakedModel = unbaked.bake(owner, bakery, ModelLoader.defaultTextureGetter(), ModelRotation.X0_Y0, this, REBAKE_LOCATION);
+                    cache.put(name, bakedModel);
+                    return bakedModel;
+                }
+                return cache.get(name);
+            }
+            return originalModel;
         }
     }
 
