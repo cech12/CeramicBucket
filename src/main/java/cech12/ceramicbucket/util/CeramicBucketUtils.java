@@ -62,12 +62,15 @@ public class CeramicBucketUtils {
                 || (fluid.isIn(ModTags.Fluids.CERAMIC_CRACKING));
     }
 
-
-    public static ItemStack getFilledCeramicBucket(Fluid fluid) {
+    public static ItemStack getFilledCeramicBucket(Fluid fluid, ItemStack emptyBucket) {
+        ItemStack filledBucket = ((FilledCeramicBucketItem) CeramicBucketItems.FILLED_CERAMIC_BUCKET).getFilledInstance(fluid);
         if (CeramicBucketUtils.isMilkFluid(fluid)) {
-            return ((CeramicMilkBucketItem) CeramicBucketItems.CERAMIC_MILK_BUCKET).getFilledInstance(fluid);
+            filledBucket = ((CeramicMilkBucketItem) CeramicBucketItems.CERAMIC_MILK_BUCKET).getFilledInstance(fluid);
         }
-        return ((FilledCeramicBucketItem) CeramicBucketItems.FILLED_CERAMIC_BUCKET).getFilledInstance(fluid);
+        if (emptyBucket != null) {
+            CeramicBucketUtils.copyBucketColor(emptyBucket, filledBucket);
+        }
+        return filledBucket;
     }
 
     /**
