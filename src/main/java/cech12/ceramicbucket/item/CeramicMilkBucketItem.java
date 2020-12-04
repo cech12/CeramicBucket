@@ -77,7 +77,7 @@ public class CeramicMilkBucketItem extends FilledCeramicBucketItem {
             stack.shrink(1);
         }
 
-        return stack.isEmpty() ? new ItemStack(CeramicBucketItems.CERAMIC_BUCKET) : stack;
+        return stack.isEmpty() ? this.getContainerItem(stack) : stack;
     }
 
     /**
