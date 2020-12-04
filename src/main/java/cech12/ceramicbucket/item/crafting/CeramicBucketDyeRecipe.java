@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.SpecialRecipe;
 import net.minecraft.item.crafting.SpecialRecipeSerializer;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
@@ -71,6 +72,13 @@ public class CeramicBucketDyeRecipe extends SpecialRecipe {
             return AbstractCeramicBucketItem.dyeItem(bucketAndDyes.getFirst(), bucketAndDyes.getSecond());
         }
         return ItemStack.EMPTY;
+    }
+
+    @Nonnull
+    @Override
+    public NonNullList<ItemStack> getRemainingItems(CraftingInventory inv) {
+        //override it to avoid remaining container items
+        return NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
     }
 
     /**

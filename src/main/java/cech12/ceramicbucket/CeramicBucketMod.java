@@ -91,11 +91,13 @@ public class CeramicBucketMod {
             if (itemstack.getItem() == CeramicBucketItems.CERAMIC_BUCKET && !player.abilities.isCreativeMode) {
                 player.playSound(SoundEvents.ENTITY_COW_MILK, 1.0F, 1.0F);
                 if (!event.getWorld().isRemote()) {
+                    ItemStack milkBucket = ((CeramicMilkBucketItem)CeramicBucketItems.CERAMIC_MILK_BUCKET).getFilledInstance();
+                    CeramicBucketUtils.copyBucketColor(itemstack, milkBucket);
                     itemstack.shrink(1);
                     if (itemstack.isEmpty()) {
-                        player.setHeldItem(event.getHand(), ((CeramicMilkBucketItem)CeramicBucketItems.CERAMIC_MILK_BUCKET).getFilledInstance());
-                    } else if (!player.inventory.addItemStackToInventory(((CeramicMilkBucketItem)CeramicBucketItems.CERAMIC_MILK_BUCKET).getFilledInstance())) {
-                        player.dropItem(((CeramicMilkBucketItem)CeramicBucketItems.CERAMIC_MILK_BUCKET).getFilledInstance(), false);
+                        player.setHeldItem(event.getHand(), milkBucket);
+                    } else if (!player.inventory.addItemStackToInventory(milkBucket)) {
+                        player.dropItem(milkBucket, false);
                     }
                 }
                 event.setCanceled(true);
