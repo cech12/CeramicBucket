@@ -23,7 +23,7 @@ public class CeramicBucketFluidHandler extends FluidHandlerItemStack {
         } else {
             newContainer = new ItemStack(CeramicBucketItems.FILLED_CERAMIC_BUCKET);
         }
-        this.container = CeramicBucketUtils.copyBucketColor(this.container, newContainer);;
+        this.container = CeramicBucketUtils.copyBucketColor(this.container, newContainer);
         super.setFluid(fluid);
     }
 
