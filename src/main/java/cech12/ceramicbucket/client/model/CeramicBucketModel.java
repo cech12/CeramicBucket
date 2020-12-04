@@ -1,7 +1,6 @@
 package cech12.ceramicbucket.client.model;
 
 import cech12.ceramicbucket.item.AbstractCeramicBucketItem;
-import cech12.ceramicbucket.util.CeramicBucketUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
@@ -19,7 +18,6 @@ import net.minecraft.client.renderer.model.ModelRotation;
 import net.minecraft.client.renderer.model.RenderMaterial;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
@@ -76,9 +74,9 @@ public class CeramicBucketModel implements IModelGeometry<CeramicBucketModel> {
      * Returns a new ModelDynBucket representing the given fluid, but with the same
      * other properties (flipGas, tint, coverIsMask).
      */
-    public CeramicBucketModel withFluid(Fluid newFluid)
+    public CeramicBucketModel withFluid(Fluid newFluid, boolean isCracked)
     {
-        return new CeramicBucketModel(newFluid, CeramicBucketUtils.isFluidTooHotForCeramicBucket(newFluid));
+        return new CeramicBucketModel(newFluid, isCracked);
     }
 
     @Override
@@ -218,7 +216,7 @@ public class CeramicBucketModel implements IModelGeometry<CeramicBucketModel> {
                     cache.clear();
                 }
                 if (!cache.containsKey(name)) {
-                    CeramicBucketModel unbaked = this.parent.withFluid(fluid);
+                    CeramicBucketModel unbaked = this.parent.withFluid(fluid, isCracked);
                     IBakedModel bakedModel = unbaked.bake(owner, bakery, ModelLoader.defaultTextureGetter(), ModelRotation.X0_Y0, this, REBAKE_LOCATION);
                     cache.put(name, bakedModel);
                     return bakedModel;
