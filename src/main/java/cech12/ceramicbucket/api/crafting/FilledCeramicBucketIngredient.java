@@ -55,7 +55,7 @@ public class FilledCeramicBucketIngredient extends Ingredient {
         if (this.matchingStacks == null) {
             FilledCeramicBucketItem bucketItem = (FilledCeramicBucketItem) CeramicBucketItems.FILLED_CERAMIC_BUCKET;
             this.matchingStacks = this.fluidTag.getAllElements().stream()
-                    .map(bucketItem::getFilledInstance)
+                    .map(fluid -> bucketItem.getFilledInstance(fluid, null))
                     .filter(this)
                     .toArray(ItemStack[]::new);
         }

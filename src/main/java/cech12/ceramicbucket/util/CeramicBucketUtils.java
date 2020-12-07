@@ -3,7 +3,6 @@ package cech12.ceramicbucket.util;
 import cech12.ceramicbucket.api.item.CeramicBucketItems;
 import cech12.ceramicbucket.config.ServerConfig;
 import cech12.ceramicbucket.init.ModTags;
-import cech12.ceramicbucket.item.AbstractCeramicBucketItem;
 import cech12.ceramicbucket.item.CeramicMilkBucketItem;
 import cech12.ceramicbucket.item.FilledCeramicBucketItem;
 import net.minecraft.fluid.Fluid;
@@ -72,16 +71,11 @@ public class CeramicBucketUtils {
     }
 
     public static ItemStack getFilledCeramicBucket(Fluid fluid, ItemStack emptyBucket) {
-        ItemStack filledBucket;
         if (CeramicBucketUtils.isMilkFluid(fluid)) {
-            filledBucket = ((CeramicMilkBucketItem) CeramicBucketItems.CERAMIC_MILK_BUCKET).getFilledInstance(fluid);
+            return ((CeramicMilkBucketItem) CeramicBucketItems.CERAMIC_MILK_BUCKET).getFilledInstance(fluid, emptyBucket);
         } else {
-            filledBucket = ((FilledCeramicBucketItem) CeramicBucketItems.FILLED_CERAMIC_BUCKET).getFilledInstance(fluid);
+            return ((FilledCeramicBucketItem) CeramicBucketItems.FILLED_CERAMIC_BUCKET).getFilledInstance(fluid, emptyBucket);
         }
-        if (emptyBucket != null) {
-            CeramicBucketUtils.copyBucketColor(emptyBucket, filledBucket);
-        }
-        return filledBucket;
     }
 
     /**
@@ -96,20 +90,6 @@ public class CeramicBucketUtils {
             return ForgeHooks.getBurnTime(new ItemStack(fluid.getFilledBucket()));
         }
         return -1;
-    }
-
-    /**
-     * This method copies a defined color of a source bucket to a target bucket.
-     * It returns the changed target.
-     * @param source bucket with color
-     * @param target bucket where the color should be copied to
-     * @return changed target bucket
-     */
-    public static ItemStack copyBucketColor(ItemStack source, ItemStack target) {
-        if (AbstractCeramicBucketItem.hasColor(source)) {
-            AbstractCeramicBucketItem.setColor(target, AbstractCeramicBucketItem.getColor(source));
-        }
-        return target;
     }
 
 }
