@@ -6,6 +6,7 @@ import cech12.ceramicbucket.config.ServerConfig;
 import cech12.ceramicbucket.init.ModTags;
 import cech12.ceramicbucket.util.CeramicBucketUtils;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
@@ -25,6 +26,7 @@ import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 
 public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
@@ -39,15 +41,19 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
         return new FilledCeramicBucketFluidHandler(stack);
     }
 
-    public ItemStack getFilledInstance(@Nonnull Fluid fluid) {
-        return fill(new ItemStack(this), new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME));
+    public ItemStack getFilledInstance(@Nonnull Fluid fluid, @Nullable ItemStack oldStack) {
+        ItemStack stack = new ItemStack(this);
+        if (oldStack != null) {
+            copyNBTWithoutBucketContent(oldStack, stack);
+        }
+        return fill(stack, new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME));
     }
 
     @Nonnull
     @Override
     @OnlyIn(Dist.CLIENT)
     public ItemStack getDefaultInstance() {
-        return this.getFilledInstance(Fluids.WATER);
+        return this.getFilledInstance(Fluids.WATER, null);
     }
 
     /**
@@ -60,10 +66,10 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
             for (Fluid fluid : ForgeRegistries.FLUIDS) {
                 //only add non milk source fluids with a bucket item
                 Item bucket = fluid.getFilledBucket();
-                if (bucket instanceof BucketItem && !CeramicBucketUtils.isMilkFluid(fluid)) {
+                if (bucket instanceof BucketItem && !CeramicBucketUtils.isMilkFluid(fluid, false)) {
                     Fluid bucketFluid = ((BucketItem) bucket).getFluid();
                     if (!addedFluids.contains(bucketFluid)) {
-                        items.add(getFilledInstance(bucketFluid));
+                        items.add(getFilledInstance(bucketFluid, null));
                         addedFluids.add(bucketFluid);
                     }
                 }
@@ -115,7 +121,11 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
     public ItemStack getContainerItem(ItemStack itemStack) {
         //for using a filled bucket as fuel or in crafting recipes, an empty bucket should remain
         if (this.hasContainerItem(itemStack)) {
-            return CeramicBucketUtils.copyBucketColor(itemStack, new ItemStack(CeramicBucketItems.CERAMIC_BUCKET));
+            if (CeramicBucketUtils.isAffectedByInfinityEnchantment(itemStack)) {
+                //with infinity enchantment the filled bucket remains
+                return itemStack.copy();
+            }
+            return copyNBTWithoutBucketContent(itemStack, new ItemStack(CeramicBucketItems.CERAMIC_BUCKET));
         }
         return ItemStack.EMPTY;
     }
@@ -124,6 +134,7 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
         if (enchantment == Enchantments.INFINITY
                 && ServerConfig.INFINITY_ENCHANTMENT_ENABLED.get()
+                && EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) <= 0
                 && this.getFluid(stack).isIn(ModTags.Fluids.INFINITY_ENCHANTABLE)) {
             return true;
         }

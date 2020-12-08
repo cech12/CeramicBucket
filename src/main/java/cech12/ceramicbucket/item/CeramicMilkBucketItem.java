@@ -22,6 +22,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class CeramicMilkBucketItem extends FilledCeramicBucketItem {
 
@@ -30,31 +31,39 @@ public class CeramicMilkBucketItem extends FilledCeramicBucketItem {
     }
 
     @Override
-    public ItemStack getFilledInstance(@Nonnull Fluid fluid) {
+    public ItemStack getFilledInstance(@Nonnull Fluid fluid, @Nullable ItemStack oldStack) {
         //can only be filled with milk
         if (CeramicBucketUtils.isMilkFluid(fluid)) {
-            return super.getFilledInstance(fluid);
+            return super.getFilledInstance(fluid, oldStack);
         }
-        return super.getFilledInstance(Fluids.EMPTY);
+        return super.getFilledInstance(Fluids.EMPTY, oldStack);
     }
 
     /**
      * Get a milk bucket with the first fluid that is milk. If there is no milk fluid, the bucket gets empty fluid.
      */
-    public ItemStack getFilledInstance() {
+    public ItemStack getFilledInstance(boolean checkTag, @Nullable ItemStack oldStack) {
         for (Fluid fluid : ForgeRegistries.FLUIDS) {
             //search first milk fluid
-            if (fluid.getDefaultState().isSource() && CeramicBucketUtils.isMilkFluid(fluid)) {
-                return super.getFilledInstance(fluid);
+            if (fluid.getDefaultState().isSource() && CeramicBucketUtils.isMilkFluid(fluid, checkTag)) {
+                return super.getFilledInstance(fluid, oldStack);
             }
         }
-        return super.getFilledInstance(Fluids.EMPTY);
+        return super.getFilledInstance(Fluids.EMPTY, oldStack);
+    }
+
+    /**
+     * Get a milk bucket with the first fluid that is milk. If there is no milk fluid, the bucket gets empty fluid.
+     */
+    @Nonnull
+    public ItemStack getFilledInstance(@Nullable ItemStack oldStack) {
+        return this.getFilledInstance(true, oldStack);
     }
 
     @Nonnull
     @Override
     public ItemStack getDefaultInstance() {
-        return this.getFilledInstance();
+        return this.getFilledInstance(null);
     }
 
     /**
@@ -114,7 +123,7 @@ public class CeramicMilkBucketItem extends FilledCeramicBucketItem {
     @Override
     public void fillItemGroup(@Nonnull ItemGroup group, @Nonnull NonNullList<ItemStack> items) {
         if (this.isInGroup(group)) {
-            items.add(this.getFilledInstance());
+            items.add(this.getFilledInstance(false, null));
         }
     }
 

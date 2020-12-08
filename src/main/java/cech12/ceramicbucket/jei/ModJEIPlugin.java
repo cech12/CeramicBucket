@@ -54,7 +54,7 @@ public class ModJEIPlugin implements IModPlugin {
                     Fluid bucketFluid = bucketFluidStack.getFluid();
                     if (!addedFluids.contains(bucketFluid) && bucketFluid.isIn(ModTags.Fluids.INFINITY_ENCHANTABLE)) {
                         addedFluids.add(bucketFluid);
-                        ItemStack bucket = ((FilledCeramicBucketItem) CeramicBucketItems.FILLED_CERAMIC_BUCKET).getFilledInstance(bucketFluid.getFluid());
+                        ItemStack bucket = ((FilledCeramicBucketItem) CeramicBucketItems.FILLED_CERAMIC_BUCKET).getFilledInstance(bucketFluid.getFluid(), null);
                         ItemStack enchantedBucket = bucket.copy();
                         enchantedBucket.addEnchantment(data.enchantment, data.enchantmentLevel);
                         recipes.add(factory.createAnvilRecipe(bucket,

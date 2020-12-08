@@ -42,18 +42,16 @@ public class CeramicEntityBucketItem extends FilledCeramicBucketItem {
 
     @Deprecated
     @Override
-    public ItemStack getFilledInstance(@Nonnull Fluid fluid) {
+    public ItemStack getFilledInstance(@Nonnull Fluid fluid, @Nullable ItemStack oldStack) {
         return ItemStack.EMPTY;
     }
 
-    public ItemStack getFilledInstance(@Nonnull Fluid fluid, @Nonnull Entity entity) {
-        ItemStack bucket = (fluid != Fluids.EMPTY) ? super.getFilledInstance(fluid) : new ItemStack(this);
-        return putEntityInStack(bucket, entity);
+    public ItemStack getFilledInstance(@Nonnull Fluid fluid, @Nonnull Entity entity, @Nullable ItemStack oldStack) {
+        return this.putEntityInStack(super.getFilledInstance(fluid, oldStack), entity);
     }
 
     private ItemStack getFilledInstance(@Nonnull Fluid fluid, @Nonnull EntityType<?> entityType) {
-        ItemStack bucket = (fluid != Fluids.EMPTY) ? super.getFilledInstance(fluid) : new ItemStack(this);
-        return putEntityTypeInStack(bucket, entityType);
+        return this.putEntityTypeInStack(super.getFilledInstance(fluid, null), entityType);
     }
 
     @Override

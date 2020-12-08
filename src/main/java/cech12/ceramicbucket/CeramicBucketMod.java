@@ -11,8 +11,6 @@ import cech12.ceramicbucket.api.crafting.FilledCeramicBucketIngredient;
 import cech12.ceramicbucket.item.crafting.CeramicBucketDyeRecipe;
 import cech12.ceramicbucket.util.CeramicBucketUtils;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -91,8 +89,7 @@ public class CeramicBucketMod {
             if (itemstack.getItem() == CeramicBucketItems.CERAMIC_BUCKET && !player.abilities.isCreativeMode) {
                 player.playSound(SoundEvents.ENTITY_COW_MILK, 1.0F, 1.0F);
                 if (!event.getWorld().isRemote()) {
-                    ItemStack milkBucket = ((CeramicMilkBucketItem)CeramicBucketItems.CERAMIC_MILK_BUCKET).getFilledInstance();
-                    CeramicBucketUtils.copyBucketColor(itemstack, milkBucket);
+                    ItemStack milkBucket = ((CeramicMilkBucketItem)CeramicBucketItems.CERAMIC_MILK_BUCKET).getFilledInstance(itemstack);
                     itemstack.shrink(1);
                     if (itemstack.isEmpty()) {
                         player.setHeldItem(event.getHand(), milkBucket);
@@ -110,14 +107,12 @@ public class CeramicBucketMod {
             if ((fluid != Fluids.EMPTY && itemstack.getItem() != CeramicBucketItems.FILLED_CERAMIC_BUCKET)
                     || (fluid == Fluids.EMPTY && itemstack.getItem() != CeramicBucketItems.CERAMIC_BUCKET)
                     || (itemstack.getItem() == CeramicBucketItems.FILLED_CERAMIC_BUCKET
-                        && itemstack.canApplyAtEnchantingTable(Enchantments.INFINITY)
-                        && EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, itemstack) > 0)) {
+                        && CeramicBucketUtils.isAffectedByInfinityEnchantment(itemstack))) {
                 return;
             }
             //check if the entity can be inside of a ceramic entity bucket
             if (ModCompat.canEntityBeObtained(fluid, entity)) {
-                ItemStack filledBucket = ((CeramicEntityBucketItem)CeramicBucketItems.CERAMIC_ENTITY_BUCKET).getFilledInstance(fluid, entity);
-                CeramicBucketUtils.copyBucketColor(itemstack, filledBucket);
+                ItemStack filledBucket = ((CeramicEntityBucketItem)CeramicBucketItems.CERAMIC_ENTITY_BUCKET).getFilledInstance(fluid, entity, itemstack);
                 ((CeramicEntityBucketItem) CeramicBucketItems.CERAMIC_ENTITY_BUCKET).playFillSound(player, filledBucket);
                 if (!event.getWorld().isRemote()) {
                     itemstack.shrink(1);
