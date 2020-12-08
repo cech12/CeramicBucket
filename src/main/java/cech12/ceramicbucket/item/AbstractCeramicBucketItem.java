@@ -65,6 +65,35 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
         };
     }
 
+    /**
+     * This method copies the nbt data (except the fluid/entity data) of a source bucket to a target bucket.
+     * It returns the changed target.
+     * @param source bucket with color
+     * @param target bucket where the color should be copied to
+     * @return changed target bucket
+     */
+    public static ItemStack copyNBTWithoutBucketContent(ItemStack source, ItemStack target) {
+        CompoundNBT sourceNbt = source.getTag();
+        if (sourceNbt != null && !sourceNbt.isEmpty()) {
+            CompoundNBT nbt = sourceNbt.copy();
+            if (nbt.contains(FluidHandlerItemStack.FLUID_NBT_KEY)) {
+                nbt.remove(FluidHandlerItemStack.FLUID_NBT_KEY);
+            }
+            if (nbt.contains("EntityType")) {
+                nbt.remove("EntityType");
+            }
+            if (nbt.contains("EntityTag")) {
+                nbt.remove("EntityTag");
+            }
+            CompoundNBT targetNbt = target.getTag();
+            if (targetNbt != null) {
+                nbt = targetNbt.merge(nbt);
+            }
+            target.setTag(nbt);
+        }
+        return target;
+    }
+
     public void playEmptySound(@Nullable PlayerEntity player, @Nonnull IWorld worldIn, @Nonnull BlockPos pos, @Nonnull ItemStack stack) {
         SoundEvent soundevent = this.getFluid(stack).getAttributes().getEmptySound();
         if (soundevent == null) soundevent = this.getFluid(stack).isIn(FluidTags.LAVA) ? SoundEvents.ITEM_BUCKET_EMPTY_LAVA : SoundEvents.ITEM_BUCKET_EMPTY;
@@ -273,7 +302,8 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
     }
 
     public boolean isCrackedBucket(ItemStack stack) {
-        return CeramicBucketUtils.isFluidTooHotForCeramicBucket(this.getFluid(stack));
+        return CeramicBucketUtils.isFluidTooHotForCeramicBucket(this.getFluid(stack))
+                && !CeramicBucketUtils.isAffectedByInfinityEnchantment(stack);
     }
 
     public static boolean hasColor(ItemStack stack) {
