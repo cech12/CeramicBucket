@@ -2,7 +2,6 @@
   "replace": false,
   "_comment" : "This tag has only an effect if infinityEnchantmentEnabled config is enabled.",
   "values": [
-    "minecraft:lava",
     "minecraft:water"
   ]
 }

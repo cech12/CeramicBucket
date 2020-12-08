@@ -122,7 +122,7 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
         //for using a filled bucket as fuel or in crafting recipes, an empty bucket should remain
         if (this.hasContainerItem(itemStack)) {
             if (CeramicBucketUtils.isAffectedByInfinityEnchantment(itemStack)) {
-                //with infinity enchantment the hole bucket remains
+                //with infinity enchantment the filled bucket remains
                 return itemStack.copy();
             }
             return copyNBTWithoutBucketContent(itemStack, new ItemStack(CeramicBucketItems.CERAMIC_BUCKET));
