@@ -3,8 +3,11 @@ package cech12.ceramicbucket.util;
 import cech12.ceramicbucket.api.item.CeramicBucketItems;
 import cech12.ceramicbucket.config.ServerConfig;
 import cech12.ceramicbucket.init.ModTags;
+import cech12.ceramicbucket.item.AbstractCeramicBucketItem;
 import cech12.ceramicbucket.item.CeramicMilkBucketItem;
 import cech12.ceramicbucket.item.FilledCeramicBucketItem;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
@@ -90,6 +93,18 @@ public class CeramicBucketUtils {
             return ForgeHooks.getBurnTime(new ItemStack(fluid.getFilledBucket()));
         }
         return -1;
+    }
+
+    /**
+     * Checks if the given bucket is affected by a infinity enchantment.
+     * @param bucket checked item stack
+     * @return boolean
+     */
+    public static boolean isAffectedByInfinityEnchantment(@Nonnull ItemStack bucket) {
+        return ServerConfig.INFINITY_ENCHANTMENT_ENABLED.get()
+                && EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, bucket) > 0
+                && bucket.getItem() instanceof AbstractCeramicBucketItem
+                && ((AbstractCeramicBucketItem) bucket.getItem()).getFluid(bucket).isIn(ModTags.Fluids.INFINITY_ENCHANTABLE);
     }
 
 }

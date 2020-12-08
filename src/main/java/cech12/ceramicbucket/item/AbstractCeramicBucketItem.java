@@ -302,7 +302,8 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
     }
 
     public boolean isCrackedBucket(ItemStack stack) {
-        return CeramicBucketUtils.isFluidTooHotForCeramicBucket(this.getFluid(stack));
+        return CeramicBucketUtils.isFluidTooHotForCeramicBucket(this.getFluid(stack))
+                && !CeramicBucketUtils.isAffectedByInfinityEnchantment(stack);
     }
 
     public static boolean hasColor(ItemStack stack) {

@@ -6,6 +6,7 @@ import cech12.ceramicbucket.config.ServerConfig;
 import cech12.ceramicbucket.init.ModTags;
 import cech12.ceramicbucket.util.CeramicBucketUtils;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
@@ -118,9 +119,12 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
 
     @Override
     public ItemStack getContainerItem(ItemStack itemStack) {
-        //TODO infinity enchantment?
         //for using a filled bucket as fuel or in crafting recipes, an empty bucket should remain
         if (this.hasContainerItem(itemStack)) {
+            if (CeramicBucketUtils.isAffectedByInfinityEnchantment(itemStack)) {
+                //with infinity enchantment the hole bucket remains
+                return itemStack.copy();
+            }
             return copyNBTWithoutBucketContent(itemStack, new ItemStack(CeramicBucketItems.CERAMIC_BUCKET));
         }
         return ItemStack.EMPTY;
@@ -130,6 +134,7 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
         if (enchantment == Enchantments.INFINITY
                 && ServerConfig.INFINITY_ENCHANTMENT_ENABLED.get()
+                && EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) <= 0
                 && this.getFluid(stack).isIn(ModTags.Fluids.INFINITY_ENCHANTABLE)) {
             return true;
         }
