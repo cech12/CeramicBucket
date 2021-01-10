@@ -3,7 +3,6 @@ package cech12.ceramicbucket.item;
 import cech12.ceramicbucket.util.CeramicBucketUtils;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.CauldronBlock;
 import net.minecraft.block.IBucketPickupHandler;
 import net.minecraft.block.ILiquidContainer;
@@ -144,7 +143,7 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
                 BlockState blockstate = worldIn.getBlockState(blockpos);
 
                 //support cauldron interaction
-                if (blockstate.getBlock() == Blocks.CAULDRON) {
+                if (blockstate.getBlock() instanceof CauldronBlock) {
                     Fluid fluid = this.getFluid(itemstack);
                     CauldronBlock cauldron = (CauldronBlock) blockstate.getBlock();
                     int level = blockstate.get(CauldronBlock.LEVEL);
