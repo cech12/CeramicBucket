@@ -15,8 +15,8 @@ import java.util.List;
 public class ModCompat {
 
     public static final Mod[] MODS = {
-            new AlexsMobsCompat(),
             new MinecraftCompat(),
+            new AlexsMobsCompat(),
             new AquacultureCompat(),
             new AxolotlCompat(),
             new CombustiveFishingCompat(),
