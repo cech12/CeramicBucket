@@ -15,12 +15,15 @@ import java.util.List;
 public class ModCompat {
 
     public static final Mod[] MODS = {
+            new AlexsMobsCompat(),
             new MinecraftCompat(),
             new AquacultureCompat(),
             new AxolotlCompat(),
             new CombustiveFishingCompat(),
+            new EnvironmentalCompat(),
             new MilkAllTheMobs(),
             new QuarkCompat(),
+            new TheUndergardenCompat(),
             new UpgradeAquaticCompat()
     };
 
