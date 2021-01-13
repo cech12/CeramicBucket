@@ -6,11 +6,15 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.ResourceLocation;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MinecraftCompat extends ModCompat.Mod implements ModCompat.MobMilkingMod, ModCompat.EntityTypeObtainingMod {
+
+    private static final ResourceLocation advancement = new ResourceLocation("minecraft", "husbandry/tactical_fishing");
 
     List<ObtainableEntityType> obtainableEntityTypes = new ArrayList<>();
 
@@ -41,4 +45,8 @@ public class MinecraftCompat extends ModCompat.Mod implements ModCompat.MobMilki
         return this.obtainableEntityTypes;
     }
 
+    @Override
+    public ResourceLocation getEntityObtainingAdvancement(@Nonnull Entity entity) {
+        return advancement;
+    }
 }
