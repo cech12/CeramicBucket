@@ -312,8 +312,9 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
 
     public static int getColor(ItemStack stack) {
         CompoundNBT compoundnbt = stack.getChildTag("display");
-        //rawColorFromRGB(219, 107, 76);
-        return compoundnbt != null && compoundnbt.contains("color", 99) ? compoundnbt.getInt("color") : 14379852;
+        //rawColorFromRGB(219, 107, 76); //14379852 //on white
+        //rawColorFromRGB(228, 129, 104); //14975336 //on white terracotta
+        return compoundnbt != null && compoundnbt.contains("color", 99) ? compoundnbt.getInt("color") : 14975336;
     }
 
     public static void removeColor(ItemStack stack) {
