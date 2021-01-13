@@ -1,15 +1,20 @@
 package cech12.ceramicbucket.compat;
 
 import cech12.ceramicbucket.api.data.ObtainableEntityType;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.ResourceLocation;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UpgradeAquaticCompat extends ModCompat.Mod implements ModCompat.EntityTypeObtainingMod {
+
+    private static final ResourceLocation advancement = new ResourceLocation("minecraft", "husbandry/tactical_fishing");
 
     List<ObtainableEntityType> obtainableEntityTypes = new ArrayList<>();
 
@@ -49,4 +54,8 @@ public class UpgradeAquaticCompat extends ModCompat.Mod implements ModCompat.Ent
         return this.obtainableEntityTypes;
     }
 
+    @Override
+    public ResourceLocation getEntityObtainingAdvancement(@Nonnull Fluid fluid, @Nonnull Entity entity) {
+        return advancement;
+    }
 }
