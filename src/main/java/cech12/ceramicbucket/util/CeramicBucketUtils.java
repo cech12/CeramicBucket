@@ -6,8 +6,12 @@ import cech12.ceramicbucket.init.ModTags;
 import cech12.ceramicbucket.item.AbstractCeramicBucketItem;
 import cech12.ceramicbucket.item.CeramicMilkBucketItem;
 import cech12.ceramicbucket.item.FilledCeramicBucketItem;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementManager;
+import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
@@ -105,6 +109,26 @@ public class CeramicBucketUtils {
                 && EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, bucket) > 0
                 && bucket.getItem() instanceof AbstractCeramicBucketItem
                 && ((AbstractCeramicBucketItem) bucket.getItem()).getFluid(bucket).isIn(ModTags.Fluids.INFINITY_ENCHANTABLE);
+    }
+
+    /**
+     * Grants the given advancement for the given player.
+     * @param player Player
+     * @param advancementLocation ResourceLocation of the advancement
+     */
+    public static void grantAdvancement(ServerPlayerEntity player, ResourceLocation advancementLocation) {
+        if (player!= null && advancementLocation != null && player.getServer() != null) {
+            AdvancementManager am = player.getServer().getAdvancementManager();
+            Advancement advancement = am.getAdvancement(advancementLocation);
+            if (advancement != null) {
+                AdvancementProgress advancementprogress = player.getAdvancements().getProgress(advancement);
+                if (!advancementprogress.isDone()) {
+                    for (String s : advancementprogress.getRemaningCriteria()) {
+                        player.getAdvancements().grantCriterion(advancement, s);
+                    }
+                }
+            }
+        }
     }
 
 }

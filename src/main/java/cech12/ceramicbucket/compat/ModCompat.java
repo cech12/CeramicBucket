@@ -5,6 +5,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.ModList;
 
 import javax.annotation.Nonnull;
@@ -55,6 +56,21 @@ public class ModCompat {
         return false;
     }
 
+    public static ResourceLocation getEntityObtainingAdvancement(@Nullable Entity entity) {
+        if (entity != null) {
+            ResourceLocation location;
+            for (Mod mod : MODS) {
+                if (mod.isLoaded() && mod instanceof EntityTypeObtainingMod) {
+                    location = ((EntityTypeObtainingMod)mod).getEntityObtainingAdvancement(entity);
+                    if (location != null) {
+                        return location;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     public static ObtainableEntityType getObtainableEntityType(@Nullable EntityType<?> entityType) {
         if (entityType != null) {
             for (ObtainableEntityType type : getObtainableEntityTypes()) {
@@ -98,6 +114,10 @@ public class ModCompat {
                 }
             }
             return false;
+        }
+
+        default ResourceLocation getEntityObtainingAdvancement(@Nonnull Entity entity) {
+            return null;
         }
 
     }
