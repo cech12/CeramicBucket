@@ -18,7 +18,7 @@ public class TheUndergardenCompat extends ModCompat.Mod implements ModCompat.Ent
     private static final String MOD_NAME = "undergarden";
 
     private static final ResourceLocation GWIBLING = new ResourceLocation(MOD_NAME, "gwibling");
-    private static final ResourceLocation CATCH_GWIBLING = new ResourceLocation(MOD_NAME, "catch_gwibling");
+    private static final ResourceLocation CATCH_GWIBLING = new ResourceLocation(MOD_NAME, "undergarden/catch_gwibling");
 
     public TheUndergardenCompat() {
         super(MOD_NAME);
