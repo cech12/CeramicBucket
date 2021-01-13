@@ -59,14 +59,16 @@ public class ModCompat {
         return false;
     }
 
-    public static ResourceLocation getEntityObtainingAdvancement(@Nullable Entity entity) {
+    public static ResourceLocation getEntityObtainingAdvancement(@Nonnull Fluid fluid, @Nullable Entity entity) {
         if (entity != null) {
             ResourceLocation location;
             for (Mod mod : MODS) {
                 if (mod.isLoaded() && mod instanceof EntityTypeObtainingMod) {
-                    location = ((EntityTypeObtainingMod)mod).getEntityObtainingAdvancement(entity);
-                    if (location != null) {
-                        return location;
+                    if (((EntityTypeObtainingMod)mod).canEntityBeObtained(fluid, entity)) {
+                        location = ((EntityTypeObtainingMod)mod).getEntityObtainingAdvancement(fluid, entity);
+                        if (location != null) {
+                            return location;
+                        }
                     }
                 }
             }
@@ -119,7 +121,7 @@ public class ModCompat {
             return false;
         }
 
-        default ResourceLocation getEntityObtainingAdvancement(@Nonnull Entity entity) {
+        default ResourceLocation getEntityObtainingAdvancement(@Nonnull Fluid fluid, @Nonnull Entity entity) {
             return null;
         }
 

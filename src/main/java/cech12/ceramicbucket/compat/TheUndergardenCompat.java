@@ -2,6 +2,7 @@ package cech12.ceramicbucket.compat;
 
 import cech12.ceramicbucket.api.data.ObtainableEntityType;
 import net.minecraft.entity.Entity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.ResourceLocation;
@@ -30,7 +31,7 @@ public class TheUndergardenCompat extends ModCompat.Mod implements ModCompat.Ent
     }
 
     @Override
-    public ResourceLocation getEntityObtainingAdvancement(@Nonnull Entity entity) {
+    public ResourceLocation getEntityObtainingAdvancement(@Nonnull Fluid fluid, @Nonnull Entity entity) {
         if (GWIBLING.equals(entity.getType().getRegistryName())) {
             return CATCH_GWIBLING;
         }
