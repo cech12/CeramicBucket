@@ -118,6 +118,7 @@ public class CeramicBucketMod {
                     itemstack.shrink(1);
                     if (player instanceof ServerPlayerEntity) {
                         CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayerEntity) player, filledBucket);
+                        CeramicBucketUtils.grantAdvancement((ServerPlayerEntity) player, ModCompat.getEntityObtainingAdvancement(entity));
                     }
                     if (itemstack.isEmpty()) {
                         player.setHeldItem(event.getHand(), filledBucket);
