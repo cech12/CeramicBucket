@@ -27,10 +27,21 @@ import java.util.List;
 
 public class CeramicBucketUtils {
 
-    private static final ITag.INamedTag<Fluid> MILK_TAG = FluidTags.makeWrapperTag("forge:milk");
+    private static final ResourceLocation FORGE_MILK_LOCATION = new ResourceLocation("forge", "milk");
+    private static final ITag.INamedTag<Fluid> MILK_TAG;
     private static final List<ResourceLocation> MILK_FLUIDS = new ArrayList<>();
     static {
+        ITag.INamedTag<Fluid> milkTag = null;
+        for (ITag.INamedTag<Fluid> tag : FluidTags.getAllTags()) {
+            if (tag.getName().equals(FORGE_MILK_LOCATION)) {
+                milkTag = tag;
+                break;
+            }
+        }
+        MILK_TAG = (milkTag != null) ? milkTag : FluidTags.makeWrapperTag(FORGE_MILK_LOCATION.toString());
+
         MILK_FLUIDS.add(new ResourceLocation("milk")); //like in FluidUtil.getFilledBucket(...)
+        //TODO remove this tag reference and the tag file in 1.17 update! Forge contains its own milk fluid since 36.0.1 (Industrial Forgoing is using this)
         MILK_FLUIDS.add(new ResourceLocation("industrialforegoing:milk")); //milk of IndustrialForegoing has not "forge:milk" tag
     }
 
