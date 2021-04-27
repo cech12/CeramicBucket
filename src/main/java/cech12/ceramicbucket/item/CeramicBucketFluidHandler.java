@@ -19,4 +19,12 @@ public class CeramicBucketFluidHandler extends FluidHandlerItemStack {
         this.container = CeramicBucketUtils.getFilledCeramicBucket(fluid.getFluid(), this.container);
     }
 
+    @Override
+    public int fill(FluidStack resource, FluidAction doFill) {
+        //only fill the bucket, if there is enough fluid to fill the bucket completely
+        if (resource.getAmount() < FluidAttributes.BUCKET_VOLUME) {
+            return 0;
+        }
+        return super.fill(resource, doFill);
+    }
 }
