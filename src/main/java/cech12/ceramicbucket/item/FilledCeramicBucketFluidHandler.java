@@ -22,6 +22,10 @@ public class FilledCeramicBucketFluidHandler extends FluidHandlerItemStack {
     @Nonnull
     @Override
     public FluidStack drain(int maxDrain, FluidAction action) {
+        //only drain the bucket, if there is enough space to drain the bucket completely
+        if (maxDrain < FluidAttributes.BUCKET_VOLUME) {
+            return FluidStack.EMPTY;
+        }
         //consider infinity enchantment
         if (action == FluidAction.EXECUTE
                 && CeramicBucketUtils.isAffectedByInfinityEnchantment(this.container)) {

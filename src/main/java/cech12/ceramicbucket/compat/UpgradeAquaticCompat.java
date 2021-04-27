@@ -26,6 +26,7 @@ public class UpgradeAquaticCompat extends ModCompat.Mod implements ModCompat.Ent
         this.addFish("immortal_jellyfish");
         this.addFish("lionfish");
         this.addFish("nautilus");
+        //this.addFish("perch"); //added in 1.16
         this.addFish("pike");
         this.addSquid();
     }
