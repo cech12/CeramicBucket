@@ -21,6 +21,7 @@ public class FinsAndTrailsCompat extends ModCompat.Mod implements ModCompat.Enti
         this.addFish("blu_wee");
         this.addFish("flatback_sucker");
         this.addFish("golden_river_ray");
+        this.addFish("gopjet");
         this.addFish("high_finned_blue");
         this.addFish("night_light_squid");
         this.addFish("ornate_bugfish");
