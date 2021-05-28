@@ -19,6 +19,7 @@ public class ModCompat {
             new MinecraftCompat(),
             new AquacultureCompat(),
             new AxolotlCompat(),
+            new CavesAndCliffs117ConceptCompat(),
             new CombustiveFishingCompat(),
             new MilkAllTheMobs(),
             new QuarkCompat(),
