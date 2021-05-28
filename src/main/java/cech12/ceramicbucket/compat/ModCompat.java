@@ -20,6 +20,7 @@ public class ModCompat {
             new AlexsMobsCompat(),
             new AquacultureCompat(),
             new AxolotlCompat(),
+            new CavesAndCliffsCompat(),
             new CombustiveFishingCompat(),
             new EnvironmentalCompat(),
             new FinsAndTrailsCompat(),
