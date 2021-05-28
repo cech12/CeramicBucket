@@ -8,12 +8,12 @@ import net.minecraft.util.ResourceLocation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CavesAndCliffsCompat extends ModCompat.Mod implements ModCompat.EntityTypeObtainingMod {
+public class CavesAndCliffs117ConceptCompat extends ModCompat.Mod implements ModCompat.EntityTypeObtainingMod {
 
     private final List<ObtainableEntityType> obtainableEntityTypes = new ArrayList<>();
 
-    public CavesAndCliffsCompat() {
-        super("cavesandcliffs");
+    public CavesAndCliffs117ConceptCompat() {
+        super("caves_and_cliffs");
         this.obtainableEntityTypes.add(new ObtainableEntityType.Builder(new ResourceLocation(this.name, "axolotl"), Fluids.WATER).addFluidTag(FluidTags.WATER).build());
     }
 
