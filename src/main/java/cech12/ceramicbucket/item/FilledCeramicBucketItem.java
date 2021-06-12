@@ -89,15 +89,8 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
         if (getFluid(stack) == Fluids.EMPTY) {
             return new TranslationTextComponent("item.ceramicbucket.ceramic_bucket");
         } else {
-            ITextComponent fluidText;
-            if (getFluid(stack) == Fluids.WATER || getFluid(stack) == Fluids.LAVA) {
-                //vanilla fluids
-                fluidText = new TranslationTextComponent(getFluid(stack).getDefaultState().getBlockState().getBlock().getTranslationKey());
-            } else {
-                //fluids registered by mods
-                fluidText = new TranslationTextComponent(Util.makeTranslationKey("fluid", ForgeRegistries.FLUIDS.getKey(getFluid(stack))));
-            }
-            return  new TranslationTextComponent("item.ceramicbucket.filled_ceramic_bucket", fluidText);
+            ITextComponent fluidText = new TranslationTextComponent(getFluid(stack).getAttributes().getTranslationKey());
+            return new TranslationTextComponent("item.ceramicbucket.filled_ceramic_bucket", fluidText);
         }
     }
 
