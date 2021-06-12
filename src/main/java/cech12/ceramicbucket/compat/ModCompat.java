@@ -23,6 +23,7 @@ public class ModCompat {
             new CavesAndCliffs117ConceptCompat(),
             new CavesAndCliffsBackportCompat(),
             new CombustiveFishingCompat(),
+            new CreaturesAndBeastsCompat(),
             new EnvironmentalCompat(),
             new FinsAndTrailsCompat(),
             new MilkAllTheMobs(),
