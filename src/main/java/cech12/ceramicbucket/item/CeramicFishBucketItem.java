@@ -82,7 +82,7 @@ public class CeramicFishBucketItem extends FilledCeramicBucketItem {
                 tooltip.add((new TranslationTextComponent(TropicalFishEntity.func_212327_q(i))).mergeStyle(atextformatting));
                 TranslationTextComponent textComponent = new TranslationTextComponent(s);
                 if (!s.equals(s1)) {
-                    textComponent.appendString(", ").append(new TranslationTextComponent(s1));
+                    textComponent.appendString(", ").appendSibling(new TranslationTextComponent(s1));
                 }
 
                 textComponent.mergeStyle(atextformatting);
