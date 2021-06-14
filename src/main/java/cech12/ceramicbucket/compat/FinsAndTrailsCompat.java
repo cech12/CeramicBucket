@@ -25,6 +25,7 @@ public class FinsAndTrailsCompat extends ModCompat.Mod implements ModCompat.Enti
         this.addFish("high_finned_blue");
         this.addFish("night_light_squid");
         this.addFish("ornate_bugfish");
+        this.addFish("papa_wee");
         this.addFish("pea_wee");
 
         ObtainableEntityType.Builder builder = new ObtainableEntityType.Builder(new ResourceLocation(this.name, "penglil"), Fluids.EMPTY);
