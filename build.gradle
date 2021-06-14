@@ -79,7 +79,7 @@ minecraft {
             arg '--crashOnFailedTests' // Optional. Recommended when running in an automated environment. Without it, the server will continue running (and can be connected to via localhost) to inspect why tests failed.
             forceExit = false // Optional. Recommended when running in an automated environment, or via the console rather than run configurations. This will allow the task to pass successfully when all tests pass. Use if you see errors along the lines of 'Gradle daemon disappeared unexpectedly'.
             mods {
-                modid {
+                ceramicbucket {
                     sources sourceSets.main, sourceSets.test
                 }
             }
