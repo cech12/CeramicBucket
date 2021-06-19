@@ -31,8 +31,8 @@ public class CeramicBucketDyeRecipe extends SpecialRecipe {
     private Pair<ItemStack, List<DyeItem>> getBucketAndDyes(@Nonnull CraftingInventory inv) {
         ItemStack bucket = ItemStack.EMPTY;
         List<DyeItem> dyeItems = Lists.newArrayList();
-        for (int i = 0; i < inv.getSizeInventory(); ++i) {
-            ItemStack stack = inv.getStackInSlot(i);
+        for (int i = 0; i < inv.getContainerSize(); ++i) {
+            ItemStack stack = inv.getItem(i);
             if (!stack.isEmpty()) {
                 Item item = stack.getItem();
                 if (item instanceof AbstractCeramicBucketItem) {
@@ -66,7 +66,7 @@ public class CeramicBucketDyeRecipe extends SpecialRecipe {
      * Returns an Item that is the result of this recipe
      */
     @Nonnull
-    public ItemStack getCraftingResult(@Nonnull CraftingInventory inv) {
+    public ItemStack assemble(@Nonnull CraftingInventory inv) {
         Pair<ItemStack, List<DyeItem>> bucketAndDyes = getBucketAndDyes(inv);
         if (bucketAndDyes != null) {
             return AbstractCeramicBucketItem.dyeItem(bucketAndDyes.getFirst(), bucketAndDyes.getSecond());
@@ -78,13 +78,13 @@ public class CeramicBucketDyeRecipe extends SpecialRecipe {
     @Override
     public NonNullList<ItemStack> getRemainingItems(CraftingInventory inv) {
         //override it to avoid remaining container items
-        return NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
+        return NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
     }
 
     /**
      * Used to determine if this recipe can fit in a grid of the given width/height
      */
-    public boolean canFit(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
         return width * height >= 2;
     }
 

@@ -47,7 +47,7 @@ public class FluidIngredient extends Ingredient {
     }
 
     public FluidIngredient(ResourceLocation resourceLocation, int amount, boolean exact) {
-        this(FluidTags.makeWrapperTag(resourceLocation.toString()), amount, exact);
+        this(FluidTags.bind(resourceLocation.toString()), amount, exact);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class FluidIngredient extends Ingredient {
         AtomicBoolean result = new AtomicBoolean(false);
         if (itemStack != null) {
             FluidUtil.getFluidContained(itemStack).ifPresent(fluidStack ->
-                    result.set(fluidStack.getFluid().isIn(fluidTag) && ((this.exact) ? fluidStack.getAmount() == this.amount : fluidStack.getAmount() >= this.amount))
+                    result.set(fluidStack.getFluid().is(fluidTag) && ((this.exact) ? fluidStack.getAmount() == this.amount : fluidStack.getAmount() >= this.amount))
             );
         }
         return result.get();
@@ -63,11 +63,11 @@ public class FluidIngredient extends Ingredient {
 
     @Override
     @Nonnull
-    public ItemStack[] getMatchingStacks() {
+    public ItemStack[] getItems() {
         if (this.matchingStacks == null) {
             ArrayList<ItemStack> stacks = new ArrayList<>();
             ArrayList<Fluid> addedFluids = new ArrayList<>();
-            this.fluidTag.getAllElements().forEach(fluid -> {
+            this.fluidTag.getValues().forEach(fluid -> {
                 //only fluid buckets which are obtainable
                 ItemStack bucket = FluidUtil.getFilledBucket(new FluidStack(fluid, amount));
                 Fluid bucketFluid = FluidUtil.getFluidContained(bucket).orElse(FluidStack.EMPTY).getFluid();
@@ -83,7 +83,7 @@ public class FluidIngredient extends Ingredient {
     }
 
     @Override
-    public boolean hasNoMatchingItems() {
+    public boolean isEmpty() {
         return false;
     }
 
@@ -104,7 +104,7 @@ public class FluidIngredient extends Ingredient {
     }
 
     @Nonnull
-    public JsonElement serialize() {
+    public JsonElement toJson() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("type", Serializer.NAME.toString());
         jsonObject.addProperty("tag", this.fluidTag.getName().toString());
@@ -129,18 +129,18 @@ public class FluidIngredient extends Ingredient {
 
         @Override
         public FluidIngredient parse(@Nonnull JsonObject json) {
-            String tag = JSONUtils.getString(json, "tag");
-            int amount = JSONUtils.getInt(json, "amount");
+            String tag = JSONUtils.getAsString(json, "tag");
+            int amount = JSONUtils.getAsInt(json, "amount");
             boolean exact = false;
-            if (JSONUtils.hasField(json, "exact")) {
-                exact = JSONUtils.getBoolean(json, "exact");
+            if (JSONUtils.isValidNode(json, "exact")) {
+                exact = JSONUtils.getAsBoolean(json, "exact");
             }
-            return new FluidIngredient(FluidTags.makeWrapperTag(tag), amount, exact);
+            return new FluidIngredient(FluidTags.bind(tag), amount, exact);
         }
 
         @Override
         public void write(PacketBuffer buffer, FluidIngredient ingredient) {
-            buffer.writeString(ingredient.fluidTag.getName().toString());
+            buffer.writeUtf(ingredient.fluidTag.getName().toString());
             buffer.writeInt(ingredient.amount);
             buffer.writeBoolean(ingredient.exact);
         }

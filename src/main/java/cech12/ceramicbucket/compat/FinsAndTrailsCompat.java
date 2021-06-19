@@ -29,7 +29,7 @@ public class FinsAndTrailsCompat extends ModCompat.Mod implements ModCompat.Enti
         this.addFish("pea_wee");
 
         ObtainableEntityType.Builder builder = new ObtainableEntityType.Builder(new ResourceLocation(this.name, "penglil"), Fluids.EMPTY);
-        ResourceLocation fillSound = ForgeRegistries.SOUND_EVENTS.getKey(SoundEvents.ITEM_BUCKET_FILL);
+        ResourceLocation fillSound = ForgeRegistries.SOUND_EVENTS.getKey(SoundEvents.BUCKET_FILL);
         if (fillSound != null) builder.setFillSound(fillSound);
         ResourceLocation emptySound = new ResourceLocation(this.name, "fins.penglil.ambient");
         SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(emptySound);

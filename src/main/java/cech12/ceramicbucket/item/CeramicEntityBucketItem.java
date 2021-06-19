@@ -56,30 +56,30 @@ public class CeramicEntityBucketItem extends FilledCeramicBucketItem {
 
     @Override
     @Nonnull
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull World worldIn, PlayerEntity playerIn, @Nonnull Hand handIn) {
+    public ActionResult<ItemStack> use(@Nonnull World worldIn, PlayerEntity playerIn, @Nonnull Hand handIn) {
         //support empty fluids
-        ItemStack itemstack = playerIn.getHeldItem(handIn);
+        ItemStack itemstack = playerIn.getItemInHand(handIn);
         if (this.getFluid(itemstack) == Fluids.EMPTY) {
-            BlockRayTraceResult raytraceresult = rayTrace(worldIn, playerIn, RayTraceContext.FluidMode.NONE);
+            BlockRayTraceResult raytraceresult = getPlayerPOVHitResult(worldIn, playerIn, RayTraceContext.FluidMode.NONE);
             //ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onBucketUse(playerIn, worldIn, itemstack, raytraceresult);
-            BlockPos blockpos = raytraceresult.getPos().offset(raytraceresult.getFace());
-            this.onLiquidPlaced(worldIn, itemstack, blockpos);
-            ItemStack result = (!playerIn.abilities.isCreativeMode) ? this.getContainerItem(itemstack) : itemstack;
+            BlockPos blockpos = raytraceresult.getBlockPos().relative(raytraceresult.getDirection());
+            this.checkExtraContent(worldIn, itemstack, blockpos);
+            ItemStack result = (!playerIn.abilities.instabuild) ? this.getContainerItem(itemstack) : itemstack;
             return new ActionResult<>(ActionResultType.SUCCESS, result);
         }
-        return super.onItemRightClick(worldIn, playerIn, handIn);
+        return super.use(worldIn, playerIn, handIn);
     }
 
     @Override
-    public void onLiquidPlaced(World worldIn, @Nonnull ItemStack stack, @Nonnull BlockPos blockPos) {
-        if (!worldIn.isRemote && worldIn instanceof ServerWorld) {
+    public void checkExtraContent(World worldIn, @Nonnull ItemStack stack, @Nonnull BlockPos blockPos) {
+        if (!worldIn.isClientSide && worldIn instanceof ServerWorld) {
             EntityType<?> entityType = getEntityTypeFromStack(stack);
             if (entityType != null) {
                 Entity entity = entityType.spawn((ServerWorld) worldIn, stack, null, blockPos, SpawnReason.BUCKET, true, false);
                 if (entity instanceof AbstractFishEntity) {
                     ((AbstractFishEntity)entity).setFromBucket(true);
                 } else if (entity instanceof MobEntity) {
-                    ((MobEntity)entity).enablePersistence(); //TODO really?
+                    ((MobEntity)entity).setPersistenceRequired(); //TODO really?
                 }
             }
         }
@@ -108,8 +108,8 @@ public class CeramicEntityBucketItem extends FilledCeramicBucketItem {
      * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
      */
     @Override
-    public void fillItemGroup(@Nonnull ItemGroup group, @Nonnull NonNullList<ItemStack> items) {
-        if (this.isInGroup(group)) {
+    public void fillItemCategory(@Nonnull ItemGroup group, @Nonnull NonNullList<ItemStack> items) {
+        if (this.allowdedIn(group)) {
             for (ObtainableEntityType type : ModCompat.getObtainableEntityTypes()) {
                 EntityType<?> entityType = type.getEntityType();
                 if (entityType != null) {
@@ -121,16 +121,16 @@ public class CeramicEntityBucketItem extends FilledCeramicBucketItem {
 
     @Override
     @Nonnull
-    public ITextComponent getDisplayName(@Nonnull ItemStack stack) {
+    public ITextComponent getName(@Nonnull ItemStack stack) {
         EntityType<?> type = getEntityTypeFromStack(stack);
-        ITextComponent name = (type != null) ? type.getName() : new StringTextComponent("?");
+        ITextComponent name = (type != null) ? type.getDescription() : new StringTextComponent("?");
         return new TranslationTextComponent("item.ceramicbucket.ceramic_entity_bucket", name);
     }
 
     public ItemStack putEntityInStack(ItemStack stack, Entity entity) {
         CompoundNBT nbt = stack.getOrCreateTag();
         nbt.putString("EntityType", EntityType.getKey(entity.getType()).toString());
-        CompoundNBT entityNbt = entity.writeWithoutTypeId(new CompoundNBT());
+        CompoundNBT entityNbt = entity.saveWithoutId(new CompoundNBT());
         entityNbt.remove("Pos");
         entityNbt.remove("Motion");
         entityNbt.remove("FallDistance");
@@ -150,7 +150,7 @@ public class CeramicEntityBucketItem extends FilledCeramicBucketItem {
     @Nullable
     public EntityType<?> getEntityTypeFromStack(ItemStack stack) {
         if (stack.hasTag()) {
-            return EntityType.byKey(stack.getTag().getString("EntityType")).orElse(null);
+            return EntityType.byString(stack.getTag().getString("EntityType")).orElse(null);
         }
         return null;
     }
@@ -169,6 +169,6 @@ public class CeramicEntityBucketItem extends FilledCeramicBucketItem {
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return enchantment.type.canEnchantItem(stack.getItem());
+        return enchantment.category.canEnchant(stack.getItem());
     }
 }

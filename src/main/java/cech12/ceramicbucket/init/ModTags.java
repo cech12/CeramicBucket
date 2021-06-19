@@ -15,7 +15,7 @@ public class ModTags {
         public static final ITag.INamedTag<Fluid> INFINITY_ENCHANTABLE = tag("infinity_enchantable");
 
         private static ITag.INamedTag<Fluid> tag(@Nonnull String name) {
-            return FluidTags.makeWrapperTag(CeramicBucketMod.MOD_ID + ":" + name);
+            return FluidTags.bind(CeramicBucketMod.MOD_ID + ":" + name);
         }
 
     }

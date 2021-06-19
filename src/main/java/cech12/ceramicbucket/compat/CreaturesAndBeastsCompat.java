@@ -32,7 +32,7 @@ public class CreaturesAndBeastsCompat extends ModCompat.Mod implements ModCompat
     public boolean canEntityBeObtained(@Nonnull Fluid fluid, @Nonnull Entity entity) {
         //only support children to be obtainable
         return ModCompat.EntityTypeObtainingMod.super.canEntityBeObtained(fluid, entity)
-                && entity instanceof LivingEntity && ((LivingEntity) entity).isChild();
+                && entity instanceof LivingEntity && ((LivingEntity) entity).isBaby();
     }
 
 }

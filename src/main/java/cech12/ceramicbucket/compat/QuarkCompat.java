@@ -22,9 +22,9 @@ public class QuarkCompat extends ModCompat.Mod implements ModCompat.EntityTypeOb
     public QuarkCompat() {
         super("quark");
         ObtainableEntityType.Builder builder = new ObtainableEntityType.Builder(EntityType.SLIME, Fluids.EMPTY);
-        ResourceLocation fillSound = ForgeRegistries.SOUND_EVENTS.getKey(SoundEvents.ENTITY_SLIME_SQUISH_SMALL);
+        ResourceLocation fillSound = ForgeRegistries.SOUND_EVENTS.getKey(SoundEvents.SLIME_SQUISH_SMALL);
         if (fillSound != null) builder.setFillSound(fillSound);
-        ResourceLocation emptySound = ForgeRegistries.SOUND_EVENTS.getKey(SoundEvents.ENTITY_SLIME_JUMP_SMALL);
+        ResourceLocation emptySound = ForgeRegistries.SOUND_EVENTS.getKey(SoundEvents.SLIME_JUMP_SMALL);
         if (emptySound != null) builder.setEmptySound(emptySound);
         this.slimeType = builder.build();
         this.obtainableEntityTypes.add(this.slimeType);
@@ -39,7 +39,7 @@ public class QuarkCompat extends ModCompat.Mod implements ModCompat.EntityTypeOb
     public boolean canEntityBeObtained(@Nonnull Fluid fluid, @Nonnull Entity entity) {
         return slimeType.isCorrectFluid(fluid)
                 && entity.getType() == EntityType.SLIME
-                && ((SlimeEntity) entity).getSlimeSize() == 1
+                && ((SlimeEntity) entity).getSize() == 1
                 && entity.isAlive();
     }
 

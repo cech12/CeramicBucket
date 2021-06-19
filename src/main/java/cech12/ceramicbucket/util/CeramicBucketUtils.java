@@ -32,13 +32,13 @@ public class CeramicBucketUtils {
     private static final List<ResourceLocation> MILK_FLUIDS = new ArrayList<>();
     static {
         ITag.INamedTag<Fluid> milkTag = null;
-        for (ITag.INamedTag<Fluid> tag : FluidTags.getAllTags()) {
+        for (ITag.INamedTag<Fluid> tag : FluidTags.getWrappers()) {
             if (tag.getName().equals(FORGE_MILK_LOCATION)) {
                 milkTag = tag;
                 break;
             }
         }
-        MILK_TAG = (milkTag != null) ? milkTag : FluidTags.makeWrapperTag(FORGE_MILK_LOCATION.toString());
+        MILK_TAG = (milkTag != null) ? milkTag : FluidTags.bind(FORGE_MILK_LOCATION.toString());
 
         MILK_FLUIDS.add(new ResourceLocation("milk")); //like in FluidUtil.getFilledBucket(...)
         //TODO remove this tag reference and the tag file in 1.17 update! Forge contains its own milk fluid since 36.0.1 (Industrial Forgoing is using this)
@@ -50,10 +50,10 @@ public class CeramicBucketUtils {
      * You can decide to check the forge:milk tag or not.
      */
     public static boolean isMilkFluid(@Nonnull Fluid fluid, boolean checkTag) {
-        if (checkTag && fluid.isIn(MILK_TAG)) {
+        if (checkTag && fluid.is(MILK_TAG)) {
             return true;
         }
-        ResourceLocation location = fluid.getFilledBucket().getRegistryName();
+        ResourceLocation location = fluid.getBucket().getRegistryName();
         if (location != null && location.equals(Items.MILK_BUCKET.getRegistryName())) {
             return true;
         }
@@ -85,7 +85,7 @@ public class CeramicBucketUtils {
         }
         int minBreakTemperature = ServerConfig.CERAMIC_BUCKET_BREAK_TEMPERATURE.get();
         return (minBreakTemperature >= 0 && fluid.getAttributes().getTemperature() >= minBreakTemperature)
-                || (fluid.isIn(ModTags.Fluids.CERAMIC_CRACKING));
+                || (fluid.is(ModTags.Fluids.CERAMIC_CRACKING));
     }
 
     public static ItemStack getFilledCeramicBucket(Fluid fluid, ItemStack emptyBucket) {
@@ -105,7 +105,7 @@ public class CeramicBucketUtils {
         if (fluid != Fluids.EMPTY) {
             //all fluids have their burn time in their bucket item.
             //get the burn time via ForgeHooks.getBurnTime to let other mods change burn times of buckets of vanilla and other fluids.
-            return ForgeHooks.getBurnTime(new ItemStack(fluid.getFilledBucket()));
+            return ForgeHooks.getBurnTime(new ItemStack(fluid.getBucket()));
         }
         return -1;
     }
@@ -117,9 +117,9 @@ public class CeramicBucketUtils {
      */
     public static boolean isAffectedByInfinityEnchantment(@Nonnull ItemStack bucket) {
         return ServerConfig.INFINITY_ENCHANTMENT_ENABLED.get()
-                && EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, bucket) > 0
+                && EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, bucket) > 0
                 && bucket.getItem() instanceof AbstractCeramicBucketItem
-                && ((AbstractCeramicBucketItem) bucket.getItem()).getFluid(bucket).isIn(ModTags.Fluids.INFINITY_ENCHANTABLE);
+                && ((AbstractCeramicBucketItem) bucket.getItem()).getFluid(bucket).is(ModTags.Fluids.INFINITY_ENCHANTABLE);
     }
 
     /**
@@ -129,13 +129,13 @@ public class CeramicBucketUtils {
      */
     public static void grantAdvancement(ServerPlayerEntity player, ResourceLocation advancementLocation) {
         if (player!= null && advancementLocation != null && player.getServer() != null) {
-            AdvancementManager am = player.getServer().getAdvancementManager();
+            AdvancementManager am = player.getServer().getAdvancements();
             Advancement advancement = am.getAdvancement(advancementLocation);
             if (advancement != null) {
-                AdvancementProgress advancementprogress = player.getAdvancements().getProgress(advancement);
+                AdvancementProgress advancementprogress = player.getAdvancements().getOrStartProgress(advancement);
                 if (!advancementprogress.isDone()) {
-                    for (String s : advancementprogress.getRemaningCriteria()) {
-                        player.getAdvancements().grantCriterion(advancement, s);
+                    for (String s : advancementprogress.getRemainingCriteria()) {
+                        player.getAdvancements().award(advancement, s);
                     }
                 }
             }

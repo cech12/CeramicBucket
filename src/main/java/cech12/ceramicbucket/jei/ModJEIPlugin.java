@@ -46,19 +46,19 @@ public class ModJEIPlugin implements IModPlugin {
     public void registerRecipes(@Nonnull IRecipeRegistration registration) {
         if (ServerConfig.INFINITY_ENCHANTMENT_ENABLED.get()) {
             IVanillaRecipeFactory factory = registration.getVanillaRecipeFactory();
-            EnchantmentData data = new EnchantmentData(Enchantments.INFINITY, Enchantments.INFINITY.getMaxLevel());
+            EnchantmentData data = new EnchantmentData(Enchantments.INFINITY_ARROWS, Enchantments.INFINITY_ARROWS.getMaxLevel());
             List<Object> recipes = new ArrayList<>();
             List<Fluid> addedFluids = new ArrayList<>();
             for (Fluid fluid : ForgeRegistries.FLUIDS) {
-                FluidUtil.getFluidContained(new ItemStack(fluid.getFilledBucket())).ifPresent(bucketFluidStack -> {
+                FluidUtil.getFluidContained(new ItemStack(fluid.getBucket())).ifPresent(bucketFluidStack -> {
                     Fluid bucketFluid = bucketFluidStack.getFluid();
-                    if (!addedFluids.contains(bucketFluid) && bucketFluid.isIn(ModTags.Fluids.INFINITY_ENCHANTABLE)) {
+                    if (!addedFluids.contains(bucketFluid) && bucketFluid.is(ModTags.Fluids.INFINITY_ENCHANTABLE)) {
                         addedFluids.add(bucketFluid);
                         ItemStack bucket = ((FilledCeramicBucketItem) CeramicBucketItems.FILLED_CERAMIC_BUCKET).getFilledInstance(bucketFluid.getFluid(), null);
                         ItemStack enchantedBucket = bucket.copy();
-                        enchantedBucket.addEnchantment(data.enchantment, data.enchantmentLevel);
+                        enchantedBucket.enchant(data.enchantment, data.level);
                         recipes.add(factory.createAnvilRecipe(bucket,
-                                Collections.singletonList(EnchantedBookItem.getEnchantedItemStack(data)),
+                                Collections.singletonList(EnchantedBookItem.createForEnchantment(data)),
                                 Collections.singletonList(enchantedBucket)));
                     }
                 });
