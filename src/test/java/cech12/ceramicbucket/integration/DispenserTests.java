@@ -18,16 +18,20 @@ public class DispenserTests {
     public void testDispenserPlacesWater(IntegrationTestHelper helper) {
         helper.pushButton(new BlockPos(0, 1, 0));
         helper.assertFluidAt(new BlockPos(1, 1, 1), Fluids.WATER, "Water should have been dispensed");
-        ItemStack dispenserItemStack = ((DispenserTileEntity) Objects.requireNonNull(helper.getTileEntity(new BlockPos(0, 1, 1)))).getStackInSlot(0);
-        helper.assertTrue(() -> !dispenserItemStack.isEmpty() && dispenserItemStack.getItem() == CeramicBucketItems.CERAMIC_BUCKET, "Empty bucket should have been remain in dispenser");
+        helper.assertTrue(() -> {
+            ItemStack dispenserItemStack = ((DispenserTileEntity) Objects.requireNonNull(helper.getTileEntity(new BlockPos(0, 1, 1)))).getStackInSlot(0);
+            return !dispenserItemStack.isEmpty() && dispenserItemStack.getItem() == CeramicBucketItems.CERAMIC_BUCKET;
+        }, "Empty bucket should have been remain in dispenser");
     }
 
     @IntegrationTest(value = "dispenser_lava")
     public void testDispenserPlacesLava(IntegrationTestHelper helper) {
         helper.pushButton(new BlockPos(0, 1, 0));
         helper.assertFluidAt(new BlockPos(1, 1, 1), Fluids.LAVA, "Lava should have been dispensed");
-        ItemStack dispenserItemStack = ((DispenserTileEntity) Objects.requireNonNull(helper.getTileEntity(new BlockPos(0, 1, 1)))).getStackInSlot(0);
-        helper.assertTrue(dispenserItemStack::isEmpty, "No bucket should have been remain in dispenser");
+        helper.assertTrue(() -> {
+            ItemStack dispenserItemStack = ((DispenserTileEntity) Objects.requireNonNull(helper.getTileEntity(new BlockPos(0, 1, 1)))).getStackInSlot(0);
+            return dispenserItemStack.isEmpty();
+        }, "No bucket should have been remain in dispenser");
     }
 
 }
