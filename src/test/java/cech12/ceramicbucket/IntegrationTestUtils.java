@@ -9,6 +9,7 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -16,6 +17,7 @@ import net.minecraftforge.common.util.FakePlayerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class IntegrationTestUtils {
 
@@ -29,6 +31,11 @@ public class IntegrationTestUtils {
 
     public static Entity getEntity(IntegrationTestHelper helper, BlockPos pos) {
         List<Entity> entityList = getEntities(helper, pos);
+        return entityList.isEmpty() ? null : entityList.get(0);
+    }
+
+    public static Entity getEntity(IntegrationTestHelper helper, BlockPos pos, EntityType<?> entityType) {
+        List<Entity> entityList = getEntities(helper, pos).stream().filter(entity -> entity.getType() == entityType).collect(Collectors.toList());
         return entityList.isEmpty() ? null : entityList.get(0);
     }
 
@@ -50,11 +57,11 @@ public class IntegrationTestUtils {
         }).orElse(ActionResult.fail(ItemStack.EMPTY));
     }
 
-    public static ItemStack useItemOnEntity(IntegrationTestHelper helper, Entity entity, ItemStack stack) {
+    public static ActionResult<ItemStack> useItemOnEntity(IntegrationTestHelper helper, Entity entity, ItemStack stack) {
         PlayerEntity player = FakePlayerFactory.getMinecraft(helper.getWorld()); // This is required because forge NPEs in place block
         player.setItemInHand(Hand.MAIN_HAND, stack);
-        player.interactOn(entity, Hand.MAIN_HAND);
-        return player.getItemInHand(Hand.MAIN_HAND);
+        ActionResultType actionResultType = player.interactOn(entity, Hand.MAIN_HAND);
+        return new ActionResult<>(actionResultType, player.getItemInHand(Hand.MAIN_HAND));
     }
 
 }

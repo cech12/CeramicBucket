@@ -79,5 +79,18 @@ public class WorldTests {
         helper.assertTrue(() -> BucketTestUtils.isEmptyBucket(result.getObject()), "Empty bucket should remain");
     }
 
+    //--------------------------------------
+    //--------- Milk Bucket Tests ----------
+    //--------------------------------------
+
+    @IntegrationTest(value = "fluid_pit")
+    public void testNothingHappensUsingMilkBucket(IntegrationTestHelper helper) {
+        ItemStack bucket = BucketTestUtils.getMilkBucket();
+
+        ActionResult<ItemStack> result = IntegrationTestUtils.useItem(helper, INTERACTION_POSITION, bucket);
+
+        helper.assertAirAt(INTERACTION_POSITION, "No fluid is placed");
+        helper.assertTrue(() -> BucketTestUtils.isMilkBucket(result.getObject()), "Milk bucket should remain");
+    }
 
 }
