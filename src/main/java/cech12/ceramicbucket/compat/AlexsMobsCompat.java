@@ -17,6 +17,8 @@ public class AlexsMobsCompat extends ModCompat.Mod implements ModCompat.EntityTy
         this.addFish("lobster");
         this.addFish("blobfish");
         this.addFish("platypus");
+        this.addFish("frilled_shark");
+        this.addFish("mimic_octopus");
         //stradpole is a lava fish
         this.obtainableEntityTypes.add(new ObtainableEntityType.Builder(new ResourceLocation(this.name, "stradpole"), Fluids.LAVA).addFluidTag(FluidTags.LAVA).build());
     }
