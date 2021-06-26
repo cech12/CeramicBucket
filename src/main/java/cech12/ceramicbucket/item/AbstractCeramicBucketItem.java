@@ -26,7 +26,6 @@ import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidAttributes;
@@ -48,21 +47,8 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
         super(supplier, builder);
     }
 
-    @Nonnull
-    abstract FluidHandlerItemStack getNewFluidHandlerInstance(@Nonnull ItemStack stack);
-
     @Override
-    public ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable CompoundNBT nbt) {
-        return new ICapabilityProvider() {
-            @Nonnull
-            @Override
-            public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-                return cap == CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY ?
-                        (LazyOptional<T>) LazyOptional.of(() -> getNewFluidHandlerInstance(stack))
-                        : LazyOptional.empty();
-            }
-        };
-    }
+    public abstract ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable CompoundNBT nbt);
 
     /**
      * This method copies the nbt data (except the fluid/entity data) of a source bucket to a target bucket.
