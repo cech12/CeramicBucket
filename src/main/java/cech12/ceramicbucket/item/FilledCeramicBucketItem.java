@@ -14,15 +14,16 @@ import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
@@ -37,7 +38,7 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
 
     @Nonnull
     @Override
-    FluidHandlerItemStack getNewFluidHandlerInstance(@Nonnull ItemStack stack) {
+    public ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable CompoundNBT nbt) {
         return new FilledCeramicBucketFluidHandler(stack);
     }
 
@@ -60,12 +61,12 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
      * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
      */
     @Override
-    public void fillItemGroup(@Nonnull ItemGroup group, @Nonnull NonNullList<ItemStack> items) {
-        if (this.isInGroup(group)) {
+    public void fillItemCategory(@Nonnull ItemGroup group, @Nonnull NonNullList<ItemStack> items) {
+        if (this.allowdedIn(group)) {
             ArrayList<Fluid> addedFluids = new ArrayList<>();
             for (Fluid fluid : ForgeRegistries.FLUIDS) {
                 //only add non milk source fluids with a bucket item
-                Item bucket = fluid.getFilledBucket();
+                Item bucket = fluid.getBucket();
                 if (bucket instanceof BucketItem && !CeramicBucketUtils.isMilkFluid(fluid, false)) {
                     Fluid bucketFluid = ((BucketItem) bucket).getFluid();
                     if (!addedFluids.contains(bucketFluid)) {
@@ -79,13 +80,13 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
 
     @Override
     @Nonnull
-    public String getTranslationKey() {
-        return Util.makeTranslationKey("item", CeramicBucketItems.CERAMIC_BUCKET.getRegistryName());
+    public String getDescriptionId() {
+        return Util.makeDescriptionId("item", CeramicBucketItems.CERAMIC_BUCKET.getRegistryName());
     }
 
     @Override
     @Nonnull
-    public ITextComponent getDisplayName(@Nonnull ItemStack stack) {
+    public ITextComponent getName(@Nonnull ItemStack stack) {
         if (getFluid(stack) == Fluids.EMPTY) {
             return new TranslationTextComponent("item.ceramicbucket.ceramic_bucket");
         } else {
@@ -125,10 +126,10 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        if (enchantment == Enchantments.INFINITY
+        if (enchantment == Enchantments.INFINITY_ARROWS
                 && ServerConfig.INFINITY_ENCHANTMENT_ENABLED.get()
-                && EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) <= 0
-                && this.getFluid(stack).isIn(ModTags.Fluids.INFINITY_ENCHANTABLE)) {
+                && EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, stack) <= 0
+                && this.getFluid(stack).is(ModTags.Fluids.INFINITY_ENCHANTABLE)) {
             return true;
         }
         return super.canApplyAtEnchantingTable(stack, enchantment);

@@ -83,18 +83,18 @@ public class CeramicBucketMod {
         if (entity == null) return;
 
         PlayerEntity player = event.getPlayer();
-        ItemStack itemstack = player.getHeldItem(event.getHand());
+        ItemStack itemstack = player.getItemInHand(event.getHand());
 
         if (ServerConfig.MILKING_ENABLED.get() && ModCompat.canEntityBeMilked(entity)) {
-            if (itemstack.getItem() == CeramicBucketItems.CERAMIC_BUCKET && !player.abilities.isCreativeMode) {
-                player.playSound(SoundEvents.ENTITY_COW_MILK, 1.0F, 1.0F);
-                if (!event.getWorld().isRemote()) {
+            if (itemstack.getItem() == CeramicBucketItems.CERAMIC_BUCKET && !player.abilities.instabuild) {
+                player.playSound(SoundEvents.COW_MILK, 1.0F, 1.0F);
+                if (!event.getWorld().isClientSide()) {
                     ItemStack milkBucket = ((CeramicMilkBucketItem)CeramicBucketItems.CERAMIC_MILK_BUCKET).getFilledInstance(itemstack);
                     itemstack.shrink(1);
                     if (itemstack.isEmpty()) {
-                        player.setHeldItem(event.getHand(), milkBucket);
-                    } else if (!player.inventory.addItemStackToInventory(milkBucket)) {
-                        player.dropItem(milkBucket, false);
+                        player.setItemInHand(event.getHand(), milkBucket);
+                    } else if (!player.inventory.add(milkBucket)) {
+                        player.drop(milkBucket, false);
                     }
                 }
                 event.setCanceled(true);
@@ -114,16 +114,16 @@ public class CeramicBucketMod {
             if (ModCompat.canEntityBeObtained(fluid, entity)) {
                 ItemStack filledBucket = ((CeramicEntityBucketItem)CeramicBucketItems.CERAMIC_ENTITY_BUCKET).getFilledInstance(fluid, entity, itemstack);
                 ((CeramicEntityBucketItem) CeramicBucketItems.CERAMIC_ENTITY_BUCKET).playFillSound(player, filledBucket);
-                if (!event.getWorld().isRemote()) {
+                if (!event.getWorld().isClientSide()) {
                     itemstack.shrink(1);
                     if (player instanceof ServerPlayerEntity) {
                         CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayerEntity) player, filledBucket);
                         CeramicBucketUtils.grantAdvancement((ServerPlayerEntity) player, ModCompat.getEntityObtainingAdvancement(fluid, entity));
                     }
                     if (itemstack.isEmpty()) {
-                        player.setHeldItem(event.getHand(), filledBucket);
-                    } else if (!player.inventory.addItemStackToInventory(filledBucket)) {
-                        player.dropItem(filledBucket, false);
+                        player.setItemInHand(event.getHand(), filledBucket);
+                    } else if (!player.inventory.add(filledBucket)) {
+                        player.drop(filledBucket, false);
                     }
                 }
                 event.setCanceled(true);

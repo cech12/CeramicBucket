@@ -84,7 +84,7 @@ public class CeramicEntityBucketModel implements IModelGeometry<CeramicEntityBuc
         }
         RenderMaterial entityLocation = null;
         if (this.entityType != null) {
-            entityLocation = new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, getEntityTexture(ForgeRegistries.ENTITIES.getKey(this.entityType))); //AtlasTexture.LOCATION_BLOCKS_TEXTURE
+            entityLocation = new RenderMaterial(PlayerContainer.BLOCK_ATLAS, getEntityTexture(ForgeRegistries.ENTITIES.getKey(this.entityType))); //AtlasTexture.LOCATION_BLOCKS_TEXTURE
         }
         TextureAtlasSprite entitySprite = entityLocation != null ? spriteGetter.apply(entityLocation) : null;
 
@@ -182,9 +182,9 @@ public class CeramicEntityBucketModel implements IModelGeometry<CeramicEntityBuc
 
         @Nullable
         @Override
-        public IBakedModel getOverrideModel(IBakedModel originalModel, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity)
+        public IBakedModel resolve(IBakedModel originalModel, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity)
         {
-            IBakedModel overridden = nested.getOverrideModel(originalModel, stack, world, entity);
+            IBakedModel overridden = nested.resolve(originalModel, stack, world, entity);
             if (overridden != originalModel) return overridden;
             if (stack.getItem() instanceof CeramicEntityBucketItem) {
                 CeramicEntityBucketItem bucket = (CeramicEntityBucketItem) stack.getItem();

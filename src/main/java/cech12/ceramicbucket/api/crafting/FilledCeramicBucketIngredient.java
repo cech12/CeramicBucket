@@ -37,24 +37,24 @@ public class FilledCeramicBucketIngredient extends Ingredient {
     }
 
     public FilledCeramicBucketIngredient(ResourceLocation resourceLocation) {
-        this(FluidTags.makeWrapperTag(resourceLocation.toString()));
+        this(FluidTags.bind(resourceLocation.toString()));
     }
 
     @Override
     public boolean test(ItemStack itemStack) {
         AtomicBoolean result = new AtomicBoolean(false);
         if (itemStack != null && itemStack.getItem() == CeramicBucketItems.FILLED_CERAMIC_BUCKET) {
-            FluidUtil.getFluidContained(itemStack).ifPresent(fluidStack -> result.set(fluidStack.getFluid().isIn(fluidTag)));
+            FluidUtil.getFluidContained(itemStack).ifPresent(fluidStack -> result.set(fluidStack.getFluid().is(fluidTag)));
         }
         return result.get();
     }
 
     @Override
     @Nonnull
-    public ItemStack[] getMatchingStacks() {
+    public ItemStack[] getItems() {
         if (this.matchingStacks == null) {
             FilledCeramicBucketItem bucketItem = (FilledCeramicBucketItem) CeramicBucketItems.FILLED_CERAMIC_BUCKET;
-            this.matchingStacks = this.fluidTag.getAllElements().stream()
+            this.matchingStacks = this.fluidTag.getValues().stream()
                     .map(fluid -> bucketItem.getFilledInstance(fluid, null))
                     .filter(this)
                     .toArray(ItemStack[]::new);
@@ -63,7 +63,7 @@ public class FilledCeramicBucketIngredient extends Ingredient {
     }
 
     @Override
-    public boolean hasNoMatchingItems() {
+    public boolean isEmpty() {
         return false;
     }
 
@@ -84,7 +84,7 @@ public class FilledCeramicBucketIngredient extends Ingredient {
     }
 
     @Nonnull
-    public JsonElement serialize() {
+    public JsonElement toJson() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("type", Serializer.NAME.toString());
         jsonObject.addProperty("tag", this.fluidTag.getName().toString());
@@ -105,13 +105,13 @@ public class FilledCeramicBucketIngredient extends Ingredient {
 
         @Override
         public FilledCeramicBucketIngredient parse(@Nonnull JsonObject json) {
-            String tag = JSONUtils.getString(json, "tag");
-            return new FilledCeramicBucketIngredient(FluidTags.makeWrapperTag(tag));
+            String tag = JSONUtils.getAsString(json, "tag");
+            return new FilledCeramicBucketIngredient(FluidTags.bind(tag));
         }
 
         @Override
         public void write(PacketBuffer buffer, FilledCeramicBucketIngredient ingredient) {
-            buffer.writeString(ingredient.fluidTag.getName().toString());
+            buffer.writeUtf(ingredient.fluidTag.getName().toString());
         }
     }
 }

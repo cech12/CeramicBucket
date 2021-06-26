@@ -26,7 +26,7 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void onTextureStitch(TextureStitchEvent.Pre event){
-        if (event.getMap().getTextureLocation().equals(PlayerContainer.LOCATION_BLOCKS_TEXTURE)) { //AtlasTexture.LOCATION_BLOCKS_TEXTURE
+        if (event.getMap().location().equals(PlayerContainer.BLOCK_ATLAS)) { //AtlasTexture.LOCATION_BLOCKS_TEXTURE
             for (ObtainableEntityType entityType : ModCompat.getObtainableEntityTypes()) {
                 ResourceLocation entityTypeKey = ForgeRegistries.ENTITIES.getKey(entityType.getEntityType());
                 if (entityTypeKey != null) {

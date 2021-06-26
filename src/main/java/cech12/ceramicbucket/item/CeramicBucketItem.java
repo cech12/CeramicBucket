@@ -3,9 +3,11 @@ package cech12.ceramicbucket.item;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class CeramicBucketItem extends AbstractCeramicBucketItem {
 
@@ -15,7 +17,7 @@ public class CeramicBucketItem extends AbstractCeramicBucketItem {
 
     @Nonnull
     @Override
-    FluidHandlerItemStack getNewFluidHandlerInstance(@Nonnull ItemStack stack) {
+    public ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable CompoundNBT nbt) {
         return new CeramicBucketFluidHandler(stack);
     }
 

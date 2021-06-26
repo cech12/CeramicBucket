@@ -42,14 +42,14 @@ public class CeramicFishBucketItem extends FilledCeramicBucketItem {
         this.fishType = fishTypeIn;
     }
 
-    public void onLiquidPlaced(World worldIn, @Nonnull ItemStack p_203792_2_, @Nonnull BlockPos pos) {
-        if (!worldIn.isRemote && worldIn instanceof ServerWorld) {
+    public void checkExtraContent(World worldIn, @Nonnull ItemStack p_203792_2_, @Nonnull BlockPos pos) {
+        if (!worldIn.isClientSide && worldIn instanceof ServerWorld) {
             this.placeFish((ServerWorld) worldIn, p_203792_2_, pos);
         }
     }
 
     protected void playEmptySound(@Nullable PlayerEntity player, IWorld worldIn, @Nonnull BlockPos pos) {
-        worldIn.playSound(player, pos, SoundEvents.ITEM_BUCKET_EMPTY_FISH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+        worldIn.playSound(player, pos, SoundEvents.BUCKET_EMPTY_FISH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
     }
 
     private void placeFish(ServerWorld worldIn, ItemStack p_205357_2_, BlockPos pos) {
@@ -63,29 +63,29 @@ public class CeramicFishBucketItem extends FilledCeramicBucketItem {
      * allows items to add custom lines of information to the mouseover description
      */
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+    public void appendHoverText(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
         if (this.fishType == EntityType.TROPICAL_FISH) {
             CompoundNBT compoundnbt = stack.getTag();
             if (compoundnbt != null && compoundnbt.contains("BucketVariantTag", 3)) {
                 int i = compoundnbt.getInt("BucketVariantTag");
                 TextFormatting[] atextformatting = new TextFormatting[]{TextFormatting.ITALIC, TextFormatting.GRAY};
-                String s = "color.minecraft." + TropicalFishEntity.func_212326_d(i);
-                String s1 = "color.minecraft." + TropicalFishEntity.func_212323_p(i);
+                String s = "color.minecraft." + TropicalFishEntity.getBaseColor(i);
+                String s1 = "color.minecraft." + TropicalFishEntity.getPatternColor(i);
 
-                for(int j = 0; j < TropicalFishEntity.SPECIAL_VARIANTS.length; ++j) {
-                    if (i == TropicalFishEntity.SPECIAL_VARIANTS[j]) {
-                        tooltip.add((new TranslationTextComponent(TropicalFishEntity.func_212324_b(j))).mergeStyle(atextformatting));
+                for(int j = 0; j < TropicalFishEntity.COMMON_VARIANTS.length; ++j) {
+                    if (i == TropicalFishEntity.COMMON_VARIANTS[j]) {
+                        tooltip.add((new TranslationTextComponent(TropicalFishEntity.getPredefinedName(j))).withStyle(atextformatting));
                         return;
                     }
                 }
 
-                tooltip.add((new TranslationTextComponent(TropicalFishEntity.func_212327_q(i))).mergeStyle(atextformatting));
+                tooltip.add((new TranslationTextComponent(TropicalFishEntity.getFishTypeName(i))).withStyle(atextformatting));
                 TranslationTextComponent textComponent = new TranslationTextComponent(s);
                 if (!s.equals(s1)) {
-                    textComponent.appendString(", ").append(new TranslationTextComponent(s1));
+                    textComponent.append(", ").append(new TranslationTextComponent(s1));
                 }
 
-                textComponent.mergeStyle(atextformatting);
+                textComponent.withStyle(atextformatting);
                 tooltip.add(textComponent);
             }
         }
@@ -101,18 +101,18 @@ public class CeramicFishBucketItem extends FilledCeramicBucketItem {
      * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
      */
     @Override
-    public void fillItemGroup(@Nonnull ItemGroup group, @Nonnull NonNullList<ItemStack> items) {
+    public void fillItemCategory(@Nonnull ItemGroup group, @Nonnull NonNullList<ItemStack> items) {
         //do nothing
     }
 
     @Override
     @Nonnull
-    public ITextComponent getDisplayName(@Nonnull ItemStack stack) {
-        return new TranslationTextComponent("item.ceramicbucket.ceramic_entity_bucket", fishType.getName());
+    public ITextComponent getName(@Nonnull ItemStack stack) {
+        return new TranslationTextComponent("item.ceramicbucket.ceramic_entity_bucket", fishType.getDescription());
     }
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return enchantment.type.canEnchantItem(stack.getItem());
+        return enchantment.category.canEnchant(stack.getItem());
     }
 }

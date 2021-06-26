@@ -45,7 +45,7 @@ public class CeramicMilkBucketItem extends FilledCeramicBucketItem {
     public ItemStack getFilledInstance(boolean checkTag, @Nullable ItemStack oldStack) {
         for (Fluid fluid : ForgeRegistries.FLUIDS) {
             //search first milk fluid
-            if (fluid.getDefaultState().isSource() && CeramicBucketUtils.isMilkFluid(fluid, checkTag)) {
+            if (fluid.defaultFluidState().isSource() && CeramicBucketUtils.isMilkFluid(fluid, checkTag)) {
                 return super.getFilledInstance(fluid, oldStack);
             }
         }
@@ -71,17 +71,17 @@ public class CeramicMilkBucketItem extends FilledCeramicBucketItem {
      */
     @Override
     @Nonnull
-    public ItemStack onItemUseFinish(@Nonnull ItemStack stack, World worldIn, @Nonnull LivingEntity entityLiving) {
+    public ItemStack finishUsingItem(@Nonnull ItemStack stack, World worldIn, @Nonnull LivingEntity entityLiving) {
         ItemStack vanillaStack = new ItemStack(Items.MILK_BUCKET);
-        if (!worldIn.isRemote) entityLiving.curePotionEffects(vanillaStack); // FORGE - move up so stack.shrink does not turn stack into air
+        if (!worldIn.isClientSide) entityLiving.curePotionEffects(vanillaStack); // FORGE - move up so stack.shrink does not turn stack into air
 
         if (entityLiving instanceof ServerPlayerEntity) {
             ServerPlayerEntity serverplayerentity = (ServerPlayerEntity)entityLiving;
             CriteriaTriggers.CONSUME_ITEM.trigger(serverplayerentity, vanillaStack);
-            serverplayerentity.addStat(Stats.ITEM_USED.get(this));
+            serverplayerentity.awardStat(Stats.ITEM_USED.get(this));
         }
 
-        if (entityLiving instanceof PlayerEntity && !((PlayerEntity)entityLiving).abilities.isCreativeMode) {
+        if (entityLiving instanceof PlayerEntity && !((PlayerEntity)entityLiving).abilities.instabuild) {
             stack.shrink(1);
         }
 
@@ -101,7 +101,7 @@ public class CeramicMilkBucketItem extends FilledCeramicBucketItem {
      */
     @Override
     @Nonnull
-    public UseAction getUseAction(@Nonnull ItemStack stack) {
+    public UseAction getUseAnimation(@Nonnull ItemStack stack) {
         return UseAction.DRINK;
     }
 
@@ -110,26 +110,26 @@ public class CeramicMilkBucketItem extends FilledCeramicBucketItem {
      */
     @Override
     @Nonnull
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull World worldIn, PlayerEntity playerIn, @Nonnull Hand handIn) {
-        ActionResult<ItemStack> result = super.onItemRightClick(worldIn, playerIn, handIn);
+    public ActionResult<ItemStack> use(@Nonnull World worldIn, PlayerEntity playerIn, @Nonnull Hand handIn) {
+        ActionResult<ItemStack> result = super.use(worldIn, playerIn, handIn);
         //when no fluid can be placed, drink it
-        if (result.getType() != ActionResultType.SUCCESS) {
-            playerIn.setActiveHand(handIn);
-            result = new ActionResult<>(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));
+        if (result.getResult() != ActionResultType.SUCCESS) {
+            playerIn.startUsingItem(handIn);
+            result = new ActionResult<>(ActionResultType.SUCCESS, playerIn.getItemInHand(handIn));
         }
         return result;
     }
 
     @Override
-    public void fillItemGroup(@Nonnull ItemGroup group, @Nonnull NonNullList<ItemStack> items) {
-        if (this.isInGroup(group)) {
+    public void fillItemCategory(@Nonnull ItemGroup group, @Nonnull NonNullList<ItemStack> items) {
+        if (this.allowdedIn(group)) {
             items.add(this.getFilledInstance(false, null));
         }
     }
 
     @Override
     @Nonnull
-    public ITextComponent getDisplayName(@Nonnull ItemStack stack) {
+    public ITextComponent getName(@Nonnull ItemStack stack) {
         return new TranslationTextComponent("item.ceramicbucket.ceramic_milk_bucket");
     }
 

@@ -35,7 +35,7 @@ public class ModCompat {
     public static boolean canEntityBeMilked(Entity entity) {
         for (Mod mod : MODS) {
             if (mod.isLoaded() && mod instanceof MobMilkingMod && ((MobMilkingMod)mod).canEntityBeMilked(entity)
-                    && (!(entity instanceof LivingEntity) || !((LivingEntity)entity).isChild())) {
+                    && (!(entity instanceof LivingEntity) || !((LivingEntity)entity).isBaby())) {
                 return true;
             }
         }
