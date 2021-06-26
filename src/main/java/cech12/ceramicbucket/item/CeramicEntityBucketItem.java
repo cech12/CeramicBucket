@@ -50,7 +50,7 @@ public class CeramicEntityBucketItem extends FilledCeramicBucketItem {
         return this.putEntityInStack(super.getFilledInstance(fluid, oldStack), entity);
     }
 
-    private ItemStack getFilledInstance(@Nonnull Fluid fluid, @Nonnull EntityType<?> entityType) {
+    public ItemStack getFilledInstance(@Nonnull Fluid fluid, @Nonnull EntityType<?> entityType) {
         return this.putEntityTypeInStack(super.getFilledInstance(fluid, null), entityType);
     }
 
