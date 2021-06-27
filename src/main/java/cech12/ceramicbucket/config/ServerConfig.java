@@ -7,6 +7,9 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import java.nio.file.Path;
 
 public class ServerConfig {
+
+    public static final int DEFAULT_CERAMIC_BUCKET_BREAK_TEMPERATURE = 1000;
+
     public static ForgeConfigSpec SERVER_CONFIG;
 
     public static final ForgeConfigSpec.IntValue CERAMIC_BUCKET_BREAK_TEMPERATURE;
@@ -21,7 +24,7 @@ public class ServerConfig {
 
         CERAMIC_BUCKET_BREAK_TEMPERATURE = builder
                 .comment("Minimum temperature of fluid at which the Ceramic Bucket breaks when emptied. (-1 means that bucket never breaks caused by high fluid temperature)")
-                .defineInRange("ceramicBucketBreakTemperature", 1000, -1, 10000);
+                .defineInRange("ceramicBucketBreakTemperature", DEFAULT_CERAMIC_BUCKET_BREAK_TEMPERATURE, -1, 10000);
 
         MILKING_ENABLED = builder
                 .comment("Whether or not milking entities with a Ceramic Bucket should be enabled.")
