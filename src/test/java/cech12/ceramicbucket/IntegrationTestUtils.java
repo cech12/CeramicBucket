@@ -13,6 +13,7 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.FakePlayerFactory;
 
 import java.util.ArrayList;
@@ -58,7 +59,11 @@ public class IntegrationTestUtils {
     }
 
     public static ActionResult<ItemStack> useItemOnEntity(IntegrationTestHelper helper, Entity entity, ItemStack stack) {
-        PlayerEntity player = FakePlayerFactory.getMinecraft(helper.getWorld()); // This is required because forge NPEs in place block
+        return useItemOnEntity(helper.getWorld(), entity, stack);
+    }
+
+    public static ActionResult<ItemStack> useItemOnEntity(ServerWorld world, Entity entity, ItemStack stack) {
+        PlayerEntity player = FakePlayerFactory.getMinecraft(world);
         player.setItemInHand(Hand.MAIN_HAND, stack);
         ActionResultType actionResultType = player.interactOn(entity, Hand.MAIN_HAND);
         return new ActionResult<>(actionResultType, player.getItemInHand(Hand.MAIN_HAND));

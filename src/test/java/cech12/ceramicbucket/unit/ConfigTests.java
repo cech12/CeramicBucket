@@ -1,23 +1,25 @@
 package cech12.ceramicbucket.unit;
 
 import cech12.ceramicbucket.BucketTestUtils;
+import cech12.ceramicbucket.IntegrationTestUtils;
 import cech12.ceramicbucket.config.ServerConfig;
 import cech12.ceramicbucket.util.CeramicBucketUtils;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
+import net.minecraft.util.ActionResult;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
-
-import java.util.Objects;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@TestMethodOrder(MethodOrderer.Alphanumeric.class) //to avoid config interferences during parallel execution
 public class ConfigTests {
 
     @Test
@@ -40,22 +42,43 @@ public class ConfigTests {
         assertTrue(CeramicBucketUtils.isFluidTooHotForCeramicBucket(Fluids.LAVA), "Lava should be too hot for ceramic buckets with default temperature config");
     }
 
-    /*
     @Test
     public void testMilkingConfig() {
-        //TODO
+        final ServerWorld world = ServerLifecycleHooks.getCurrentServer().overworld();
+        final Entity cow = EntityType.COW.create(world);
+
+        ItemStack emptyBucket = BucketTestUtils.getEmptyBucket();
+        ActionResult<ItemStack> actionResult;
+
+        ServerConfig.MILKING_ENABLED.set(false);
+        actionResult = IntegrationTestUtils.useItemOnEntity(world, cow, emptyBucket.copy());
+        assertFalse(BucketTestUtils.isMilkBucket(actionResult.getObject()), "Cow should not be milkable with disabled config");
+
+        ServerConfig.MILKING_ENABLED.set(true);
+        actionResult = IntegrationTestUtils.useItemOnEntity(world, cow, emptyBucket.copy());
+        assertTrue(BucketTestUtils.isMilkBucket(actionResult.getObject()), "Cow should be milkable with enabled config");
     }
 
     @Test
     public void testFishObtainingConfig() {
-        //TODO
+        final ServerWorld world = ServerLifecycleHooks.getCurrentServer().overworld();
+        final Entity cod = EntityType.COD.create(world);
+
+        ItemStack waterBucket = BucketTestUtils.getFilledBucket(Fluids.WATER);
+        ActionResult<ItemStack> actionResult;
+
+        ServerConfig.FISH_OBTAINING_ENABLED.set(false);
+        actionResult = IntegrationTestUtils.useItemOnEntity(world, cod, waterBucket.copy());
+        assertFalse(BucketTestUtils.bucketContainsEntity(actionResult.getObject(), EntityType.COD), "Fish should not be obtained with disabled config");
+
+        ServerConfig.FISH_OBTAINING_ENABLED.set(true);
+        actionResult = IntegrationTestUtils.useItemOnEntity(world, cod, waterBucket.copy());
+        assertTrue(BucketTestUtils.bucketContainsEntity(actionResult.getObject(), EntityType.COD), "Fish should be obtained with disabled config");
     }
-     */
 
     @Test
     public void testInfinityEnchantmentConfig() {
         final ServerWorld world = ServerLifecycleHooks.getCurrentServer().overworld();
-        PlayerEntity player = FakePlayerFactory.getMinecraft(world);
 
         ItemStack waterBucket = BucketTestUtils.getFilledBucket(Fluids.WATER);
         ItemStack emptyBucket = BucketTestUtils.getEmptyBucket();
@@ -77,9 +100,8 @@ public class ConfigTests {
             assertFalse(CeramicBucketUtils.isAffectedByInfinityEnchantment(bucket), bucket + " should not be affected by infinity enchantment with enabled config.");
         }
         //fish should not be obtainable with an enchanted water bucket
-        player.setItemInHand(Hand.MAIN_HAND, enchantedWaterBucket.copy());
-        player.interactOn(Objects.requireNonNull(EntityType.COD.create(world)), Hand.MAIN_HAND);
-        assertTrue(player.getItemInHand(Hand.MAIN_HAND).equals(enchantedWaterBucket, false), "Fish should not be obtainable with an enchanted water bucket with enabled config");
+        ActionResult<ItemStack> actionResult = IntegrationTestUtils.useItemOnEntity(world, EntityType.COD.create(world), enchantedWaterBucket.copy());
+        assertTrue(enchantedWaterBucket.equals(actionResult.getObject(), false), "Fish should not be obtainable with an enchanted water bucket with enabled config");
 
         ServerConfig.INFINITY_ENCHANTMENT_ENABLED.set(false);
         for (ItemStack bucket : notAffectedBucketsWhenDisabled) {
@@ -87,10 +109,8 @@ public class ConfigTests {
             assertFalse(CeramicBucketUtils.isAffectedByInfinityEnchantment(bucket), bucket + " should not be affected by infinity enchantment with disabled config.");
         }
         //fish should be obtainable with an enchanted water bucket
-        player.setItemInHand(Hand.MAIN_HAND, enchantedWaterBucket.copy());
-        player.interactOn(Objects.requireNonNull(EntityType.COD.create(world)), Hand.MAIN_HAND);
-        ItemStack resultStack = player.getItemInHand(Hand.MAIN_HAND);
-        assertTrue(BucketTestUtils.bucketContainsEntity(resultStack, EntityType.COD), "Fish should be obtainable with an enchanted water bucket with disabled config");
+        actionResult = IntegrationTestUtils.useItemOnEntity(world, EntityType.COD.create(world), enchantedWaterBucket.copy());
+        assertTrue(BucketTestUtils.bucketContainsEntity(actionResult.getObject(), EntityType.COD), "Fish should be obtainable with an enchanted water bucket with disabled config");
         //TODO Fix bug?!
         //assertEquals(0, EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, resultStack), "Bucket should not be enchanted with infinity enchantment after obtaining a fish with disabled config");
     }

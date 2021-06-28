@@ -1,4 +1,4 @@
-# This workflow will build the project and runs the automated tests on each push and pull request
+# This workflow builds the project on each push and pull request
 
 name: Build
 
