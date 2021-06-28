@@ -21,32 +21,22 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ConfigTests {
 
     @Test
-    public void testTemperatureConfigForWater() {
-        int fluidTemperature = Fluids.WATER.getAttributes().getTemperature();
-
-        ServerConfig.CERAMIC_BUCKET_BREAK_TEMPERATURE.set(fluidTemperature);
+    public void testTemperatureConfig() {
+        int waterTemperature = Fluids.WATER.getAttributes().getTemperature();
+        ServerConfig.CERAMIC_BUCKET_BREAK_TEMPERATURE.set(waterTemperature);
         assertTrue(CeramicBucketUtils.isFluidTooHotForCeramicBucket(Fluids.WATER), "Water should be too hot for ceramic buckets with low temperature config");
-
-        ServerConfig.CERAMIC_BUCKET_BREAK_TEMPERATURE.set(fluidTemperature + 1);
+        ServerConfig.CERAMIC_BUCKET_BREAK_TEMPERATURE.set(waterTemperature + 1);
         assertFalse(CeramicBucketUtils.isFluidTooHotForCeramicBucket(Fluids.WATER), "Water should not be too hot for ceramic buckets with high temperature config");
 
-        // Reset defaults
-        ServerConfig.CERAMIC_BUCKET_BREAK_TEMPERATURE.set(ServerConfig.DEFAULT_CERAMIC_BUCKET_BREAK_TEMPERATURE);
-        assertFalse(CeramicBucketUtils.isFluidTooHotForCeramicBucket(Fluids.WATER), "Water should not be too hot for ceramic buckets with default temperature config");
-    }
-
-    @Test
-    public void testTemperatureConfigForLava() {
-        int fluidTemperature = Fluids.LAVA.getAttributes().getTemperature();
-
-        ServerConfig.CERAMIC_BUCKET_BREAK_TEMPERATURE.set(fluidTemperature);
+        int lavaTemperature = Fluids.LAVA.getAttributes().getTemperature();
+        ServerConfig.CERAMIC_BUCKET_BREAK_TEMPERATURE.set(lavaTemperature);
         assertTrue(CeramicBucketUtils.isFluidTooHotForCeramicBucket(Fluids.LAVA), "Lava should be too hot for ceramic buckets with low temperature config");
-
-        ServerConfig.CERAMIC_BUCKET_BREAK_TEMPERATURE.set(fluidTemperature + 1);
+        ServerConfig.CERAMIC_BUCKET_BREAK_TEMPERATURE.set(lavaTemperature + 1);
         assertFalse(CeramicBucketUtils.isFluidTooHotForCeramicBucket(Fluids.LAVA), "Lava should not be too hot for ceramic buckets with high temperature config");
 
         // Reset defaults
         ServerConfig.CERAMIC_BUCKET_BREAK_TEMPERATURE.set(ServerConfig.DEFAULT_CERAMIC_BUCKET_BREAK_TEMPERATURE);
+        assertFalse(CeramicBucketUtils.isFluidTooHotForCeramicBucket(Fluids.WATER), "Water should not be too hot for ceramic buckets with default temperature config");
         assertTrue(CeramicBucketUtils.isFluidTooHotForCeramicBucket(Fluids.LAVA), "Lava should be too hot for ceramic buckets with default temperature config");
     }
 
