@@ -5,14 +5,14 @@ import cech12.ceramicbucket.api.item.CeramicBucketItems;
 import cech12.ceramicbucket.item.FilledCeramicBucketItem;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.tags.Tag;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.minecraftforge.fluids.FluidUtil;
 
@@ -28,10 +28,10 @@ import java.util.stream.Stream;
  */
 public class FilledCeramicBucketIngredient extends Ingredient {
 
-    protected final ITag.INamedTag<Fluid> fluidTag;
+    protected final Tag.Named<Fluid> fluidTag;
     private ItemStack[] matchingStacks;
 
-    public FilledCeramicBucketIngredient(ITag.INamedTag<Fluid> fluidTag) {
+    public FilledCeramicBucketIngredient(Tag.Named<Fluid> fluidTag) {
         super(Stream.of());
         this.fluidTag = fluidTag;
     }
@@ -98,19 +98,19 @@ public class FilledCeramicBucketIngredient extends Ingredient {
         private Serializer() {}
 
         @Override
-        public FilledCeramicBucketIngredient parse(PacketBuffer buffer) {
+        public FilledCeramicBucketIngredient parse(FriendlyByteBuf buffer) {
             ResourceLocation tag = buffer.readResourceLocation();
             return new FilledCeramicBucketIngredient(tag);
         }
 
         @Override
         public FilledCeramicBucketIngredient parse(@Nonnull JsonObject json) {
-            String tag = JSONUtils.getAsString(json, "tag");
+            String tag = GsonHelper.getAsString(json, "tag");
             return new FilledCeramicBucketIngredient(FluidTags.bind(tag));
         }
 
         @Override
-        public void write(PacketBuffer buffer, FilledCeramicBucketIngredient ingredient) {
+        public void write(FriendlyByteBuf buffer, FilledCeramicBucketIngredient ingredient) {
             buffer.writeUtf(ingredient.fluidTag.getName().toString());
         }
     }

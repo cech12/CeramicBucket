@@ -21,7 +21,8 @@ version = "${minecraft_version}-${mod_version}"
 group = "cech12.${mod_id}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "${mod_id}"
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+// Mojang ships Java 16 to end users in 1.17+ instead of Java 8 in 1.16 or lower, so your mod should target Java 16.
+java.toolchain.languageVersion = JavaLanguageVersion.of(16)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
@@ -66,30 +67,6 @@ minecraft {
             }
         }
 
-        def testClasses = String.join(File.pathSeparator,
-                "${mod_id}%%${sourceSets.main.output.resourcesDir}",
-                "${mod_id}%%${sourceSets.main.output.classesDirs.asPath}",
-                "${mod_id}%%${sourceSets.test.output.resourcesDir}",
-                "${mod_id}%%${sourceSets.test.output.classesDirs.asPath}")
-
-        serverTest {
-            parent runs.server // This run config inherits settings from the server config
-            workingDirectory project.file('run')
-            main 'com.alcatrazescapee.mcjunitlib.DedicatedTestServerLauncher' // The main class which launches a customized server which then runs JUnit tests
-            ideaModule "${project.name}.test" // Tell IDEA to use the classpath of the test module
-            property 'forge.logging.console.level', 'unittest' // This logging level prevents any other server information messages and leaves only the test output
-            environment 'MOD_CLASSES', testClasses
-            environment 'target', 'fmltestserver' // This is a custom service used to launch with ModLauncher's transforming class loader
-            environment 'targetModId', "${mod_id}" // Pass the mod ID directly to mcjunitlib, to find integration test classes from the mod annotation scan data
-            arg '--crashOnFailedTests' // Optional. Recommended when running in an automated environment. Without it, the server will continue running (and can be connected to via localhost) to inspect why tests failed.
-            forceExit = false // Optional. Recommended when running in an automated environment, or via the console rather than run configurations. This will allow the task to pass successfully when all tests pass. Use if you see errors along the lines of 'Gradle daemon disappeared unexpectedly'.
-            mods {
-                ceramicbucket {
-                    sources sourceSets.main, sourceSets.test
-                }
-            }
-        }
-
         data {
             workingDirectory project.file('run')
 
@@ -119,8 +96,10 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.k-4u.nl"
     }
-    //for mcjunitlib
-    maven { url 'https://jitpack.io' }
+    maven {
+        url 'https://repo.maven.apache.org/maven2'
+        name 'Maven Central'
+    }
 }
 
 dependencies {
@@ -128,14 +107,12 @@ dependencies {
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft "net.minecraftforge:forge:${project.minecraft_version}-${project.forge_version}"
-    implementation 'org.jetbrains:annotations:15.0'
+    implementation 'org.jetbrains:annotations:22.0.0'
 
     // compile against the JEI API but do not include it at runtime
-    compileOnly fg.deobf("mezz.jei:jei-${project.jei_version}:api")
+    // compileOnly fg.deobf("mezz.jei:jei-${project.jei_version}:api")
     // at runtime, use the full JEI jar
-    runtimeOnly fg.deobf("mezz.jei:jei-${project.jei_version}")
-
-    testImplementation fg.deobf("com.github.alcatrazEscapee:mcjunitlib:${project.mcjunitlib_version}")
+    // runtimeOnly fg.deobf("mezz.jei:jei-${project.jei_version}")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

@@ -1,12 +1,12 @@
 package cech12.ceramicbucket.compat;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.passive.PigEntity;
-import net.minecraft.entity.passive.SheepEntity;
-import net.minecraft.entity.passive.horse.DonkeyEntity;
-import net.minecraft.entity.passive.horse.HorseEntity;
-import net.minecraft.entity.passive.horse.LlamaEntity;
-import net.minecraft.entity.passive.horse.MuleEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.animal.Pig;
+import net.minecraft.world.entity.animal.Sheep;
+import net.minecraft.world.entity.animal.horse.Donkey;
+import net.minecraft.world.entity.animal.horse.Horse;
+import net.minecraft.world.entity.animal.horse.Llama;
+import net.minecraft.world.entity.animal.horse.Mule;
 
 public class MilkAllTheMobs extends ModCompat.Mod implements ModCompat.MobMilkingMod {
 
@@ -16,11 +16,11 @@ public class MilkAllTheMobs extends ModCompat.Mod implements ModCompat.MobMilkin
 
     @Override
     public boolean canEntityBeMilked(Entity entity) {
-        return entity instanceof SheepEntity
-                || entity instanceof LlamaEntity
-                || entity instanceof PigEntity
-                || entity instanceof DonkeyEntity
-                || entity instanceof HorseEntity
-                || entity instanceof MuleEntity;
+        return entity instanceof Sheep
+                || entity instanceof Llama
+                || entity instanceof Pig
+                || entity instanceof Donkey
+                || entity instanceof Horse
+                || entity instanceof Mule;
     }
 }

@@ -4,15 +4,15 @@ import cech12.ceramicbucket.CeramicBucketMod;
 import cech12.ceramicbucket.util.CeramicBucketUtils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.tags.Tag;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -34,12 +34,12 @@ import java.util.stream.Stream;
  */
 public class FluidIngredient extends Ingredient {
 
-    protected final ITag.INamedTag<Fluid> fluidTag;
+    protected final Tag.Named<Fluid> fluidTag;
     protected final int amount;
     protected final boolean exact;
     private ItemStack[] matchingStacks;
 
-    public FluidIngredient(ITag.INamedTag<Fluid> fluidTag, int amount, boolean exact) {
+    public FluidIngredient(Tag.Named<Fluid> fluidTag, int amount, boolean exact) {
         super(Stream.of());
         this.fluidTag = fluidTag;
         this.amount = amount;
@@ -120,7 +120,7 @@ public class FluidIngredient extends Ingredient {
         private Serializer() {}
 
         @Override
-        public FluidIngredient parse(PacketBuffer buffer) {
+        public FluidIngredient parse(FriendlyByteBuf buffer) {
             ResourceLocation tag = buffer.readResourceLocation();
             int amount = buffer.readInt();
             boolean exact = buffer.readBoolean();
@@ -129,17 +129,17 @@ public class FluidIngredient extends Ingredient {
 
         @Override
         public FluidIngredient parse(@Nonnull JsonObject json) {
-            String tag = JSONUtils.getAsString(json, "tag");
-            int amount = JSONUtils.getAsInt(json, "amount");
+            String tag = GsonHelper.getAsString(json, "tag");
+            int amount = GsonHelper.getAsInt(json, "amount");
             boolean exact = false;
-            if (JSONUtils.isValidNode(json, "exact")) {
-                exact = JSONUtils.getAsBoolean(json, "exact");
+            if (GsonHelper.isValidNode(json, "exact")) {
+                exact = GsonHelper.getAsBoolean(json, "exact");
             }
             return new FluidIngredient(FluidTags.bind(tag), amount, exact);
         }
 
         @Override
-        public void write(PacketBuffer buffer, FluidIngredient ingredient) {
+        public void write(FriendlyByteBuf buffer, FluidIngredient ingredient) {
             buffer.writeUtf(ingredient.fluidTag.getName().toString());
             buffer.writeInt(ingredient.amount);
             buffer.writeBoolean(ingredient.exact);

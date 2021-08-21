@@ -5,20 +5,21 @@ import cech12.ceramicbucket.api.item.CeramicBucketItems;
 import cech12.ceramicbucket.config.ServerConfig;
 import cech12.ceramicbucket.init.ModTags;
 import cech12.ceramicbucket.util.CeramicBucketUtils;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.BucketItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.NonNullList;
+import net.minecraft.Util;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -38,7 +39,7 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
 
     @Nonnull
     @Override
-    public ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable CompoundNBT nbt) {
+    public ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable CompoundTag nbt) {
         return new FilledCeramicBucketFluidHandler(stack);
     }
 
@@ -61,7 +62,7 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
      * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
      */
     @Override
-    public void fillItemCategory(@Nonnull ItemGroup group, @Nonnull NonNullList<ItemStack> items) {
+    public void fillItemCategory(@Nonnull CreativeModeTab group, @Nonnull NonNullList<ItemStack> items) {
         if (this.allowdedIn(group)) {
             ArrayList<Fluid> addedFluids = new ArrayList<>();
             for (Fluid fluid : ForgeRegistries.FLUIDS) {
@@ -86,23 +87,23 @@ public class FilledCeramicBucketItem extends AbstractCeramicBucketItem {
 
     @Override
     @Nonnull
-    public ITextComponent getName(@Nonnull ItemStack stack) {
+    public Component getName(@Nonnull ItemStack stack) {
         if (getFluid(stack) == Fluids.EMPTY) {
-            return new TranslationTextComponent("item.ceramicbucket.ceramic_bucket");
+            return new TranslatableComponent("item.ceramicbucket.ceramic_bucket");
         } else {
-            ITextComponent fluidText = new TranslationTextComponent(getFluid(stack).getAttributes().getTranslationKey());
-            return new TranslationTextComponent("item.ceramicbucket.filled_ceramic_bucket", fluidText);
+            Component fluidText = new TranslatableComponent(getFluid(stack).getAttributes().getTranslationKey());
+            return new TranslatableComponent("item.ceramicbucket.filled_ceramic_bucket", fluidText);
         }
     }
 
     @Override
-    public int getBurnTime(ItemStack itemStack) {
+    public int getBurnTime(ItemStack itemStack, @Nullable RecipeType<?> recipeType) {
         //get burn time of normal bucket
-        int burnTime = CeramicBucketUtils.getBurnTimeOfFluid(this.getFluid(itemStack));
+        int burnTime = CeramicBucketUtils.getBurnTimeOfFluid(this.getFluid(itemStack), recipeType);
         if (burnTime >= 0) {
             return burnTime;
         }
-        return super.getBurnTime(itemStack);
+        return super.getBurnTime(itemStack, recipeType);
     }
 
     @Override

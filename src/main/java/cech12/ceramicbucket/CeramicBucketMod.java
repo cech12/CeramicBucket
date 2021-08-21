@@ -11,15 +11,15 @@ import cech12.ceramicbucket.api.crafting.FilledCeramicBucketIngredient;
 import cech12.ceramicbucket.item.crafting.CeramicBucketDyeRecipe;
 import cech12.ceramicbucket.util.CeramicBucketUtils;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ColorHandlerEvent;
@@ -67,7 +67,7 @@ public class CeramicBucketMod {
     }
 
     @SubscribeEvent
-    public static void registerRecipeSerializers(RegistryEvent.Register<IRecipeSerializer<?>> event) {
+    public static void registerRecipeSerializers(RegistryEvent.Register<RecipeSerializer<?>> event) {
         //dye recipe serializer
         event.getRegistry().register(CeramicBucketDyeRecipe.SERIALIZER);
         //ingredient serializers
@@ -82,23 +82,23 @@ public class CeramicBucketMod {
         Entity entity = event.getTarget();
         if (entity == null) return;
 
-        PlayerEntity player = event.getPlayer();
+        Player player = event.getPlayer();
         ItemStack itemstack = player.getItemInHand(event.getHand());
 
         if (ServerConfig.MILKING_ENABLED.get() && ModCompat.canEntityBeMilked(entity)) {
-            if (itemstack.getItem() == CeramicBucketItems.CERAMIC_BUCKET && !player.abilities.instabuild) {
+            if (itemstack.getItem() == CeramicBucketItems.CERAMIC_BUCKET && !player.getAbilities().instabuild) {
                 player.playSound(SoundEvents.COW_MILK, 1.0F, 1.0F);
                 if (!event.getWorld().isClientSide()) {
                     ItemStack milkBucket = ((CeramicMilkBucketItem)CeramicBucketItems.CERAMIC_MILK_BUCKET).getFilledInstance(itemstack);
                     itemstack.shrink(1);
                     if (itemstack.isEmpty()) {
                         player.setItemInHand(event.getHand(), milkBucket);
-                    } else if (!player.inventory.add(milkBucket)) {
+                    } else if (!player.getInventory().add(milkBucket)) {
                         player.drop(milkBucket, false);
                     }
                 }
                 event.setCanceled(true);
-                event.setCancellationResult(ActionResultType.SUCCESS);
+                event.setCancellationResult(InteractionResult.SUCCESS);
             }
         } else if (ServerConfig.FISH_OBTAINING_ENABLED.get()) {
             //check if filled ceramic bucket is there and contains a fluid
@@ -116,18 +116,18 @@ public class CeramicBucketMod {
                 ((CeramicEntityBucketItem) CeramicBucketItems.CERAMIC_ENTITY_BUCKET).playFillSound(player, filledBucket);
                 if (!event.getWorld().isClientSide()) {
                     itemstack.shrink(1);
-                    if (player instanceof ServerPlayerEntity) {
-                        CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayerEntity) player, filledBucket);
-                        CeramicBucketUtils.grantAdvancement((ServerPlayerEntity) player, ModCompat.getEntityObtainingAdvancement(fluid, entity));
+                    if (player instanceof ServerPlayer) {
+                        CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayer) player, filledBucket);
+                        CeramicBucketUtils.grantAdvancement((ServerPlayer) player, ModCompat.getEntityObtainingAdvancement(fluid, entity));
                     }
                     if (itemstack.isEmpty()) {
                         player.setItemInHand(event.getHand(), filledBucket);
-                    } else if (!player.inventory.add(filledBucket)) {
+                    } else if (!player.getInventory().add(filledBucket)) {
                         player.drop(filledBucket, false);
                     }
                 }
                 event.setCanceled(true);
-                event.setCancellationResult(ActionResultType.SUCCESS);
+                event.setCancellationResult(InteractionResult.SUCCESS);
             }
         }
     }

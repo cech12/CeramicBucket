@@ -1,5 +1,6 @@
 package cech12.ceramicbucket.unit;
 
+/*
 import cech12.ceramicbucket.api.item.CeramicBucketItems;
 import cech12.ceramicbucket.item.CeramicEntityBucketItem;
 import cech12.ceramicbucket.item.FilledCeramicBucketItem;
@@ -18,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * This class tests the ItemStack equality tests of the Item Filters mod. (to support FTB Quests)
  * https://www.curseforge.com/minecraft/mc-mods/item-filters-forge
- */
+ /
 public class ItemFiltersTests {
 
     @Test
@@ -80,3 +81,4 @@ public class ItemFiltersTests {
     }
 
 }
+ */

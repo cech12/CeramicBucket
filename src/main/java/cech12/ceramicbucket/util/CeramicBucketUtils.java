@@ -7,34 +7,39 @@ import cech12.ceramicbucket.item.AbstractCeramicBucketItem;
 import cech12.ceramicbucket.item.CeramicMilkBucketItem;
 import cech12.ceramicbucket.item.FilledCeramicBucketItem;
 import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementManager;
+import net.minecraft.server.ServerAdvancementManager;
 import net.minecraft.advancements.AdvancementProgress;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.tags.Tag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class CeramicBucketUtils {
 
     private static final ResourceLocation FORGE_MILK_LOCATION = new ResourceLocation("forge", "milk");
-    private static final ITag.INamedTag<Fluid> MILK_TAG;
+    private static final Tag<Fluid> MILK_TAG;
     private static final List<ResourceLocation> MILK_FLUIDS = new ArrayList<>();
     static {
-        ITag.INamedTag<Fluid> milkTag = null;
-        for (ITag.INamedTag<Fluid> tag : FluidTags.getWrappers()) {
-            if (tag.getName().equals(FORGE_MILK_LOCATION)) {
-                milkTag = tag;
+        Tag<Fluid> milkTag = null;
+        for (Map.Entry<ResourceLocation, Tag<Fluid>> entry : FluidTags.getAllTags().getAllTags().entrySet()) {
+            if (entry.getKey().equals(FORGE_MILK_LOCATION)) {
+                milkTag = entry.getValue();
                 break;
             }
         }
@@ -97,15 +102,40 @@ public class CeramicBucketUtils {
     }
 
     /**
+     * Fills the given emptyBucket with the content of the given filledItemStack.
+     * If the content cannot be filled into the emptyBucket, null is returned.
+     *
+     * @param filledItemStack filled item stack
+     * @param emptyBucket empty ceramic bucket that should be filled with the content of filledItemStack.
+     * @return filled ceramic bucket or null if it cannot be filled.
+     */
+    public static ItemStack getFilledCeramicBucket(ItemStack filledItemStack, ItemStack emptyBucket) {
+        if (filledItemStack.getItem() == Items.POWDER_SNOW_BUCKET) {
+            //TODO
+        } else {
+            FluidStack fluidStack = FluidUtil.getFluidContained(filledItemStack).orElse(null);
+            if (fluidStack != null && fluidStack.getFluid() != Fluids.EMPTY) {
+                if (CeramicBucketUtils.isMilkFluid(fluidStack.getFluid())) {
+                    return ((CeramicMilkBucketItem) CeramicBucketItems.CERAMIC_MILK_BUCKET).getFilledInstance(fluidStack.getFluid(), emptyBucket);
+                } else {
+                    return ((FilledCeramicBucketItem) CeramicBucketItems.FILLED_CERAMIC_BUCKET).getFilledInstance(fluidStack.getFluid(), emptyBucket);
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
      * Get the burn time of the bucket item of the given fluid.
      * @param fluid fluid that should be checked.
+     * @param recipeType recipeType
      * @return burn time of the bucket item of the given fluid; -1 for Fluids.EMPTY
      */
-    public static int getBurnTimeOfFluid(@Nonnull Fluid fluid) {
+    public static int getBurnTimeOfFluid(@Nonnull Fluid fluid, @Nullable RecipeType<?> recipeType) {
         if (fluid != Fluids.EMPTY) {
             //all fluids have their burn time in their bucket item.
             //get the burn time via ForgeHooks.getBurnTime to let other mods change burn times of buckets of vanilla and other fluids.
-            return ForgeHooks.getBurnTime(new ItemStack(fluid.getBucket()));
+            return ForgeHooks.getBurnTime(new ItemStack(fluid.getBucket()), recipeType);
         }
         return -1;
     }
@@ -127,9 +157,9 @@ public class CeramicBucketUtils {
      * @param player Player
      * @param advancementLocation ResourceLocation of the advancement
      */
-    public static void grantAdvancement(ServerPlayerEntity player, ResourceLocation advancementLocation) {
+    public static void grantAdvancement(ServerPlayer player, ResourceLocation advancementLocation) {
         if (player!= null && advancementLocation != null && player.getServer() != null) {
-            AdvancementManager am = player.getServer().getAdvancements();
+            ServerAdvancementManager am = player.getServer().getAdvancements();
             Advancement advancement = am.getAdvancement(advancementLocation);
             if (advancement != null) {
                 AdvancementProgress advancementprogress = player.getAdvancements().getOrStartProgress(advancement);

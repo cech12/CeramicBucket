@@ -1,12 +1,12 @@
 package cech12.ceramicbucket.api.data;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.tags.Tag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
@@ -18,12 +18,12 @@ public class ObtainableEntityType {
 
     private final ResourceLocation entityType;
     private final List<Fluid> fluids;
-    private final List<ITag<Fluid>> fluidTags;
+    private final List<Tag<Fluid>> fluidTags;
     private final Boolean cracksBucket;
     private final ResourceLocation emptySound;
     private final ResourceLocation fillSound;
 
-    public ObtainableEntityType(@Nonnull ResourceLocation entityType, List<Fluid> fluids, List<ITag<Fluid>> fluidTags, Boolean cracksBucket, ResourceLocation emptySound, ResourceLocation fillSound) {
+    public ObtainableEntityType(@Nonnull ResourceLocation entityType, List<Fluid> fluids, List<Tag<Fluid>> fluidTags, Boolean cracksBucket, ResourceLocation emptySound, ResourceLocation fillSound) {
         this.entityType = entityType;
         this.fluids = fluids;
         this.fluidTags = fluidTags;
@@ -55,7 +55,7 @@ public class ObtainableEntityType {
                 return true;
             }
         }
-        for (ITag<Fluid> tag : this.fluidTags) {
+        for (Tag<Fluid> tag : this.fluidTags) {
             if (fluid.is(tag)) {
                 return true;
             }
@@ -79,7 +79,7 @@ public class ObtainableEntityType {
 
         private final ResourceLocation entityType;
         private final List<Fluid> fluids = new ArrayList<>();
-        private final List<ITag<Fluid>> fluidTags = new ArrayList<>();
+        private final List<Tag<Fluid>> fluidTags = new ArrayList<>();
         private Boolean cracksBucket = null;
         private ResourceLocation emptySound = ForgeRegistries.SOUND_EVENTS.getKey(SoundEvents.BUCKET_EMPTY_FISH);
         private ResourceLocation fillSound = ForgeRegistries.SOUND_EVENTS.getKey(SoundEvents.BUCKET_FILL_FISH);
@@ -99,7 +99,7 @@ public class ObtainableEntityType {
             return this;
         }
 
-        public Builder addFluidTag(@Nonnull ITag<Fluid> fluidTag) {
+        public Builder addFluidTag(@Nonnull Tag<Fluid> fluidTag) {
             this.fluidTags.add(fluidTag);
             return this;
         }

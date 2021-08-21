@@ -1,8 +1,8 @@
 package cech12.ceramicbucket.item;
 
 import cech12.ceramicbucket.util.CeramicBucketUtils;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidAttributes;

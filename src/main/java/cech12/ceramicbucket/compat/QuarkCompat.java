@@ -1,13 +1,13 @@
 package cech12.ceramicbucket.compat;
 
 import cech12.ceramicbucket.api.data.ObtainableEntityType;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.monster.SlimeEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.Slime;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
@@ -39,7 +39,7 @@ public class QuarkCompat extends ModCompat.Mod implements ModCompat.EntityTypeOb
     public boolean canEntityBeObtained(@Nonnull Fluid fluid, @Nonnull Entity entity) {
         return slimeType.isCorrectFluid(fluid)
                 && entity.getType() == EntityType.SLIME
-                && ((SlimeEntity) entity).getSize() == 1
+                && ((Slime) entity).getSize() == 1
                 && entity.isAlive();
     }
 

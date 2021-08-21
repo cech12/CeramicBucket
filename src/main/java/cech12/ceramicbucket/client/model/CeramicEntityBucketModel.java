@@ -8,29 +8,29 @@ import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.IModelTransform;
-import net.minecraft.client.renderer.model.IUnbakedModel;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.model.ItemOverrideList;
-import net.minecraft.client.renderer.model.ModelBakery;
-import net.minecraft.client.renderer.model.ModelRotation;
-import net.minecraft.client.renderer.model.RenderMaterial;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelState;
+import net.minecraft.client.resources.model.UnbakedModel;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.BlockModelRotation;
+import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.TransformationMatrix;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.resources.ResourceLocation;
+import com.mojang.math.Transformation;
+import net.minecraftforge.client.model.CompositeModelState;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.minecraftforge.client.model.IModelLoader;
 import net.minecraftforge.client.model.ItemLayerModel;
 import net.minecraftforge.client.model.ItemMultiLayerBakedModel;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.model.ModelTransformComposition;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -75,30 +75,30 @@ public class CeramicEntityBucketModel implements IModelGeometry<CeramicEntityBuc
     }
 
     @Override
-    public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter, IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation)
+    public BakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides, ResourceLocation modelLocation)
     {
-        RenderMaterial particleLocation = owner.isTexturePresent("particle") ? owner.resolveTexture("particle") : null;
-        RenderMaterial baseLocation = owner.isTexturePresent("base") ? owner.resolveTexture("base") : null;
+        Material particleLocation = owner.isTexturePresent("particle") ? owner.resolveTexture("particle") : null;
+        Material baseLocation = owner.isTexturePresent("base") ? owner.resolveTexture("base") : null;
         if (this.isCracked && owner.isTexturePresent("crackedBase")) {
             baseLocation = owner.resolveTexture("crackedBase");
         }
-        RenderMaterial entityLocation = null;
+        Material entityLocation = null;
         if (this.entityType != null) {
-            entityLocation = new RenderMaterial(PlayerContainer.BLOCK_ATLAS, getEntityTexture(ForgeRegistries.ENTITIES.getKey(this.entityType))); //AtlasTexture.LOCATION_BLOCKS_TEXTURE
+            entityLocation = new Material(InventoryMenu.BLOCK_ATLAS, getEntityTexture(ForgeRegistries.ENTITIES.getKey(this.entityType))); //AtlasTexture.LOCATION_BLOCKS_TEXTURE
         }
         TextureAtlasSprite entitySprite = entityLocation != null ? spriteGetter.apply(entityLocation) : null;
 
-        IModelTransform transformsFromModel = owner.getCombinedTransform();
+        ModelState transformsFromModel = owner.getCombinedTransform();
 
 
-        ImmutableMap<ItemCameraTransforms.TransformType, TransformationMatrix> transformMap =
-                PerspectiveMapWrapper.getTransforms(new ModelTransformComposition(transformsFromModel, modelTransform));
+        ImmutableMap<ItemTransforms.TransformType, Transformation> transformMap =
+                PerspectiveMapWrapper.getTransforms(new CompositeModelState(transformsFromModel, modelTransform));
 
         TextureAtlasSprite particleSprite = particleLocation != null ? spriteGetter.apply(particleLocation) : null;
         if (particleSprite == null) particleSprite = entitySprite;
 
 
-        TransformationMatrix transform = modelTransform.getRotation();
+        Transformation transform = modelTransform.getRotation();
 
         ItemMultiLayerBakedModel.Builder builder = ItemMultiLayerBakedModel.builder(owner, particleSprite, new CeramicEntityBucketModel.ContainedFluidOverrideHandler(overrides, bakery, owner, this), transformMap);
 
@@ -119,9 +119,9 @@ public class CeramicEntityBucketModel implements IModelGeometry<CeramicEntityBuc
     }
 
     @Override
-    public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors)
+    public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors)
     {
-        Set<RenderMaterial> texs = Sets.newHashSet();
+        Set<Material> texs = Sets.newHashSet();
 
         if (owner.isTexturePresent("particle")) texs.add(owner.resolveTexture("particle"));
         if (owner.isTexturePresent("base")) texs.add(owner.resolveTexture("base"));
@@ -141,13 +141,7 @@ public class CeramicEntityBucketModel implements IModelGeometry<CeramicEntityBuc
         }
 
         @Override
-        public void onResourceManagerReload(IResourceManager resourceManager)
-        {
-            // no need to clear cache since we create a new model instance
-        }
-
-        @Override
-        public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> resourcePredicate)
+        public void onResourceManagerReload(ResourceManager resourceManager)
         {
             // no need to clear cache since we create a new model instance
         }
@@ -160,19 +154,19 @@ public class CeramicEntityBucketModel implements IModelGeometry<CeramicEntityBuc
         }
     }
 
-    private static final class ContainedFluidOverrideHandler extends ItemOverrideList
+    private static final class ContainedFluidOverrideHandler extends ItemOverrides
     {
         private static final ResourceLocation REBAKE_LOCATION = new ResourceLocation("ceramicbucket:entity_bucket_override");
 
-        private final Map<String, IBakedModel> cache = Maps.newHashMap(); // contains all the baked models since they'll never change
-        private final ItemOverrideList nested;
+        private final Map<String, BakedModel> cache = Maps.newHashMap(); // contains all the baked models since they'll never change
+        private final ItemOverrides nested;
         private final ModelBakery bakery;
         private final IModelConfiguration owner;
         private final CeramicEntityBucketModel parent;
 
         private boolean isCracked;
 
-        private ContainedFluidOverrideHandler(ItemOverrideList nested, ModelBakery bakery, IModelConfiguration owner, CeramicEntityBucketModel parent)
+        private ContainedFluidOverrideHandler(ItemOverrides nested, ModelBakery bakery, IModelConfiguration owner, CeramicEntityBucketModel parent)
         {
             this.nested = nested;
             this.bakery = bakery;
@@ -182,9 +176,9 @@ public class CeramicEntityBucketModel implements IModelGeometry<CeramicEntityBuc
 
         @Nullable
         @Override
-        public IBakedModel resolve(IBakedModel originalModel, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity)
+        public BakedModel resolve(BakedModel originalModel, ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int number)
         {
-            IBakedModel overridden = nested.resolve(originalModel, stack, world, entity);
+            BakedModel overridden = nested.resolve(originalModel, stack, world, entity, number);
             if (overridden != originalModel) return overridden;
             if (stack.getItem() instanceof CeramicEntityBucketItem) {
                 CeramicEntityBucketItem bucket = (CeramicEntityBucketItem) stack.getItem();
@@ -201,7 +195,7 @@ public class CeramicEntityBucketModel implements IModelGeometry<CeramicEntityBuc
                         }
                         if (!cache.containsKey(name)) {
                             CeramicEntityBucketModel unbaked = this.parent.withEntityType(containedEntityType, isCracked);
-                            IBakedModel bakedModel = unbaked.bake(owner, bakery, ModelLoader.defaultTextureGetter(), ModelRotation.X0_Y0, this, REBAKE_LOCATION);
+                            BakedModel bakedModel = unbaked.bake(owner, bakery, ModelLoader.defaultTextureGetter(), BlockModelRotation.X0_Y0, this, REBAKE_LOCATION);
                             cache.put(name, bakedModel);
                             return bakedModel;
                         }

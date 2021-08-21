@@ -2,23 +2,23 @@ package cech12.ceramicbucket.item;
 
 import cech12.ceramicbucket.util.CeramicBucketUtils;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.UseAction;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.UseAnim;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
@@ -71,17 +71,17 @@ public class CeramicMilkBucketItem extends FilledCeramicBucketItem {
      */
     @Override
     @Nonnull
-    public ItemStack finishUsingItem(@Nonnull ItemStack stack, World worldIn, @Nonnull LivingEntity entityLiving) {
+    public ItemStack finishUsingItem(@Nonnull ItemStack stack, Level worldIn, @Nonnull LivingEntity entityLiving) {
         ItemStack vanillaStack = new ItemStack(Items.MILK_BUCKET);
         if (!worldIn.isClientSide) entityLiving.curePotionEffects(vanillaStack); // FORGE - move up so stack.shrink does not turn stack into air
 
-        if (entityLiving instanceof ServerPlayerEntity) {
-            ServerPlayerEntity serverplayerentity = (ServerPlayerEntity)entityLiving;
+        if (entityLiving instanceof ServerPlayer) {
+            ServerPlayer serverplayerentity = (ServerPlayer)entityLiving;
             CriteriaTriggers.CONSUME_ITEM.trigger(serverplayerentity, vanillaStack);
             serverplayerentity.awardStat(Stats.ITEM_USED.get(this));
         }
 
-        if (entityLiving instanceof PlayerEntity && !((PlayerEntity)entityLiving).abilities.instabuild) {
+        if (entityLiving instanceof Player && !((Player)entityLiving).getAbilities().instabuild) {
             stack.shrink(1);
         }
 
@@ -101,8 +101,8 @@ public class CeramicMilkBucketItem extends FilledCeramicBucketItem {
      */
     @Override
     @Nonnull
-    public UseAction getUseAnimation(@Nonnull ItemStack stack) {
-        return UseAction.DRINK;
+    public UseAnim getUseAnimation(@Nonnull ItemStack stack) {
+        return UseAnim.DRINK;
     }
 
     /**
@@ -110,18 +110,18 @@ public class CeramicMilkBucketItem extends FilledCeramicBucketItem {
      */
     @Override
     @Nonnull
-    public ActionResult<ItemStack> use(@Nonnull World worldIn, PlayerEntity playerIn, @Nonnull Hand handIn) {
-        ActionResult<ItemStack> result = super.use(worldIn, playerIn, handIn);
+    public InteractionResultHolder<ItemStack> use(@Nonnull Level level, Player playerIn, @Nonnull InteractionHand handIn) {
+        InteractionResultHolder<ItemStack> result = super.use(level, playerIn, handIn);
         //when no fluid can be placed, drink it
-        if (result.getResult() != ActionResultType.SUCCESS) {
+        if (result.getResult() != InteractionResult.SUCCESS) {
             playerIn.startUsingItem(handIn);
-            result = new ActionResult<>(ActionResultType.SUCCESS, playerIn.getItemInHand(handIn));
+            result = new InteractionResultHolder<>(InteractionResult.SUCCESS, playerIn.getItemInHand(handIn));
         }
         return result;
     }
 
     @Override
-    public void fillItemCategory(@Nonnull ItemGroup group, @Nonnull NonNullList<ItemStack> items) {
+    public void fillItemCategory(@Nonnull CreativeModeTab group, @Nonnull NonNullList<ItemStack> items) {
         if (this.allowdedIn(group)) {
             items.add(this.getFilledInstance(false, null));
         }
@@ -129,8 +129,8 @@ public class CeramicMilkBucketItem extends FilledCeramicBucketItem {
 
     @Override
     @Nonnull
-    public ITextComponent getName(@Nonnull ItemStack stack) {
-        return new TranslationTextComponent("item.ceramicbucket.ceramic_milk_bucket");
+    public Component getName(@Nonnull ItemStack stack) {
+        return new TranslatableComponent("item.ceramicbucket.ceramic_milk_bucket");
     }
 
     @Override

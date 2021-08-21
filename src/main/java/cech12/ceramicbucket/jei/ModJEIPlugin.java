@@ -1,5 +1,6 @@
 package cech12.ceramicbucket.jei;
 
+/*
 import cech12.ceramicbucket.CeramicBucketMod;
 import cech12.ceramicbucket.api.item.CeramicBucketItems;
 import cech12.ceramicbucket.config.ServerConfig;
@@ -11,12 +12,12 @@ import mezz.jei.api.constants.VanillaRecipeCategoryUid;
 import mezz.jei.api.recipe.vanilla.IVanillaRecipeFactory;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
-import net.minecraft.enchantment.EnchantmentData;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.EnchantedBookItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.enchantment.EnchantmentInstance;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.item.EnchantedBookItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -46,7 +47,7 @@ public class ModJEIPlugin implements IModPlugin {
     public void registerRecipes(@Nonnull IRecipeRegistration registration) {
         if (ServerConfig.INFINITY_ENCHANTMENT_ENABLED.get()) {
             IVanillaRecipeFactory factory = registration.getVanillaRecipeFactory();
-            EnchantmentData data = new EnchantmentData(Enchantments.INFINITY_ARROWS, Enchantments.INFINITY_ARROWS.getMaxLevel());
+            EnchantmentInstance data = new EnchantmentInstance(Enchantments.INFINITY_ARROWS, Enchantments.INFINITY_ARROWS.getMaxLevel());
             List<Object> recipes = new ArrayList<>();
             List<Fluid> addedFluids = new ArrayList<>();
             for (Fluid fluid : ForgeRegistries.FLUIDS) {
@@ -70,3 +71,4 @@ public class ModJEIPlugin implements IModPlugin {
     }
 
 }
+ */

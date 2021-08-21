@@ -1,5 +1,6 @@
 package cech12.ceramicbucket;
 
+/*
 import com.alcatrazescapee.mcjunitlib.framework.IntegrationTestHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -70,3 +71,4 @@ public class IntegrationTestUtils {
     }
 
 }
+ */

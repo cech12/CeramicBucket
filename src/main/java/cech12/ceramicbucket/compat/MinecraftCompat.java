@@ -1,13 +1,13 @@
 package cech12.ceramicbucket.compat;
 
 import cech12.ceramicbucket.api.data.ObtainableEntityType;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.CowEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.Cow;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class MinecraftCompat extends ModCompat.Mod implements ModCompat.MobMilki
 
     @Override
     public boolean canEntityBeMilked(Entity entity) {
-        return entity instanceof CowEntity;
+        return entity instanceof Cow;
     }
 
     @Override

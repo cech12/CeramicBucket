@@ -1,6 +1,6 @@
 package cech12.ceramicbucket.api.item;
 
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 
 public class CeramicBucketItems {
 
@@ -10,15 +10,5 @@ public class CeramicBucketItems {
     public static Item UNFIRED_CLAY_BUCKET;
 
     public static Item CERAMIC_ENTITY_BUCKET;
-
-    //TODO fish buckets can be removed on 1.17 update
-    @Deprecated
-    public static Item PUFFERFISH_CERAMIC_BUCKET;
-    @Deprecated
-    public static Item SALMON_CERAMIC_BUCKET;
-    @Deprecated
-    public static Item COD_CERAMIC_BUCKET;
-    @Deprecated
-    public static Item TROPICAL_FISH_CERAMIC_BUCKET;
 
 }

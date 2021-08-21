@@ -4,31 +4,31 @@ import cech12.ceramicbucket.CeramicBucketMod;
 import cech12.ceramicbucket.item.AbstractCeramicBucketItem;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.DyeItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.SpecialRecipe;
-import net.minecraft.item.crafting.SpecialRecipeSerializer;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class CeramicBucketDyeRecipe extends SpecialRecipe {
+public class CeramicBucketDyeRecipe extends CustomRecipe {
 
-    public static final SpecialRecipeSerializer<CeramicBucketDyeRecipe> SERIALIZER = new Serializer();
+    public static final SimpleRecipeSerializer<CeramicBucketDyeRecipe> SERIALIZER = new Serializer();
 
     public CeramicBucketDyeRecipe(ResourceLocation id) {
         super(id);
     }
 
     @Nullable
-    private Pair<ItemStack, List<DyeItem>> getBucketAndDyes(@Nonnull CraftingInventory inv) {
+    private Pair<ItemStack, List<DyeItem>> getBucketAndDyes(@Nonnull CraftingContainer inv) {
         ItemStack bucket = ItemStack.EMPTY;
         List<DyeItem> dyeItems = Lists.newArrayList();
         for (int i = 0; i < inv.getContainerSize(); ++i) {
@@ -57,7 +57,7 @@ public class CeramicBucketDyeRecipe extends SpecialRecipe {
     /**
      * Used to check if a recipe matches current crafting inventory
      */
-    public boolean matches(@Nonnull CraftingInventory inv, @Nonnull World worldIn) {
+    public boolean matches(@Nonnull CraftingContainer inv, @Nonnull Level worldIn) {
         Pair<ItemStack, List<DyeItem>> bucketAndDyes = getBucketAndDyes(inv);
         return bucketAndDyes != null;
     }
@@ -66,7 +66,7 @@ public class CeramicBucketDyeRecipe extends SpecialRecipe {
      * Returns an Item that is the result of this recipe
      */
     @Nonnull
-    public ItemStack assemble(@Nonnull CraftingInventory inv) {
+    public ItemStack assemble(@Nonnull CraftingContainer inv) {
         Pair<ItemStack, List<DyeItem>> bucketAndDyes = getBucketAndDyes(inv);
         if (bucketAndDyes != null) {
             return AbstractCeramicBucketItem.dyeItem(bucketAndDyes.getFirst(), bucketAndDyes.getSecond());
@@ -76,7 +76,7 @@ public class CeramicBucketDyeRecipe extends SpecialRecipe {
 
     @Nonnull
     @Override
-    public NonNullList<ItemStack> getRemainingItems(CraftingInventory inv) {
+    public NonNullList<ItemStack> getRemainingItems(CraftingContainer inv) {
         //override it to avoid remaining container items
         return NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
     }
@@ -89,11 +89,11 @@ public class CeramicBucketDyeRecipe extends SpecialRecipe {
     }
 
     @Nonnull
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return SERIALIZER;
     }
 
-    private static class Serializer extends SpecialRecipeSerializer<CeramicBucketDyeRecipe> {
+    private static class Serializer extends SimpleRecipeSerializer<CeramicBucketDyeRecipe> {
         public Serializer() {
             super(CeramicBucketDyeRecipe::new);
             this.setRegistryName(CeramicBucketMod.MOD_ID, "ceramic_bucket_dye_recipe");

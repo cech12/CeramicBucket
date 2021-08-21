@@ -5,8 +5,8 @@ import cech12.ceramicbucket.api.data.ObtainableEntityType;
 import cech12.ceramicbucket.client.model.CeramicBucketModel;
 import cech12.ceramicbucket.client.model.CeramicEntityBucketModel;
 import cech12.ceramicbucket.compat.ModCompat;
-import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -26,7 +26,7 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void onTextureStitch(TextureStitchEvent.Pre event){
-        if (event.getMap().location().equals(PlayerContainer.BLOCK_ATLAS)) { //AtlasTexture.LOCATION_BLOCKS_TEXTURE
+        if (event.getMap().location().equals(InventoryMenu.BLOCK_ATLAS)) { //AtlasTexture.LOCATION_BLOCKS_TEXTURE
             for (ObtainableEntityType entityType : ModCompat.getObtainableEntityTypes()) {
                 ResourceLocation entityTypeKey = ForgeRegistries.ENTITIES.getKey(entityType.getEntityType());
                 if (entityTypeKey != null) {

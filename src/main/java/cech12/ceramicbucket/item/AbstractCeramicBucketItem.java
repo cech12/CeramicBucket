@@ -2,30 +2,28 @@ package cech12.ceramicbucket.item;
 
 import cech12.ceramicbucket.util.CeramicBucketUtils;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.CauldronBlock;
-import net.minecraft.block.IBucketPickupHandler;
-import net.minecraft.block.ILiquidContainer;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.fluid.FlowingFluid;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.BucketItem;
-import net.minecraft.item.DyeItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.BucketPickup;
+import net.minecraft.world.level.block.LiquidBlockContainer;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidAttributes;
@@ -41,6 +39,13 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Supplier;
 
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+
 public abstract class AbstractCeramicBucketItem extends BucketItem {
 
     public AbstractCeramicBucketItem(Supplier<? extends Fluid> supplier, Properties builder) {
@@ -48,7 +53,7 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
     }
 
     @Override
-    public abstract ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable CompoundNBT nbt);
+    public abstract ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable CompoundTag nbt);
 
     /**
      * This method copies the nbt data (except the fluid/entity data) of a source bucket to a target bucket.
@@ -58,9 +63,9 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
      * @return changed target bucket
      */
     public static ItemStack copyNBTWithoutBucketContent(ItemStack source, ItemStack target) {
-        CompoundNBT sourceNbt = source.getTag();
+        CompoundTag sourceNbt = source.getTag();
         if (sourceNbt != null && !sourceNbt.isEmpty()) {
-            CompoundNBT nbt = sourceNbt.copy();
+            CompoundTag nbt = sourceNbt.copy();
             if (nbt.contains(FluidHandlerItemStack.FLUID_NBT_KEY)) {
                 nbt.remove(FluidHandlerItemStack.FLUID_NBT_KEY);
             }
@@ -70,7 +75,7 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
             if (nbt.contains("EntityTag")) {
                 nbt.remove("EntityTag");
             }
-            CompoundNBT targetNbt = target.getTag();
+            CompoundTag targetNbt = target.getTag();
             if (targetNbt != null) {
                 nbt = targetNbt.merge(nbt);
             }
@@ -79,13 +84,13 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
         return target;
     }
 
-    public void playEmptySound(@Nullable PlayerEntity player, @Nonnull IWorld worldIn, @Nonnull BlockPos pos, @Nonnull ItemStack stack) {
+    public void playEmptySound(@Nullable Player player, @Nonnull LevelAccessor worldIn, @Nonnull BlockPos pos, @Nonnull ItemStack stack) {
         SoundEvent soundevent = this.getFluid(stack).getAttributes().getEmptySound();
         if (soundevent == null) soundevent = this.getFluid(stack).is(FluidTags.LAVA) ? SoundEvents.BUCKET_EMPTY_LAVA : SoundEvents.BUCKET_EMPTY;
-        worldIn.playSound(player, pos, soundevent, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        worldIn.playSound(player, pos, soundevent, SoundSource.BLOCKS, 1.0F, 1.0F);
     }
 
-    public void playFillSound(@Nullable PlayerEntity player, @Nonnull ItemStack stack) {
+    public void playFillSound(@Nullable Player player, @Nonnull ItemStack stack) {
         if (player != null) {
             SoundEvent soundevent = this.getFluid(stack).getAttributes().getEmptySound();
             if (soundevent == null) soundevent = this.getFluid(stack).is(FluidTags.LAVA) ? SoundEvents.BUCKET_FILL_LAVA : SoundEvents.BUCKET_FILL;
@@ -95,94 +100,100 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
 
     @Override
     @Nonnull
-    public ActionResult<ItemStack> use(@Nonnull World worldIn, PlayerEntity playerIn, @Nonnull Hand handIn) {
+    public InteractionResultHolder<ItemStack> use(@Nonnull Level level, Player playerIn, @Nonnull InteractionHand handIn) {
         ItemStack itemstack = playerIn.getItemInHand(handIn);
-        RayTraceResult raytraceresult = getPlayerPOVHitResult(worldIn, playerIn, this.getFluid(itemstack) == Fluids.EMPTY ? RayTraceContext.FluidMode.SOURCE_ONLY : RayTraceContext.FluidMode.NONE);
-        ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onBucketUse(playerIn, worldIn, itemstack, raytraceresult);
+        HitResult raytraceresult = getPlayerPOVHitResult(level, playerIn, this.getFluid(itemstack) == Fluids.EMPTY ? ClipContext.Fluid.SOURCE_ONLY : ClipContext.Fluid.NONE);
+        InteractionResultHolder<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onBucketUse(playerIn, level, itemstack, raytraceresult);
         if (ret != null) return ret;
-        if (raytraceresult.getType() == RayTraceResult.Type.MISS) {
-            return new ActionResult<>(ActionResultType.PASS, itemstack);
-        } else if (raytraceresult.getType() != RayTraceResult.Type.BLOCK) {
-            return new ActionResult<>(ActionResultType.PASS, itemstack);
+        if (raytraceresult.getType() == HitResult.Type.MISS) {
+            return new InteractionResultHolder<>(InteractionResult.PASS, itemstack);
+        } else if (raytraceresult.getType() != HitResult.Type.BLOCK) {
+            return new InteractionResultHolder<>(InteractionResult.PASS, itemstack);
         } else {
-            BlockRayTraceResult blockraytraceresult = (BlockRayTraceResult) raytraceresult;
+            BlockHitResult blockraytraceresult = (BlockHitResult) raytraceresult;
             BlockPos blockpos = blockraytraceresult.getBlockPos();
-            if (worldIn.mayInteract(playerIn, blockpos) && playerIn.mayUseItemAt(blockpos, blockraytraceresult.getDirection(), itemstack)) {
+            if (level.mayInteract(playerIn, blockpos) && playerIn.mayUseItemAt(blockpos, blockraytraceresult.getDirection(), itemstack)) {
                 if (this.getFluid(itemstack) == Fluids.EMPTY) {
-                    BlockState blockstate1 = worldIn.getBlockState(blockpos);
-                    if (blockstate1.getBlock() instanceof IBucketPickupHandler) {
-                        Fluid fluid = ((IBucketPickupHandler) blockstate1.getBlock()).takeLiquid(worldIn, blockpos, blockstate1);
-                        if (fluid != Fluids.EMPTY) {
-                            playerIn.awardStat(Stats.ITEM_USED.get(this));
+                    BlockState blockstate1 = level.getBlockState(blockpos);
+                    if (blockstate1.getBlock() instanceof BucketPickup) {
+                        ItemStack vanillaBucket = ((BucketPickup) blockstate1.getBlock()).pickupBlock(level, blockpos, blockstate1);
+                        ItemStack bucket = CeramicBucketUtils.getFilledCeramicBucket(vanillaBucket, itemstack);
+                        if (bucket != null) {
+                            Fluid fluid = FluidUtil.getFluidContained(bucket).orElse(FluidStack.EMPTY).getFluid();
+                            if (fluid != Fluids.EMPTY) {
+                                playerIn.awardStat(Stats.ITEM_USED.get(this));
 
-                            ItemStack itemstack1 = this.fillBucket(itemstack, playerIn, fluid);
-                            this.playFillSound(playerIn, itemstack1);
-                            if (!worldIn.isClientSide) {
-                                CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayerEntity) playerIn, new ItemStack(fluid.getBucket()));
+                                ItemStack itemstack1 = this.fillBucket(itemstack, playerIn, fluid);
+                                this.playFillSound(playerIn, itemstack1);
+                                if (!level.isClientSide) {
+                                    CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayer) playerIn, new ItemStack(fluid.getBucket()));
+                                }
+
+                                return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemstack1);
                             }
-
-                            return new ActionResult<>(ActionResultType.SUCCESS, itemstack1);
                         }
                     }
 
                 }
-                BlockState blockstate = worldIn.getBlockState(blockpos);
+                BlockState blockstate = level.getBlockState(blockpos);
 
-                //support cauldron interaction
+                //TODO support cauldron interaction
+                /*
                 if (blockstate.getBlock() instanceof CauldronBlock) {
                     Fluid fluid = this.getFluid(itemstack);
                     CauldronBlock cauldron = (CauldronBlock) blockstate.getBlock();
-                    int level = blockstate.getValue(CauldronBlock.LEVEL);
-                    if (!(itemstack.getItem() instanceof CeramicEntityBucketItem) && !(itemstack.getItem() instanceof CeramicFishBucketItem)) {
+                    int fillLevel = blockstate.getValue(CauldronBlock.LEVEL);
+                    if (!(itemstack.getItem() instanceof CeramicEntityBucketItem)) {
                         if (fluid.is(FluidTags.WATER)) {
-                            if (level < 3) {
+                            if (fillLevel < 3) {
                                 ItemStack emptyStack = this.getEmptySuccessItem(itemstack, playerIn);
-                                if (!worldIn.isClientSide) {
+                                if (!level.isClientSide) {
                                     playerIn.awardStat(Stats.FILL_CAULDRON);
-                                    cauldron.setWaterLevel(worldIn, blockpos, blockstate, 3);
+                                    cauldron.setWaterLevel(fillLevel, blockpos, blockstate, 3);
                                 }
-                                this.playEmptySound(playerIn, worldIn, blockpos, itemstack);
+                                this.playEmptySound(playerIn, level, blockpos, itemstack);
                                 itemstack = emptyStack;
                             }
-                            return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
+                            return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemstack);
                         } else if (fluid == Fluids.EMPTY) {
-                            if (level == 3) {
+                            if (fillLevel == 3) {
                                 itemstack = this.fillBucket(itemstack, playerIn, Fluids.WATER);
-                                if (!worldIn.isClientSide) {
+                                if (!level.isClientSide) {
                                     playerIn.awardStat(Stats.USE_CAULDRON);
-                                    cauldron.setWaterLevel(worldIn, blockpos, blockstate, 0);
+                                    cauldron.setWaterLevel(fillLevel, blockpos, blockstate, 0);
                                 }
                                 this.playFillSound(playerIn, itemstack);
                             }
-                            return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
+                            return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemstack);
                         }
                     }
                 }
+                 */
 
-                BlockPos blockpos1 = canBlockContainFluid(worldIn, blockpos, blockstate, itemstack) ? blockpos : blockraytraceresult.getBlockPos().relative(blockraytraceresult.getDirection());
-                if (this.tryPlaceContainedLiquid(playerIn, worldIn, blockpos1, blockraytraceresult, itemstack)) {
-                    this.checkExtraContent(worldIn, itemstack, blockpos1);
-                    if (playerIn instanceof ServerPlayerEntity) {
-                        CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayerEntity) playerIn, blockpos1, itemstack);
+                BlockPos blockpos1 = canBlockContainFluid(level, blockpos, blockstate, itemstack) ? blockpos : blockraytraceresult.getBlockPos().relative(blockraytraceresult.getDirection());
+                if (this.tryPlaceContainedLiquid(playerIn, level, blockpos1, blockraytraceresult, itemstack)) {
+                    this.checkExtraContent(playerIn, level, itemstack, blockpos1);
+                    if (playerIn instanceof ServerPlayer) {
+                        CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayer) playerIn, blockpos1, itemstack);
                     }
 
                     playerIn.awardStat(Stats.ITEM_USED.get(this));
-                    return new ActionResult<>(ActionResultType.SUCCESS, this.getEmptySuccessItem(itemstack, playerIn));
+                    return new InteractionResultHolder<>(InteractionResult.SUCCESS, this.internalGetEmptySuccessItem(itemstack, playerIn));
                 } else {
-                    return new ActionResult<>(ActionResultType.FAIL, itemstack);
+                    return new InteractionResultHolder<>(InteractionResult.FAIL, itemstack);
                 }
             } else {
-                return new ActionResult<>(ActionResultType.FAIL, itemstack);
+                return new InteractionResultHolder<>(InteractionResult.FAIL, itemstack);
             }
         }
     }
 
-    private ItemStack fillBucket(ItemStack stack, PlayerEntity player, Fluid fluid) {
-        if (player == null || !player.abilities.instabuild) {
+    private ItemStack fillBucket(ItemStack stack, Player player, Fluid fluid) {
+        if (player == null || !player.getAbilities().instabuild) {
             if (stack.getCount() > 1) {
                 ItemStack newStack = CeramicBucketUtils.getFilledCeramicBucket(fluid, stack);
                 stack.shrink(1);
-                if (player != null && !player.inventory.add(newStack)) {
+                if (player != null && !player.getInventory().add(newStack)) {
                     player.drop(newStack, false);
                 }
                 //old stack must be returned
@@ -193,22 +204,15 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
         return stack;
     }
 
-    @Override
     @Nonnull
-    public ItemStack getEmptySuccessItem(@Nonnull ItemStack stack, @Nullable PlayerEntity player) {
-        if (player != null && player.abilities.instabuild) {
+    public ItemStack internalGetEmptySuccessItem(@Nonnull ItemStack stack, @Nullable Player player) {
+        if (player != null && player.getAbilities().instabuild) {
             return stack;
         }
         return drain(stack, FluidAttributes.BUCKET_VOLUME);
     }
 
-    @Deprecated
-    @Override
-    public boolean emptyBucket(@Nullable PlayerEntity player, @Nonnull World worldIn, @Nonnull BlockPos posIn, @Nullable BlockRayTraceResult raytrace) {
-        return false;
-    }
-
-    public boolean tryPlaceContainedLiquid(@Nullable PlayerEntity player, World worldIn, BlockPos posIn, @Nullable BlockRayTraceResult raytrace, ItemStack stack) {
+    public boolean tryPlaceContainedLiquid(@Nullable Player player, Level worldIn, BlockPos posIn, @Nullable BlockHitResult raytrace, ItemStack stack) {
         Fluid fluid = this.getFluid(stack);
         FluidAttributes fluidAttributes = fluid.getAttributes();
         if (!(fluid instanceof FlowingFluid)) {
@@ -227,7 +231,7 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
                 if (fluidStack != null && worldIn.dimensionType().ultraWarm() && this.getFluid(stack).is(FluidTags.WATER)) {
                     fluidAttributes.vaporize(player, worldIn, posIn, fluidStack);
                 } else if (canContainFluid) {
-                    if (((ILiquidContainer) blockstate.getBlock()).placeLiquid(worldIn, posIn, blockstate, ((FlowingFluid) fluid).getSource(false))) {
+                    if (((LiquidBlockContainer) blockstate.getBlock()).placeLiquid(worldIn, posIn, blockstate, ((FlowingFluid) fluid).getSource(false))) {
                         this.playEmptySound(player, worldIn, posIn, stack);
                     }
                 } else {
@@ -282,8 +286,8 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
         return stack;
     }
 
-    private boolean canBlockContainFluid(World worldIn, BlockPos posIn, BlockState blockstate, ItemStack itemStack) {
-        return blockstate.getBlock() instanceof ILiquidContainer && ((ILiquidContainer)blockstate.getBlock()).canPlaceLiquid(worldIn, posIn, blockstate, this.getFluid(itemStack));
+    private boolean canBlockContainFluid(Level worldIn, BlockPos posIn, BlockState blockstate, ItemStack itemStack) {
+        return blockstate.getBlock() instanceof LiquidBlockContainer && ((LiquidBlockContainer)blockstate.getBlock()).canPlaceLiquid(worldIn, posIn, blockstate, this.getFluid(itemStack));
     }
 
     public boolean isCrackedBucket(ItemStack stack) {
@@ -292,19 +296,19 @@ public abstract class AbstractCeramicBucketItem extends BucketItem {
     }
 
     public static boolean hasColor(ItemStack stack) {
-        CompoundNBT compoundnbt = stack.getTagElement("display");
+        CompoundTag compoundnbt = stack.getTagElement("display");
         return compoundnbt != null && compoundnbt.contains("color", 99);
     }
 
     public static int getColor(ItemStack stack) {
-        CompoundNBT compoundnbt = stack.getTagElement("display");
+        CompoundTag compoundnbt = stack.getTagElement("display");
         //rawColorFromRGB(219, 107, 76); //14379852 //on white
         //rawColorFromRGB(228, 129, 104); //14975336 //on white terracotta
         return compoundnbt != null && compoundnbt.contains("color", 99) ? compoundnbt.getInt("color") : 14975336;
     }
 
     public static void removeColor(ItemStack stack) {
-        CompoundNBT compoundnbt = stack.getTagElement("display");
+        CompoundTag compoundnbt = stack.getTagElement("display");
         if (compoundnbt != null && compoundnbt.contains("color")) {
             compoundnbt.remove("color");
         }
