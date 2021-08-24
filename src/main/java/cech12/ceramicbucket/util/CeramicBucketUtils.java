@@ -17,57 +17,27 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class CeramicBucketUtils {
-
-    private static final ResourceLocation FORGE_MILK_LOCATION = new ResourceLocation("forge", "milk");
-    private static final Tag<Fluid> MILK_TAG;
-    private static final List<ResourceLocation> MILK_FLUIDS = new ArrayList<>();
-    static {
-        Tag<Fluid> milkTag = null;
-        for (Map.Entry<ResourceLocation, Tag<Fluid>> entry : FluidTags.getAllTags().getAllTags().entrySet()) {
-            if (entry.getKey().equals(FORGE_MILK_LOCATION)) {
-                milkTag = entry.getValue();
-                break;
-            }
-        }
-        MILK_TAG = (milkTag != null) ? milkTag : FluidTags.bind(FORGE_MILK_LOCATION.toString());
-
-        MILK_FLUIDS.add(new ResourceLocation("milk")); //like in FluidUtil.getFilledBucket(...)
-        //TODO remove this tag reference and the tag file in 1.17 update! Forge contains its own milk fluid since 36.0.1 (Industrial Forgoing is using this)
-        MILK_FLUIDS.add(new ResourceLocation("industrialforegoing:milk")); //milk of IndustrialForegoing has not "forge:milk" tag
-    }
 
     /**
      * Checks if a given fluid is a milk fluid.
      * You can decide to check the forge:milk tag or not.
      */
     public static boolean isMilkFluid(@Nonnull Fluid fluid, boolean checkTag) {
-        if (checkTag && fluid.is(MILK_TAG)) {
+        if (checkTag && fluid.is(Tags.Fluids.MILK)) {
             return true;
         }
         ResourceLocation location = fluid.getBucket().getRegistryName();
-        if (location != null && location.equals(Items.MILK_BUCKET.getRegistryName())) {
-            return true;
-        }
-        for (ResourceLocation name : MILK_FLUIDS) {
-            if (name.equals(fluid.getRegistryName())) {
-                return true;
-            }
-        }
-        return false;
+        return location != null && location.equals(Items.MILK_BUCKET.getRegistryName());
     }
 
     /**

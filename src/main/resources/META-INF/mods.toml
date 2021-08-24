@@ -27,6 +27,6 @@ license="The MIT License (MIT)"
 [[dependencies.ceramicbucket]]
    modId="jei"
    mandatory=false
-   versionRange="[7.6.1.75,)"
+   versionRange="[8.0.0.12,)"
    ordering="NONE"
    side="BOTH"

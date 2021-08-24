@@ -1,6 +1,5 @@
 package cech12.ceramicbucket.jei;
 
-/*
 import cech12.ceramicbucket.CeramicBucketMod;
 import cech12.ceramicbucket.api.item.CeramicBucketItems;
 import cech12.ceramicbucket.config.ServerConfig;
@@ -55,7 +54,7 @@ public class ModJEIPlugin implements IModPlugin {
                     Fluid bucketFluid = bucketFluidStack.getFluid();
                     if (!addedFluids.contains(bucketFluid) && bucketFluid.is(ModTags.Fluids.INFINITY_ENCHANTABLE)) {
                         addedFluids.add(bucketFluid);
-                        ItemStack bucket = ((FilledCeramicBucketItem) CeramicBucketItems.FILLED_CERAMIC_BUCKET).getFilledInstance(bucketFluid.getFluid(), null);
+                        ItemStack bucket = ((FilledCeramicBucketItem) CeramicBucketItems.FILLED_CERAMIC_BUCKET).getFilledInstance(bucketFluid, null);
                         ItemStack enchantedBucket = bucket.copy();
                         enchantedBucket.enchant(data.enchantment, data.level);
                         recipes.add(factory.createAnvilRecipe(bucket,
@@ -71,4 +70,3 @@ public class ModJEIPlugin implements IModPlugin {
     }
 
 }
- */
