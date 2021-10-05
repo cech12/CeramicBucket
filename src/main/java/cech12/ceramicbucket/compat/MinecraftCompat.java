@@ -4,6 +4,7 @@ import cech12.ceramicbucket.api.data.ObtainableEntityType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Cow;
+import net.minecraft.world.entity.animal.goat.Goat;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.tags.FluidTags;
@@ -38,7 +39,7 @@ public class MinecraftCompat extends ModCompat.Mod implements ModCompat.MobMilki
 
     @Override
     public boolean canEntityBeMilked(Entity entity) {
-        return entity instanceof Cow;
+        return entity instanceof Cow || entity instanceof Goat;
     }
 
     @Override
