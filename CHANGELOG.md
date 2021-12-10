@@ -5,7 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ## [1.17.1-2.7.0.1] - 2021-08-??
 ### Changed
-- Update mod to Forge 1.17.1-37.0.42
+- Update mod to Forge 1.17.1-37.1.1
+
+### Added
+- Milking Goats
 
 ### Removed
 - old deprecated fish buckets were removed
