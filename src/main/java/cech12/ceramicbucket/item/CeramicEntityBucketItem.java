@@ -2,6 +2,7 @@ package cech12.ceramicbucket.item;
 
 import cech12.ceramicbucket.api.data.ObtainableEntityType;
 import cech12.ceramicbucket.compat.ModCompat;
+import net.minecraft.world.entity.animal.axolotl.Axolotl;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -78,6 +79,8 @@ public class CeramicEntityBucketItem extends FilledCeramicBucketItem {
                 Entity entity = entityType.spawn((ServerLevel) worldIn, stack, null, blockPos, MobSpawnType.BUCKET, true, false);
                 if (entity instanceof AbstractFish) {
                     ((AbstractFish)entity).setFromBucket(true);
+                } else if (entity instanceof Axolotl) {
+                    ((Axolotl)entity).setFromBucket(true);
                 } else if (entity instanceof Mob) {
                     ((Mob)entity).setPersistenceRequired(); //TODO really?
                 }

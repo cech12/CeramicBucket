@@ -8,10 +8,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 - Update mod to Forge 1.17.1-37.1.1
 
 ### Added
-- Milking Goats
+- Milking Goats #35
+- Axolotls can be obtained with ceramic buckets #35
 
 ### Removed
-- old deprecated fish buckets were removed
+- old deprecated fish buckets were removed #35
 
 ## [1.16.5-2.7.0.1] - 2021-08-21
 ### Added

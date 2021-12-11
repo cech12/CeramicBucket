@@ -16,12 +16,14 @@ import java.util.List;
 
 public class MinecraftCompat extends ModCompat.Mod implements ModCompat.MobMilkingMod, ModCompat.EntityTypeObtainingMod {
 
-    private static final ResourceLocation advancement = new ResourceLocation("minecraft", "husbandry/tactical_fishing");
+    private static final ResourceLocation AXOLOTL_IN_A_BUCKET = new ResourceLocation("minecraft", "husbandry/axolotl_in_a_bucket");
+    private static final ResourceLocation TACTICAL_FISHING = new ResourceLocation("minecraft", "husbandry/tactical_fishing");
 
     List<ObtainableEntityType> obtainableEntityTypes = new ArrayList<>();
 
     public MinecraftCompat() {
         super("minecraft");
+        this.addFish(EntityType.AXOLOTL);
         this.addFish(EntityType.PUFFERFISH);
         this.addFish(EntityType.SALMON);
         this.addFish(EntityType.COD);
@@ -49,6 +51,10 @@ public class MinecraftCompat extends ModCompat.Mod implements ModCompat.MobMilki
 
     @Override
     public ResourceLocation getEntityObtainingAdvancement(@Nonnull Fluid fluid, @Nonnull Entity entity) {
-        return advancement;
+        if (entity.getType() == EntityType.AXOLOTL) {
+            return AXOLOTL_IN_A_BUCKET;
+        } else {
+            return TACTICAL_FISHING;
+        }
     }
 }
