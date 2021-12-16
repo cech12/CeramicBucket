@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ## [1.17.1-2.7.0.1] - 2021-08-??
 ### Changed
-- Update mod to Forge 1.17.1-37.1.1
+- Update mod to Forge 1.17.1-37.1.1 (fix Log4J security issue)
 
 ### Added
 - Milking Goats #35
