@@ -1,7 +1,6 @@
 {
   "item.ceramicbucket.ceramic_bucket": "Керамічне відро",
-  "item.ceramicbucket.ceramic_entity_bucket": "Керамічне відро %s",
-  "item.ceramicbucket.ceramic_milk_bucket": "Керамічне відро молока",
-  "item.ceramicbucket.filled_ceramic_bucket": "Керамічне відро %s",
+  "item.ceramicbucket.ceramic_bucket.entity": "Керамічне відро %s",
+  "item.ceramicbucket.ceramic_bucket.filled": "Керамічне відро %s",
   "item.ceramicbucket.unfired_clay_bucket": "Необпалене керамічне відро"
 }

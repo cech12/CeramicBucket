@@ -1,7 +1,0 @@
-{
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "ceramicbucket:item/ceramic_bucket_lower",
-    "layer1": "ceramicbucket:item/bucket_content/minecraft/cod"
-  }
-}

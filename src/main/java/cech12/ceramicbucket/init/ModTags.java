@@ -12,7 +12,6 @@ public class ModTags {
     public static class Fluids {
 
         public static final Tag.Named<Fluid> CERAMIC_CRACKING = tag("ceramic_cracking");
-        public static final Tag.Named<Fluid> INFINITY_ENCHANTABLE = tag("infinity_enchantable");
 
         private static Tag.Named<Fluid> tag(@Nonnull String name) {
             return FluidTags.bind(CeramicBucketMod.MOD_ID + ":" + name);

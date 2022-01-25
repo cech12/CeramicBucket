@@ -1,9 +1,0 @@
-{
-  "loader": "ceramicbucket:bucket",
-  "parent": "forge:item/default",
-  "textures": {
-    "base": "ceramicbucket:item/ceramic_bucket",
-    "crackedBase": "ceramicbucket:item/ceramic_bucket_cracked",
-    "fluid": "forge:item/mask/bucket_fluid"
-  }
-}

@@ -1,0 +1,45 @@
+# This workflow builds the project on each push and pull request and publish it on new tags
+
+name: CI/CD
+
+on:
+  push:
+    branches: [ "1.18" ]
+    tags: ["1.18*"]
+  pull_request:
+    branches: [ "1.18" ]
+
+jobs:
+  build:
+    name: Build
+    uses: cech12/MinecraftModActions/.github/workflows/build.yml@main
+    with:
+      java-version: 17
+  codeql:
+    needs: build
+    name: CodeQL
+    uses: cech12/MinecraftModActions/.github/workflows/codeql-analysis.yml@main
+    with:
+      java-version: 17
+  publish-github:
+    needs: codeql
+    if: startsWith(github.ref, 'refs/tags/1.18')
+    name: Publish Github
+    uses: cech12/MinecraftModActions/.github/workflows/publish-github.yml@main
+    with:
+      java-version: 17
+      mod-name: Bucket Lib
+      mod-id: bucketlib
+      publish-api: true
+      publish-sources: true
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
+  publish-curseforge:
+    needs: codeql
+    if: startsWith(github.ref, 'refs/tags/1.18')
+    name: Publish Curseforge
+    uses: cech12/MinecraftModActions/.github/workflows/publish-curseforge.yml@main
+    with:
+      java-version: 17
+    secrets:
+      curseforge-token: ${{ secrets.CURSEFORGE_API_KEY }}

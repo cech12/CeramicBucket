@@ -21,8 +21,8 @@ version = "${minecraft_version}-${mod_version}"
 group = "cech12.${mod_id}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "${mod_id}"
 
-// Mojang ships Java 16 to end users in 1.17+ instead of Java 8 in 1.16 or lower, so your mod should target Java 16.
-java.toolchain.languageVersion = JavaLanguageVersion.of(16)
+// Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
@@ -87,14 +87,8 @@ minecraft {
 
 repositories {
     maven {
-        // location of the maven that hosts JEI files
-        name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
-    }
-    maven {
-        // location of a maven mirror for JEI files, as a fallback
-        name = "ModMaven"
-        url = "https://modmaven.k-4u.nl"
+        name 'Jitpack'
+        url 'https://jitpack.io'
     }
     maven {
         url 'https://repo.maven.apache.org/maven2'
@@ -109,10 +103,10 @@ dependencies {
     minecraft "net.minecraftforge:forge:${project.minecraft_version}-${project.forge_version}"
     implementation 'org.jetbrains:annotations:22.0.0'
 
-    // compile against the JEI API but do not include it at runtime
-    compileOnly fg.deobf("mezz.jei:jei-${project.jei_version}:api")
-    // at runtime, use the full JEI jar
-    runtimeOnly fg.deobf("mezz.jei:jei-${project.jei_version}")
+    // compile against the BucketLib API but do not include it at runtime
+    compileOnly fg.deobf("com.github.cech12:bucketlib:${project.bucketlib_version}:api")
+    // at runtime, use the full BucketLib jar
+    runtimeOnly fg.deobf("com.github.cech12:bucketlib:${project.bucketlib_version}")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
@@ -159,6 +153,9 @@ curseforge {
         releaseType = "${curseforge_release}"
         "${curseforge_versions}".split(',').each {
             addGameVersion "${it}"
+        }
+        relations {
+            requiredDependency 'bucketlib'
         }
     }
 }

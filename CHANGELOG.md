@@ -3,16 +3,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Forge Recommended Versioning](https://mcforge.readthedocs.io/en/latest/conventions/versioning/).
 
-## [1.17.1-2.7.0.1] - 2021-08-??
+## [1.18.1-3.0.0.0] - 2022-01-??
 ### Changed
-- Update mod to Forge 1.17.1-37.1.1 (fix Log4J security issue)
+- Update mod to Forge 1.18.1-39.0.0 (fix Log4J security issue)
+- Mod needs BucketLib mod to work
 
 ### Added
 - Milking Goats #35
 - Axolotls can be obtained with ceramic buckets #35
+- Powder Snow interaction #35
 
 ### Removed
-- old deprecated fish buckets were removed #35
+- extra items for fluid, entity & milk buckets where removed
 
 ## [1.16.5-2.7.0.1] - 2021-08-21
 ### Added

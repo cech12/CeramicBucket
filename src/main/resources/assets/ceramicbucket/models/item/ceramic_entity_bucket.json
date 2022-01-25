@@ -1,8 +1,0 @@
-{
-  "loader": "ceramicbucket:entity_bucket",
-  "parent": "forge:item/default",
-  "textures": {
-    "base": "ceramicbucket:item/ceramic_bucket_lower",
-    "crackedBase": "ceramicbucket:item/ceramic_bucket_cracked_lower"
-  }
-}
