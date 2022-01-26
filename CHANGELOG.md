@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Changed
 - Update mod to Forge 1.18.1-39.0.0 (fix Log4J security issue)
 - Mod needs BucketLib mod to work
+- Hint: Updating from an earlier mod version could cause issues with existing buckets (milk & entities could be removed)
 
 ### Added
 - Milking Goats #35

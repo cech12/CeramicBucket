@@ -1,8 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    "ceramicbucket:ceramic_bucket",
-    "ceramicbucket:filled_ceramic_bucket",
-    "ceramicbucket:ceramic_entity_bucket"
-  ]
-}
