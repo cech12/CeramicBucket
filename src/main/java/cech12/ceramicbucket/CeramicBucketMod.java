@@ -4,8 +4,10 @@ import cech12.bucketlib.api.BucketLibApi;
 import cech12.bucketlib.api.item.UniversalBucketItem;
 import cech12.ceramicbucket.config.ServerConfig;
 import cech12.ceramicbucket.init.ModTags;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -17,7 +19,12 @@ import net.minecraftforge.fml.loading.FMLConfig;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.minecraftforge.registries.RegistryObject;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static cech12.ceramicbucket.CeramicBucketMod.MOD_ID;
 
@@ -39,6 +46,16 @@ public class CeramicBucketMod {
                     .dyeable(14975336)
     ));
 
+    private static final List<ResourceLocation> oldResourceLocations = Arrays.stream(new String[]{
+            "filled_ceramic_bucket",
+            "ceramic_milk_bucket",
+            "ceramic_entity_bucket",
+            "pufferfish_ceramic_bucket",
+            "salmon_ceramic_bucket",
+            "cod_ceramic_bucket",
+            "tropical_fish_ceramic_bucket"
+    }).map(oldId -> new ResourceLocation(MOD_ID, oldId)).toList();
+
     public CeramicBucketMod() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         ITEMS.register(modEventBus);
@@ -50,6 +67,16 @@ public class CeramicBucketMod {
     @SubscribeEvent
     public static void sendImc(InterModEnqueueEvent evt) {
         BucketLibApi.registerBucket(CERAMIC_BUCKET.getId());
+    }
+
+    @SubscribeEvent
+    public static void remapOldIds(RegistryEvent.MissingMappings<Item> event) {
+        //to support old versions of this mod
+        event.getMappings(MOD_ID).forEach(itemMapping -> {
+            if (oldResourceLocations.stream().anyMatch(itemMapping.key::equals)) {
+                itemMapping.remap(CERAMIC_BUCKET.get());
+            }
+        });
     }
 
 }
