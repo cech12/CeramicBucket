@@ -19,17 +19,15 @@ import net.minecraftforge.fml.loading.FMLConfig;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static cech12.ceramicbucket.CeramicBucketMod.MOD_ID;
 
 @Mod(MOD_ID)
-@Mod.EventBusSubscriber(modid= MOD_ID, bus= Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = MOD_ID)
 public class CeramicBucketMod {
 
     public static final String MOD_ID = "ceramicbucket";
@@ -62,10 +60,11 @@ public class CeramicBucketMod {
         //Config
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfig.SERVER_CONFIG);
         ServerConfig.loadConfig(ServerConfig.SERVER_CONFIG, FMLPaths.GAMEDIR.get().resolve(FMLConfig.defaultConfigPath()).resolve(MOD_ID + "-server.toml"));
+        //register for IMC event
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::sendImc);
     }
 
-    @SubscribeEvent
-    public static void sendImc(InterModEnqueueEvent evt) {
+    private void sendImc(InterModEnqueueEvent evt) {
         BucketLibApi.registerBucket(CERAMIC_BUCKET.getId());
     }
 
