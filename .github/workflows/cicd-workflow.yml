@@ -23,20 +23,18 @@ jobs:
       java-version: 17
   publish-github:
     needs: codeql
-    if: startsWith(github.ref, 'refs/tags/1.18')
+    if: startsWith(github.ref, 'refs/tags/')
     name: Publish Github
     uses: cech12/MinecraftModActions/.github/workflows/publish-github.yml@main
     with:
       java-version: 17
-      mod-name: Bucket Lib
-      mod-id: bucketlib
-      publish-api: true
-      publish-sources: true
+      mod-name: Ceramic Bucket
+      mod-id: ceramicbucket
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}
   publish-curseforge:
-    needs: codeql
-    if: startsWith(github.ref, 'refs/tags/1.18')
+    needs: publish-github
+    if: startsWith(github.ref, 'refs/tags/')
     name: Publish Curseforge
     uses: cech12/MinecraftModActions/.github/workflows/publish-curseforge.yml@main
     with:
