@@ -90,8 +90,8 @@ repositories {
         name 'BucketLib'
         url 'https://maven.pkg.github.com/cech12/bucketlib'
         credentials {
-            username = "cech12machine"
-            password = "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"
+            username = System.getenv("GITHUB_ACTOR")
+            password = System.getenv("GITHUB_TOKEN")
         }
     }
     maven {
