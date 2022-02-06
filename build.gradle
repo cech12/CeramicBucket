@@ -87,8 +87,12 @@ minecraft {
 
 repositories {
     maven {
-        name 'Jitpack'
-        url 'https://jitpack.io'
+        name 'BucketLib'
+        url 'https://maven.pkg.github.com/cech12/bucketlib'
+        credentials {
+            username = "cech12machine"
+            password = "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"
+        }
     }
     maven {
         url 'https://repo.maven.apache.org/maven2'

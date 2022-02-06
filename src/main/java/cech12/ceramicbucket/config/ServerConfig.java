@@ -15,6 +15,7 @@ public class ServerConfig {
     public static final ForgeConfigSpec.IntValue CERAMIC_BUCKET_BREAK_TEMPERATURE;
     public static final ForgeConfigSpec.BooleanValue MILKING_ENABLED;
     public static final ForgeConfigSpec.BooleanValue FISH_OBTAINING_ENABLED;
+    public static final ForgeConfigSpec.IntValue CERAMIC_BUCKET_DURABILITY;
 
     static {
         final ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -32,6 +33,10 @@ public class ServerConfig {
         FISH_OBTAINING_ENABLED = builder
                 .comment("Whether or not obtaining fish with a Ceramic Bucket should be enabled.")
                 .define("fishObtainingEnabled", true);
+
+        CERAMIC_BUCKET_DURABILITY = builder
+                .comment("Defines the maximum durability of a Ceramic Bucket. (0 deactivates the durability)")
+                .defineInRange("durability", 0, 0, 10000);
 
         builder.pop();
 

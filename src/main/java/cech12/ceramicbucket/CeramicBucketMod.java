@@ -42,6 +42,7 @@ public class CeramicBucketMod {
                     .milking(ServerConfig.MILKING_ENABLED)
                     .entityObtaining(ServerConfig.FISH_OBTAINING_ENABLED)
                     .dyeable(14975336)
+                    .durability(ServerConfig.CERAMIC_BUCKET_DURABILITY)
     ));
 
     private static final List<ResourceLocation> oldResourceLocations = Arrays.stream(new String[]{

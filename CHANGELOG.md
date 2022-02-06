@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Forge Recommended Versioning](https://mcforge.readthedocs.io/en/latest/conventions/versioning/).
 
+## [1.18.1-3.0.2.0] - 2022-02-06
+### Changed
+- Update BucketLib mod to 1.18.1-0.4.0.0
+
+### Added
+- config option to add durability to ceramic buckets. #48 (thanks to doctor_unknown for the idea)
+
 ## [1.18.1-3.0.1.0] - 2022-01-29
 ### Changed
 - Update BucketLib mod to 1.18.1-0.3.2.0
