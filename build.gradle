@@ -7,15 +7,13 @@ buildscript {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
     }
 }
-
+// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 plugins {
+    id 'eclipse'
+    id 'maven-publish'
     id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
-
 apply plugin: 'net.minecraftforge.gradle'
-// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
-apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
 
 version = "${minecraft_version}-${mod_version}"
 group = "cech12.${mod_id}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -42,9 +40,9 @@ minecraft {
         client {
             workingDirectory project.file('run')
 
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
-            property 'ceramicbucket.developmentMode', 'true'
+            property 'forge.enabledGameTestNamespaces', "${mod_id}"
 
             mods {
                 ceramicbucket {
@@ -56,9 +54,26 @@ minecraft {
         server {
             workingDirectory project.file('run')
 
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
-            property 'ceramicbucket.developmentMode', 'true'
+            property 'forge.enabledGameTestNamespaces', "${mod_id}"
+
+            mods {
+                ceramicbucket {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        // This run config launches GameTestServer and runs all registered gametests, then exits.
+        // By default, the server will crash when no gametests are provided.
+        // The gametest system is also enabled by default for other run configs under the /test command.
+        gameTestServer {
+            workingDirectory project.file('run')
+
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            property 'forge.enabledGameTestNamespaces', "${mod_id}"
 
             mods {
                 ceramicbucket {
@@ -70,11 +85,11 @@ minecraft {
         data {
             workingDirectory project.file('run')
 
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
-            property 'ceramicbucket.developmentMode', 'true'
+            property 'forge.enabledGameTestNamespaces', "${mod_id}"
 
-            args '--mod', 'ceramicbucket', '--all', '--output', file('src/generated/resources/')
+            args '--mod', "${mod_id}", '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
                 ceramicbucket {
