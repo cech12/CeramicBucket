@@ -3,11 +3,12 @@
 name: CI/CD
 
 on:
+  workflow_dispatch:
   push:
-    branches: [ "1.18" ]
+    branches: [ "*" ]
     tags: ["1.18*"]
   pull_request:
-    branches: [ "1.18" ]
+    branches: [ "*" ]
 
 jobs:
   build:
