@@ -119,9 +119,9 @@ dependencies {
     implementation 'org.jetbrains:annotations:22.0.0'
 
     // compile against the BucketLib API but do not include it at runtime
-    compileOnly fg.deobf("com.github.cech12:bucketlib:${project.bucketlib_version}:api")
+    compileOnly fg.deobf("com.github.cech12:BucketLib:${project.bucketlib_version}:api")
     // at runtime, use the full BucketLib jar
-    runtimeOnly fg.deobf("com.github.cech12:bucketlib:${project.bucketlib_version}")
+    runtimeOnly fg.deobf("com.github.cech12:BucketLib:${project.bucketlib_version}")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
