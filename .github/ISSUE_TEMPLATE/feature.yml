@@ -1,0 +1,12 @@
+name: Request a Feature
+description: Note that new features are only added to the latest Minecraft version.
+title: "[Feature]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the Feature
+      description: Describe your idea or feature clearly and add examples or images for illustration.
+    validations:
+      required: true

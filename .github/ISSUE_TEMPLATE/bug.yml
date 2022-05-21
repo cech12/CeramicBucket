@@ -1,0 +1,52 @@
+name: Report a Bug
+description: The game crashed or something is not working as expected.
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug. Filling out this information and providing logs will help get the issue resolved faster.
+  - type: input
+    id: minecraftVersion
+    attributes:
+      label: Minecraft Version
+      description: What version of Minecraft were you running?
+    validations:
+      required: true
+  - type: input
+    id: modLoaderVersion
+    attributes:
+      label: Forge Version
+      description: What version of Forge were you using?
+    validations:
+      required: true
+  - type: input
+    id: modVersion
+    attributes:
+      label: Mod Version
+      description: What version of the mod were you using?
+    validations:
+      required: true
+  - type: textarea
+    id: otherMods
+    attributes:
+      label: Modpack or other Mod
+      description: Are you playing a modpack or is the bug related to another mod? Please list the name, the version and a link of the modpack or the other mod.
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the Issue
+      description: Be as thorough as possible and provide a step-by-step guide to reproduce the issue.
+    validations:
+      required: true
+  - type: input
+    id: logs
+    attributes:
+      label: Logs
+      description: Provide a link to the logs here. You can use a site like pastebin or gist to upload the latest.log content. Make sure they are set to not expire.
+  - type: input
+    id: optifine
+    attributes:
+      label: Do you use any performance-enhancing mods (e.g. OptiFine)?
+      description: Specify which and test whether the issue happens with those mods disabled.
