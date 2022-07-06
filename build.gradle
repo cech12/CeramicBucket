@@ -116,7 +116,6 @@ dependencies {
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft "net.minecraftforge:forge:${project.minecraft_version}-${project.forge_version}"
-    implementation 'org.jetbrains:annotations:22.0.0'
 
     // compile against the BucketLib API but do not include it at runtime
     compileOnly fg.deobf("com.github.cech12:BucketLib:${project.bucketlib_version}:api")

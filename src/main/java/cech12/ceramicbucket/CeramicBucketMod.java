@@ -7,7 +7,6 @@ import cech12.ceramicbucket.init.ModTags;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -19,6 +18,7 @@ import net.minecraftforge.fml.loading.FMLConfig;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.MissingMappingsEvent;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Arrays;
@@ -70,10 +70,10 @@ public class CeramicBucketMod {
     }
 
     @SubscribeEvent
-    public static void remapOldIds(RegistryEvent.MissingMappings<Item> event) {
+    public static void remapOldIds(MissingMappingsEvent event) {
         //to support old versions of this mod
-        event.getMappings(MOD_ID).forEach(itemMapping -> {
-            if (oldResourceLocations.stream().anyMatch(itemMapping.key::equals)) {
+        event.getMappings(ForgeRegistries.ITEMS.getRegistryKey(), MOD_ID).forEach(itemMapping -> {
+            if (oldResourceLocations.stream().anyMatch(itemMapping.getKey()::equals)) {
                 itemMapping.remap(CERAMIC_BUCKET.get());
             }
         });
