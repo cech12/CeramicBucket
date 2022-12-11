@@ -2,6 +2,7 @@
 
 [![Curseforge](http://cf.way2muchnoise.eu/full_363799_downloads(0D0D0D-F16436-fff-010101-fff).svg)](https://www.curseforge.com/minecraft/mc-mods/ceramic-bucket)
 [![Curseforge](http://cf.way2muchnoise.eu/versions/For%20MC_363799_all(0D0D0D-F16436-fff-010101).svg)](https://www.curseforge.com/minecraft/mc-mods/ceramic-bucket/files)
+[![Modrinth](https://modrinth-utils.vercel.app/api/badge/downloads?id=M9G5zpf1&logo=true)](https://modrinth.com/mod/ceramic-bucket)
 [![CI/CD](https://github.com/cech12/CeramicBucket/actions/workflows/cicd-workflow.yml/badge.svg)](https://github.com/cech12/CeramicBucket/actions/workflows/cicd-workflow.yml)
 [![CodeFactor](https://www.codefactor.io/repository/github/cech12/ceramicbucket/badge)](https://www.codefactor.io/repository/github/cech12/ceramicbucket)
 [![gitlocalized ](https://gitlocalize.com/repo/8135/whole_project/badge.svg)](https://gitlocalize.com/repo/8135/?utm_source=badge)
