@@ -18,6 +18,7 @@ jobs:
       java-version: 17
   dependencies:
     needs: build
+    if: github.event.name == 'push'
     name: Dependencies
     uses: cech12/MinecraftModActions/.github/workflows/dependency-submission.yml@main
     with:
