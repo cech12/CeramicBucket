@@ -5,8 +5,9 @@ import cech12.bucketlib.api.item.UniversalBucketItem;
 import cech12.ceramicbucket.config.ServerConfig;
 import cech12.ceramicbucket.init.ModTags;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
+import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -34,7 +35,7 @@ public class CeramicBucketMod {
 
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MOD_ID);
 
-    public static final RegistryObject<Item> UNFIRED_CLAY_BUCKET = ITEMS.register("unfired_clay_bucket", () -> new Item((new Item.Properties()).tab(CreativeModeTab.TAB_MISC)));
+    public static final RegistryObject<Item> UNFIRED_CLAY_BUCKET = ITEMS.register("unfired_clay_bucket", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> CERAMIC_BUCKET = ITEMS.register("ceramic_bucket", () -> new UniversalBucketItem(
             new UniversalBucketItem.Properties()
                     .upperCrackingTemperature(ServerConfig.CERAMIC_BUCKET_BREAK_TEMPERATURE)
@@ -58,6 +59,8 @@ public class CeramicBucketMod {
     public CeramicBucketMod() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         ITEMS.register(modEventBus);
+        //listeners
+        modEventBus.addListener(this::addItemsToTabs);
         //Config
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfig.SERVER_CONFIG);
         ServerConfig.loadConfig(ServerConfig.SERVER_CONFIG, FMLPaths.GAMEDIR.get().resolve(FMLConfig.defaultConfigPath()).resolve(MOD_ID + "-server.toml"));
@@ -77,6 +80,13 @@ public class CeramicBucketMod {
                 itemMapping.remap(CERAMIC_BUCKET.get());
             }
         });
+    }
+
+    private void addItemsToTabs(CreativeModeTabEvent.BuildContents event) {
+        //CERAMIC_BUCKET is added by BucketLib
+        if (event.getTab() == CreativeModeTabs.INGREDIENTS) {
+            event.accept(UNFIRED_CLAY_BUCKET);
+        }
     }
 
 }
