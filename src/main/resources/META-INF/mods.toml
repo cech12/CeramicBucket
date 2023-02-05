@@ -28,5 +28,6 @@ license="The MIT License (MIT)"
     modId="bucketlib"
     mandatory=true
     versionRange="[1.19.3-1.1.0.0,)"
+    referralUrl="https://github.com/cech12/BucketLib"
     ordering="NONE"
     side="BOTH"
