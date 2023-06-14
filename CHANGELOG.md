@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Forge Recommended Versioning](https://mcforge.readthedocs.io/en/latest/conventions/versioning/).
 
+## [1.20.1-4.0.0.0] - 2023-06-14
+### Changed
+- Update to Forge 1.20.1-47.0.1 #69
+- Update BucketLib mod to 1.20-2.1.0.0 #69
+
 ## [1.19.3-3.2.1.0] - 2023-01-06
 ### Added
 - Added Portuguese Translation (thanks to alofh) #65

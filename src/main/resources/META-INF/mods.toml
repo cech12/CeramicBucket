@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[44,)"
+loaderVersion="[47,)"
 issueTrackerURL="https://github.com/cech12/CeramicBucket/issues"
 license="The MIT License (MIT)"
 [[mods]]
@@ -15,19 +15,19 @@ license="The MIT License (MIT)"
 [[dependencies.ceramicbucket]]
     modId="forge"
     mandatory=true
-    versionRange="[44.0.41,)"
+    versionRange="[47.0.1,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.ceramicbucket]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19.3,1.20)"
+    versionRange="[1.20.1,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.ceramicbucket]]
     modId="bucketlib"
     mandatory=true
-    versionRange="[1.19.3-1.1.0.0,)"
+    versionRange="[1.20.1-2.1.0.0,)"
     referralUrl="https://github.com/cech12/BucketLib"
     ordering="NONE"
     side="BOTH"

@@ -7,7 +7,7 @@ import cech12.ceramicbucket.init.ModTags;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.event.CreativeModeTabEvent;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -82,9 +82,9 @@ public class CeramicBucketMod {
         });
     }
 
-    private void addItemsToTabs(CreativeModeTabEvent.BuildContents event) {
+    private void addItemsToTabs(BuildCreativeModeTabContentsEvent event) {
         //CERAMIC_BUCKET is added by BucketLib
-        if (event.getTab() == CreativeModeTabs.INGREDIENTS) {
+        if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
             event.accept(UNFIRED_CLAY_BUCKET);
         }
     }
