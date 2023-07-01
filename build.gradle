@@ -57,7 +57,7 @@ minecraft {
             // Export mixin-changed classes
             property 'mixin.debug.export', 'true'
 
-            //for curios
+            //for bucketlib
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 
