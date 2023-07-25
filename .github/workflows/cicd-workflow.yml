@@ -16,13 +16,6 @@ jobs:
     uses: cech12/MinecraftModActions/.github/workflows/build.yml@main
     with:
       java-version: 17
-  dependencies:
-    needs: build
-    if: github.event_name == 'push'
-    name: Dependencies
-    uses: cech12/MinecraftModActions/.github/workflows/dependency-submission.yml@main
-    with:
-      java-version: 17
   codeql:
     needs: build
     name: CodeQL
