@@ -2,7 +2,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'net.neoforged.gradle' version '[6.0,6.2)'
 }
 
 version = "${minecraft_version}-${mod_version}"
@@ -104,7 +104,7 @@ repositories {
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${project.minecraft_version}-${project.forge_version}"
+    minecraft "net.neoforged:forge:${project.minecraft_version}-${project.forge_version}"
 
     // compile against the BucketLib API but do not include it at runtime
     compileOnly fg.deobf("com.github.cech12:BucketLib:${project.bucketlib_version}:api")

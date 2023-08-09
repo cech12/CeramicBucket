@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Forge Recommended Versioning](https://mcforge.readthedocs.io/en/latest/conventions/versioning/).
 
+## [1.20.1-4.1.0.0] - 2023-08-09
+### Changed
+- Changed Forge to NeoForge 1.20.1-47.1.54 (compatible with Forge 47.1.0)
+- Updated BucketLib mod to 1.20.1-2.3.0.0
+
 ## [1.20.1-4.0.0.0] - 2023-06-14
 ### Changed
 - Update to Forge 1.20.1-47.0.1 #69
