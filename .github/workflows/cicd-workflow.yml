@@ -101,7 +101,7 @@ jobs:
         1.20.2
       release-type: release
       loaders: |
-        forge
+        neoforge
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}
       modrinth-token: ${{ secrets.MODRINTH_API_KEY }}
