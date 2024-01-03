@@ -13,7 +13,7 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 import java.nio.file.Path;
 
 /**
- * The config service implementation for Forge.
+ * The config service implementation for NeoForge.
  */
 public class NeoForgeConfigHelper implements IConfigHelper {
 
