@@ -14,11 +14,22 @@ body:
       description: What version of Minecraft were you running?
     validations:
       required: true
+  - type: dropdown
+    id: modLoader
+    attributes:
+      label: Mod Loader
+      description: What mod loader were you using?
+      options:
+        - Fabric
+        - Forge
+        - NeoForge
+    validations:
+      required: true
   - type: input
     id: modLoaderVersion
     attributes:
-      label: Forge Version
-      description: What version of Forge were you using?
+      label: Mod Loader Version
+      description: What mod loader version were you using?
     validations:
       required: true
   - type: input
