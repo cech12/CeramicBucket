@@ -33,13 +33,6 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                    source project(":common").sourceSets.main
-                    //source sourceSets.test
-                }
-            }
         }
         client {
             property 'forge.enabledGameTestNamespaces', mod_id
@@ -56,6 +49,12 @@ minecraft {
             args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
         }
     }
+}
+
+sourceSets.each {
+    def dir = layout.buildDirectory.dir("sourcesSets/$it.name")
+    it.output.resourcesDir = dir
+    it.java.destinationDirectory = dir
 }
 
 sourceSets.main.resources.srcDir 'src/generated/resources'
