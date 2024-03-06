@@ -26,7 +26,7 @@ jobs:
     needs: codeql
     if: startsWith(github.ref, 'refs/tags/')
     name: Publish Github
-    uses: cech12/MinecraftModActions/.github/workflows/publish-github.yml@main
+    uses: cech12/MinecraftModActions/.github/workflows/multi-publish-github.yml@main
     with:
       java-version: 17
       mod-name: Ceramic Bucket
