@@ -21,15 +21,11 @@ import net.minecraftforge.registries.RegistryObject;
 import java.util.Arrays;
 import java.util.List;
 
-import static de.cech12.ceramicbucket.CeramicBucketMod.MOD_ID;
-
-@Mod(MOD_ID)
-@Mod.EventBusSubscriber(modid = MOD_ID)
+@Mod(Constants.MOD_ID)
+@Mod.EventBusSubscriber(modid = Constants.MOD_ID)
 public class CeramicBucketMod {
 
-    public static final String MOD_ID = "ceramicbucket";
-
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MOD_ID);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Constants.MOD_ID);
 
     public static final RegistryObject<Item> UNFIRED_CLAY_BUCKET = ITEMS.register("unfired_clay_bucket", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> CERAMIC_BUCKET = ITEMS.register("ceramic_bucket", () -> new UniversalBucketItem(
@@ -50,7 +46,7 @@ public class CeramicBucketMod {
             "salmon_ceramic_bucket",
             "cod_ceramic_bucket",
             "tropical_fish_ceramic_bucket"
-    }).map(oldId -> new ResourceLocation(MOD_ID, oldId)).toList();
+    }).map(oldId -> new ResourceLocation(Constants.MOD_ID, oldId)).toList();
 
     public CeramicBucketMod() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -70,7 +66,7 @@ public class CeramicBucketMod {
     @SubscribeEvent
     public static void remapOldIds(MissingMappingsEvent event) {
         //to support old versions of this mod
-        event.getMappings(ForgeRegistries.ITEMS.getRegistryKey(), MOD_ID).forEach(itemMapping -> {
+        event.getMappings(ForgeRegistries.ITEMS.getRegistryKey(), Constants.MOD_ID).forEach(itemMapping -> {
             if (oldResourceLocations.stream().anyMatch(itemMapping.getKey()::equals)) {
                 itemMapping.remap(CERAMIC_BUCKET.get());
             }

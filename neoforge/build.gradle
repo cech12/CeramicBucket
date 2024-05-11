@@ -35,13 +35,6 @@ runs {
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
-repositories {
-    maven {
-        name = 'Jitpack'
-        url = 'https://jitpack.io'
-    }
-}
-
 dependencies {
     implementation "net.neoforged:neoforge:${neoforge_version}"
     compileOnly project(":common")

@@ -13,14 +13,10 @@ import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-import static de.cech12.ceramicbucket.CeramicBucketMod.MOD_ID;
-
-@Mod(MOD_ID)
+@Mod(Constants.MOD_ID)
 public class CeramicBucketMod {
 
-    public static final String MOD_ID = "ceramicbucket";
-
-    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MOD_ID);
+    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Constants.MOD_ID);
 
     public static final DeferredItem<Item> UNFIRED_CLAY_BUCKET = ITEMS.register("unfired_clay_bucket", () -> new Item(new Item.Properties()));
 

@@ -3,6 +3,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Forge Recommended Versioning](https://mcforge.readthedocs.io/en/latest/conventions/versioning/).
 
+## [1.20.4-5.2.0.0] - 2024-05-11
+### Added
+- add Fabric (>=0.96.11+1.20.4) support (Fabric, Quilt)
+
+### Changed
+- updated BucketLib to 1.20.4-3.2.0.2
+- break temperature can also be configured to be negative (Deactivation by setting a number larger than the hottest fluid)
+- changed the config descriptions to be more precisely
+
+### Known issues
+- Fabric: max stack size of 16 is not taken into account and defaults to 1
+
 ## [1.20.4-5.1.0.0] - 2024-01-29
 - Update to Minecraft 1.20.4 (Forge 49.0.22, Neoforge 20.4.138-beta)
 - Update BucketLib to 1.20.4-3.1.0.0

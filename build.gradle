@@ -44,6 +44,10 @@ subprojects {
             name = 'BlameJared Maven (JEI / CraftTweaker / Bookshelf)'
             url = 'https://maven.blamejared.com'
         }
+        maven {
+            name = 'Jitpack'
+            url = 'https://jitpack.io'
+        }
     }
 
     tasks.withType(JavaCompile).configureEach {
@@ -60,8 +64,10 @@ subprojects {
                 "forge_version": forge_version,
                 "forge_version_range": forge_version_range,
                 "forge_loader_version_range": forge_loader_version_range,
-                //"fabric_version": fabric_version,
-                //"fabric_loader_version": fabric_loader_version,
+                "fabric_version": fabric_version,
+                "fabric_loader_version": fabric_loader_version,
+                "cloth_config_version": cloth_config_version,
+                "mod_menu_version": mod_menu_version,
                 "neoforge_version": neoforge_version,
                 "neoforge_version_range": neoforge_version_range,
                 "neoforge_loader_version_range": neoforge_loader_version_range,

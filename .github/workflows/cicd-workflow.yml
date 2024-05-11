@@ -105,3 +105,41 @@ jobs:
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}
       modrinth-token: ${{ secrets.MODRINTH_API_KEY }}
+  publish-fabric-on-curseforge:
+    needs: publish-github
+    if: startsWith(github.ref, 'refs/tags/')
+    name: Publish Fabric on Curseforge
+    uses: cech12/MinecraftModActions/.github/workflows/publish-curseforge.yml@main
+    with:
+      java-version: 17
+      subproject: fabric
+      title-prefix: fabric-
+      curseforge-id: 363799
+      game-versions: |
+        1.20.4
+      release-type: release
+      loaders: |
+        fabric
+        quilt
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
+      curseforge-token: ${{ secrets.CURSEFORGE_API_KEY }}
+  publish-fabric-on-modrinth:
+    needs: publish-github
+    if: startsWith(github.ref, 'refs/tags/')
+    name: Publish Fabric on Modrinth
+    uses: cech12/MinecraftModActions/.github/workflows/publish-modrinth.yml@main
+    with:
+      java-version: 17
+      subproject: fabric
+      title-prefix: fabric-
+      modrinth-id: M9G5zpf1
+      game-versions: |
+        1.20.4
+      release-type: release
+      loaders: |
+        fabric
+        quilt
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
+      modrinth-token: ${{ secrets.MODRINTH_API_KEY }}

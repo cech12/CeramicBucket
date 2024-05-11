@@ -23,6 +23,7 @@ body:
         - Fabric
         - Forge
         - NeoForge
+        - Quilt
     validations:
       required: true
   - type: input

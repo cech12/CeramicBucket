@@ -59,13 +59,6 @@ sourceSets.each {
 
 sourceSets.main.resources.srcDir 'src/generated/resources'
 
-repositories {
-    maven {
-        name = 'Jitpack'
-        url = 'https://jitpack.io'
-    }
-}
-
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     compileOnly project(":common")

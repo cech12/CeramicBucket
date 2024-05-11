@@ -17,7 +17,7 @@ import java.nio.file.Path;
  */
 public class ForgeConfigHelper implements IConfigHelper {
 
-    private static ForgeConfigSpec SERVER_CONFIG;
+    private static final ForgeConfigSpec SERVER_CONFIG;
 
     private static final ForgeConfigSpec.IntValue BREAK_TEMPERATURE;
     private static final ForgeConfigSpec.IntValue DURABILITY;
@@ -30,19 +30,19 @@ public class ForgeConfigHelper implements IConfigHelper {
         builder.push("Balance Options");
 
         BREAK_TEMPERATURE = builder
-                .comment("Minimum temperature of fluid at which the Ceramic Bucket breaks when emptied. (-1 means that bucket never breaks caused by high fluid temperature)")
-                .defineInRange("ceramicBucketBreakTemperature", BREAK_TEMPERATURE_DEFAULT, -1, 10000);
+                .comment(BREAK_TEMPERATURE_DESCRIPTION)
+                .defineInRange("crackingTemperature", BREAK_TEMPERATURE_DEFAULT, BREAK_TEMPERATURE_MIN, BREAK_TEMPERATURE_MAX);
 
         DURABILITY = builder
-                .comment("Defines the maximum durability of a Ceramic Bucket. (0 deactivates the durability)")
-                .defineInRange("durability", DURABILITY_DEFAULT, 0, 10000);
+                .comment(DURABILITY_DESCRIPTION)
+                .defineInRange("durability", DURABILITY_DEFAULT, DURABILITY_MIN, DURABILITY_MAX);
 
         FISH_OBTAINING_ENABLED = builder
-                .comment("Whether or not obtaining fish with a Ceramic Bucket should be enabled.")
+                .comment(FISH_OBTAINING_ENABLED_DESCRIPTION)
                 .define("fishObtainingEnabled", FISH_OBTAINING_ENABLED_DEFAULT);
 
         MILKING_ENABLED = builder
-                .comment("Whether or not milking entities with a Ceramic Bucket should be enabled.")
+                .comment(MILKING_ENABLED_DESCRIPTION)
                 .define("milkingEnabled", MILKING_ENABLED_DEFAULT);
 
         builder.pop();
