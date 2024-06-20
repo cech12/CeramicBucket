@@ -33,42 +33,42 @@ jobs:
       mod-id: ceramicbucket
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}
-  publish-forge-on-curseforge:
-    needs: publish-github
-    if: startsWith(github.ref, 'refs/tags/')
-    name: Publish Forge on Curseforge
-    uses: cech12/MinecraftModActions/.github/workflows/publish-curseforge.yml@main
-    with:
-      java-version: 21
-      subproject: forge
-      title-prefix: forge-
-      curseforge-id: 363799
-      game-versions: |
-        1.20.6
-      release-type: release
-      loaders: |
-        forge
-    secrets:
-      github-token: ${{ secrets.GITHUB_TOKEN }}
-      curseforge-token: ${{ secrets.CURSEFORGE_API_KEY }}
-  publish-forge-on-modrinth:
-    needs: publish-github
-    if: startsWith(github.ref, 'refs/tags/')
-    name: Publish Forge on Modrinth
-    uses: cech12/MinecraftModActions/.github/workflows/publish-modrinth.yml@main
-    with:
-      java-version: 21
-      subproject: forge
-      title-prefix: forge-
-      modrinth-id: M9G5zpf1
-      game-versions: |
-        1.20.6
-      release-type: release
-      loaders: |
-        forge
-    secrets:
-      github-token: ${{ secrets.GITHUB_TOKEN }}
-      modrinth-token: ${{ secrets.MODRINTH_API_KEY }}
+#  publish-forge-on-curseforge:
+#    needs: publish-github
+#    if: startsWith(github.ref, 'refs/tags/')
+#    name: Publish Forge on Curseforge
+#    uses: cech12/MinecraftModActions/.github/workflows/publish-curseforge.yml@main
+#    with:
+#      java-version: 21
+#      subproject: forge
+#      title-prefix: forge-
+#      curseforge-id: 363799
+#      game-versions: |
+#        1.20.6
+#      release-type: release
+#      loaders: |
+#        forge
+#    secrets:
+#      github-token: ${{ secrets.GITHUB_TOKEN }}
+#      curseforge-token: ${{ secrets.CURSEFORGE_API_KEY }}
+#  publish-forge-on-modrinth:
+#    needs: publish-github
+#    if: startsWith(github.ref, 'refs/tags/')
+#    name: Publish Forge on Modrinth
+#    uses: cech12/MinecraftModActions/.github/workflows/publish-modrinth.yml@main
+#    with:
+#      java-version: 21
+#      subproject: forge
+#      title-prefix: forge-
+#      modrinth-id: M9G5zpf1
+#      game-versions: |
+#        1.20.6
+#      release-type: release
+#      loaders: |
+#        forge
+#    secrets:
+#      github-token: ${{ secrets.GITHUB_TOKEN }}
+#      modrinth-token: ${{ secrets.MODRINTH_API_KEY }}
   publish-neoforge-on-curseforge:
     needs: publish-github
     if: startsWith(github.ref, 'refs/tags/')
