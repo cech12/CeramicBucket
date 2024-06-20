@@ -16,8 +16,8 @@ import net.minecraft.world.item.Item;
 @SuppressWarnings("unused")
 public class CeramicBucketMod implements ModInitializer {
 
-    public static final ResourceLocation UNFIRED_CLAY_BUCKET_LOCATION = new ResourceLocation(Constants.MOD_ID, "unfired_clay_bucket");
-    public static final ResourceLocation CERAMIC_BUCKET_LOCATION = new ResourceLocation(Constants.MOD_ID, "ceramic_bucket");
+    public static final ResourceLocation UNFIRED_CLAY_BUCKET_LOCATION = Constants.id("unfired_clay_bucket");
+    public static final ResourceLocation CERAMIC_BUCKET_LOCATION = Constants.id("ceramic_bucket");
 
     public static final Item UNFIRED_CLAY_BUCKET = Registry.register(BuiltInRegistries.ITEM, UNFIRED_CLAY_BUCKET_LOCATION, new Item(new Item.Properties()));
     public static final Item CERAMIC_BUCKET = Registry.register(BuiltInRegistries.ITEM, CERAMIC_BUCKET_LOCATION, new UniversalBucketItem(new UniversalBucketItem.Properties()

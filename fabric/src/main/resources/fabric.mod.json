@@ -31,7 +31,7 @@
     "cloth-config": ">=${cloth_config_version}",
     "bucketlib": ">=${bucketlib_version}"
   },
-  "recommends": {
+  "suggests": {
     "modmenu": ">=${mod_menu_version}"
   }
 }
