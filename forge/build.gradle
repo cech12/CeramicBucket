@@ -1,7 +1,7 @@
 plugins {
     id 'idea'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
+    id 'net.minecraftforge.gradle' version '6.0.24'
     id 'org.spongepowered.mixin' version '0.7-SNAPSHOT'
 }
 base {
@@ -15,6 +15,7 @@ base {
 
 minecraft {
     mappings channel: 'official', version: minecraft_version
+    reobf = false
 
     copyIdeResources = true //Calls processResources when in dev
 
@@ -63,6 +64,8 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     compileOnly project(":common")
     //annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
+    //temporary necessary:
+    implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
 
     implementation fg.deobf("com.github.cech12.BucketLib:forge:${bucketlib_version}")
 }
@@ -80,8 +83,6 @@ tasks.withType(JavaCompile).configureEach {
 processResources {
     from project(":common").sourceSets.main.resources
 }
-
-jar.finalizedBy('reobfJar')
 
 publishing {
     publications {

@@ -15,20 +15,20 @@ jobs:
     name: Build
     uses: cech12/MinecraftModActions/.github/workflows/build.yml@main
     with:
-      java-version: 17
+      java-version: 21
   codeql:
     needs: build
     name: CodeQL
     uses: cech12/MinecraftModActions/.github/workflows/codeql-analysis.yml@main
     with:
-      java-version: 17
+      java-version: 21
   publish-github:
     needs: codeql
     if: startsWith(github.ref, 'refs/tags/')
     name: Publish Github
     uses: cech12/MinecraftModActions/.github/workflows/multi-publish-github.yml@main
     with:
-      java-version: 17
+      java-version: 21
       mod-name: Ceramic Bucket
       mod-id: ceramicbucket
     secrets:
@@ -39,12 +39,12 @@ jobs:
     name: Publish Forge on Curseforge
     uses: cech12/MinecraftModActions/.github/workflows/publish-curseforge.yml@main
     with:
-      java-version: 17
+      java-version: 21
       subproject: forge
       title-prefix: forge-
       curseforge-id: 363799
       game-versions: |
-        1.20.4
+        1.20.6
       release-type: release
       loaders: |
         forge
@@ -57,12 +57,12 @@ jobs:
     name: Publish Forge on Modrinth
     uses: cech12/MinecraftModActions/.github/workflows/publish-modrinth.yml@main
     with:
-      java-version: 17
+      java-version: 21
       subproject: forge
       title-prefix: forge-
       modrinth-id: M9G5zpf1
       game-versions: |
-        1.20.4
+        1.20.6
       release-type: release
       loaders: |
         forge
@@ -75,12 +75,12 @@ jobs:
     name: Publish NeoForge on Curseforge
     uses: cech12/MinecraftModActions/.github/workflows/publish-curseforge.yml@main
     with:
-      java-version: 17
+      java-version: 21
       subproject: neoforge
       title-prefix: neoforge-
       curseforge-id: 363799
       game-versions: |
-        1.20.4
+        1.20.6
       release-type: release
       loaders: |
         neoforge
@@ -93,12 +93,12 @@ jobs:
     name: Publish NeoForge on Modrinth
     uses: cech12/MinecraftModActions/.github/workflows/publish-modrinth.yml@main
     with:
-      java-version: 17
+      java-version: 21
       subproject: neoforge
       title-prefix: neoforge-
       modrinth-id: M9G5zpf1
       game-versions: |
-        1.20.4
+        1.20.6
       release-type: release
       loaders: |
         neoforge
@@ -111,12 +111,12 @@ jobs:
     name: Publish Fabric on Curseforge
     uses: cech12/MinecraftModActions/.github/workflows/publish-curseforge.yml@main
     with:
-      java-version: 17
+      java-version: 21
       subproject: fabric
       title-prefix: fabric-
       curseforge-id: 363799
       game-versions: |
-        1.20.4
+        1.20.6
       release-type: release
       loaders: |
         fabric
@@ -130,12 +130,12 @@ jobs:
     name: Publish Fabric on Modrinth
     uses: cech12/MinecraftModActions/.github/workflows/publish-modrinth.yml@main
     with:
-      java-version: 17
+      java-version: 21
       subproject: fabric
       title-prefix: fabric-
       modrinth-id: M9G5zpf1
       game-versions: |
-        1.20.4
+        1.20.6
       release-type: release
       loaders: |
         fabric

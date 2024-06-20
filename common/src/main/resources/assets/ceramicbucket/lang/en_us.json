@@ -1,4 +1,6 @@
 {
+  "tag.fluid.woodenbucket.ceramic_cracking": "Fluids that crack the Ceramic Bucket",
+
   "item.ceramicbucket.ceramic_bucket": "Ceramic Bucket",
   "item.ceramicbucket.ceramic_bucket.entity": "Ceramic Bucket of %s",
   "item.ceramicbucket.ceramic_bucket.filled": "Ceramic %s Bucket",

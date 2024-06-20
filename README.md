@@ -15,12 +15,12 @@ This is a Minecraft mod that adds a **Ceramic Bucket** to the game. (Forge, NeoF
 
 ## Dependencies
 
-Since mod version 3.0.0.0 the library mod BucketLib ([Github](https://github.com/cech12/BucketLib/), [Curseforge](https://www.curseforge.com/minecraft/mc-mods/bucketlib), [Modrinth](https://modrinth.com/mod/bucketlib)) is required.
+Since mod version 3.0.0.0 the library mod BucketLib ([GitHub](https://github.com/cech12/BucketLib/), [Curseforge](https://www.curseforge.com/minecraft/mc-mods/bucketlib), [Modrinth](https://modrinth.com/mod/bucketlib)) is required.
 
 The Fabric / Quilt version needs also the following mods:
 
-- Fabric API ([Github](https://github.com/FabricMC/fabric), [Curseforge](https://www.curseforge.com/minecraft/mc-mods/fabric-api), [Modrinth](https://modrinth.com/mod/fabric-api))
-- Cloth Config API ([Github](https://github.com/shedaniel/cloth-config), [Curseforge](https://www.curseforge.com/minecraft/mc-mods/cloth-config), [Modrinth](https://modrinth.com/mod/cloth-config))
+- Fabric API ([GitHub](https://github.com/FabricMC/fabric), [Curseforge](https://www.curseforge.com/minecraft/mc-mods/fabric-api), [Modrinth](https://modrinth.com/mod/fabric-api))
+- Cloth Config API ([GitHub](https://github.com/shedaniel/cloth-config), [Curseforge](https://www.curseforge.com/minecraft/mc-mods/cloth-config), [Modrinth](https://modrinth.com/mod/cloth-config))
 
 ## Features
 

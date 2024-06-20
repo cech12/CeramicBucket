@@ -10,4 +10,4 @@ jobs:
     name: Analyze
     uses: cech12/MinecraftModActions/.github/workflows/codeql-analysis.yml@main
     with:
-      java-version: 17
+      java-version: 21

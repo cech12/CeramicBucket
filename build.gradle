@@ -8,7 +8,7 @@ subprojects {
 
     version "$project.minecraft_version-$project.mod_version"
 
-    java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+    java.toolchain.languageVersion = JavaLanguageVersion.of(java_version)
     //java.withSourcesJar()
     //java.withJavadocJar()
 
@@ -50,15 +50,11 @@ subprojects {
         }
     }
 
-    tasks.withType(JavaCompile).configureEach {
-        it.options.encoding = 'UTF-8'
-        it.options.getRelease().set(17)
-    }
-
     processResources {
         def expandProps = [
                 "version": version,
                 "group": project.group, //Else we target the task's group.
+                "java_version": java_version,
                 "minecraft_version": minecraft_version,
                 "minecraft_version_range": minecraft_version_range,
                 "forge_version": forge_version,
@@ -82,7 +78,7 @@ subprojects {
                 "bucketlib_version_range": bucketlib_version_range
         ]
 
-        filesMatching(['pack.mcmeta', 'fabric.mod.json', 'META-INF/mods.toml', '*.mixins.json']) {
+        filesMatching(['pack.mcmeta', 'fabric.mod.json', 'META-INF/neoforge.mods.toml', 'META-INF/mods.toml', '*.mixins.json']) {
             expand expandProps
         }
         inputs.properties(expandProps)

@@ -3,6 +3,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Forge Recommended Versioning](https://mcforge.readthedocs.io/en/latest/conventions/versioning/).
 
+## [1.20.6-5.3.0.0] - 2024-06-20
+### Changed
+- Updated to Minecraft 1.20.6 (Fabric 0.98.0+1.20.6, Neoforge 20.6.119)
+- Removed Forge support until the capability system is re-added
+- Updated BucketLib to 1.20.6-3.3.0.3
+- Updated Cloth Config support (14.0.126) (Fabric/Quilt)
+- Updated ModMenu support (10.0.0-beta.1) (Fabric/Quilt)
+
+### Fixed
+- fixed known issue: max stack size was not taken into account and defaulted to 1 (Fabric)
+
 ## [1.20.4-5.2.0.0] - 2024-05-11
 ### Added
 - add Fabric (>=0.96.11+1.20.4) support (Fabric, Quilt)

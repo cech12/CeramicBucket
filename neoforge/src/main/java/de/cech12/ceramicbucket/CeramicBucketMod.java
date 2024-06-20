@@ -4,12 +4,13 @@ import de.cech12.bucketlib.api.BucketLibApi;
 import de.cech12.bucketlib.api.item.UniversalBucketItem;
 import de.cech12.ceramicbucket.init.ModTags;
 import de.cech12.ceramicbucket.platform.Services;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
-import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -26,7 +27,7 @@ public class CeramicBucketMod {
                     .crackingFluids(ModTags.Fluids.CERAMIC_CRACKING)
                     .milking(Services.CONFIG::isMilkingEnabled)
                     .entityObtaining(Services.CONFIG::isFishObtainingEnabled)
-                    .dyeable(14975336)
+                    .dyeable(FastColor.ARGB32.color(255, 14975336))
                     .durability(Services.CONFIG::getDurability)
     ));
 
@@ -40,8 +41,8 @@ public class CeramicBucketMod {
         modEventBus.addListener(this::sendImc);
     }
 
-    private void sendImc(InterModEnqueueEvent evt) {
-        BucketLibApi.registerBucket(CERAMIC_BUCKET.getId());
+    private void sendImc(RegisterCapabilitiesEvent evt) {
+        BucketLibApi.registerBucket(evt, CERAMIC_BUCKET.getId());
     }
 
     private void addItemsToTabs(BuildCreativeModeTabContentsEvent event) {
