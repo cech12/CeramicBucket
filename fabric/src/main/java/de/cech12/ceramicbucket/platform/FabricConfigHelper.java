@@ -14,12 +14,10 @@ import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
 @Config(name = Constants.MOD_ID)
 public class FabricConfigHelper implements ConfigData, IConfigHelper {
 
-    @ConfigEntry.Gui.Tooltip(count = 5)
-    @ConfigEntry.BoundedDiscrete(min = BREAK_TEMPERATURE_MIN, max = BREAK_TEMPERATURE_MAX)
+    @ConfigEntry.Gui.Tooltip(count = 6)
     public long BREAK_TEMPERATURE = BREAK_TEMPERATURE_DEFAULT;
 
-    @ConfigEntry.Gui.Tooltip(count = 4)
-    @ConfigEntry.BoundedDiscrete(min = DURABILITY_MIN, max = DURABILITY_MAX)
+    @ConfigEntry.Gui.Tooltip(count = 5)
     public long DURABILITY = DURABILITY_DEFAULT;
 
     @ConfigEntry.Gui.Tooltip(count = 4)
@@ -39,12 +37,12 @@ public class FabricConfigHelper implements ConfigData, IConfigHelper {
 
     @Override
     public int getBreakTemperature() {
-        return (int) getConfig().BREAK_TEMPERATURE;
+        return Math.clamp((int) getConfig().BREAK_TEMPERATURE, BREAK_TEMPERATURE_MIN, BREAK_TEMPERATURE_MAX);
     }
 
     @Override
     public int getDurability() {
-        return (int) getConfig().DURABILITY;
+        return Math.clamp((int) getConfig().DURABILITY, DURABILITY_MIN, DURABILITY_MAX);
     }
 
     @Override
