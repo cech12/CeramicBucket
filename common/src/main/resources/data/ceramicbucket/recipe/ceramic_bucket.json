@@ -1,9 +1,7 @@
 {
   "type": "minecraft:smelting",
   "category": "misc",
-  "ingredient": {
-    "item": "ceramicbucket:unfired_clay_bucket"
-  },
+  "ingredient": "ceramicbucket:unfired_clay_bucket",
   "result": {
     "id": "ceramicbucket:ceramic_bucket"
   },

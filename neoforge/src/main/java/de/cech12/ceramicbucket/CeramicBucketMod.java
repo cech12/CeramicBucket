@@ -4,7 +4,9 @@ import de.cech12.bucketlib.api.BucketLibApi;
 import de.cech12.bucketlib.api.item.UniversalBucketItem;
 import de.cech12.ceramicbucket.init.ModTags;
 import de.cech12.ceramicbucket.platform.Services;
-import net.minecraft.util.FastColor;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.ARGB;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
@@ -19,15 +21,15 @@ public class CeramicBucketMod {
 
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Constants.MOD_ID);
 
-    public static final DeferredItem<Item> UNFIRED_CLAY_BUCKET = ITEMS.register("unfired_clay_bucket", () -> new Item(new Item.Properties()));
-
-    public static final DeferredItem<Item> CERAMIC_BUCKET = ITEMS.register("ceramic_bucket", () -> new UniversalBucketItem(
+    public static final DeferredItem<Item> UNFIRED_CLAY_BUCKET = ITEMS.register(Constants.UNFIRED_CLAY_BUCKET_NAME, () -> new Item(new Item.Properties().setId(ResourceKey.create(BuiltInRegistries.ITEM.key(), Constants.id(Constants.UNFIRED_CLAY_BUCKET_NAME)))));
+    public static final DeferredItem<Item> CERAMIC_BUCKET = ITEMS.register(Constants.CERAMIC_BUCKET_NAME, () -> new UniversalBucketItem(
+            ResourceKey.create(BuiltInRegistries.ITEM.key(), Constants.id(Constants.CERAMIC_BUCKET_NAME)),
             new UniversalBucketItem.Properties()
                     .upperCrackingTemperature(Services.CONFIG::getBreakTemperature)
                     .crackingFluids(ModTags.Fluids.CERAMIC_CRACKING)
                     .milking(Services.CONFIG::isMilkingEnabled)
                     .entityObtaining(Services.CONFIG::isFishObtainingEnabled)
-                    .dyeable(FastColor.ARGB32.color(255, 14975336))
+                    .dyeable(ARGB.color(255, 14975336))
                     .durability(Services.CONFIG::getDurability)
     ));
 

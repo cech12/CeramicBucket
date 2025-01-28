@@ -6,9 +6,7 @@
     " # "
   ],
   "key": {
-    "#": {
-      "item": "minecraft:clay_ball"
-    }
+    "#": "minecraft:clay_ball"
   },
   "result": {
     "id": "ceramicbucket:unfired_clay_bucket"

@@ -16,6 +16,9 @@ public class Constants {
     /** Logger instance */
     public static final Logger LOG = LoggerFactory.getLogger(MOD_NAME);
 
+    public static final String UNFIRED_CLAY_BUCKET_NAME = "unfired_clay_bucket";
+    public static final String CERAMIC_BUCKET_NAME = "ceramic_bucket";
+
     private Constants() {}
 
     public static ResourceLocation id(String name) {

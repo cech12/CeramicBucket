@@ -8,25 +8,28 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.FastColor;
+import net.minecraft.util.ARGB;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 
 @SuppressWarnings("unused")
 public class CeramicBucketMod implements ModInitializer {
 
-    public static final ResourceLocation UNFIRED_CLAY_BUCKET_LOCATION = Constants.id("unfired_clay_bucket");
-    public static final ResourceLocation CERAMIC_BUCKET_LOCATION = Constants.id("ceramic_bucket");
+    public static final ResourceLocation UNFIRED_CLAY_BUCKET_LOCATION = Constants.id(Constants.UNFIRED_CLAY_BUCKET_NAME);
+    public static final ResourceLocation CERAMIC_BUCKET_LOCATION = Constants.id(Constants.CERAMIC_BUCKET_NAME);
 
-    public static final Item UNFIRED_CLAY_BUCKET = Registry.register(BuiltInRegistries.ITEM, UNFIRED_CLAY_BUCKET_LOCATION, new Item(new Item.Properties()));
-    public static final Item CERAMIC_BUCKET = Registry.register(BuiltInRegistries.ITEM, CERAMIC_BUCKET_LOCATION, new UniversalBucketItem(new UniversalBucketItem.Properties()
-            .upperCrackingTemperature(Services.CONFIG::getBreakTemperature)
-            .crackingFluids(ModTags.Fluids.CERAMIC_CRACKING)
-            .milking(Services.CONFIG::isMilkingEnabled)
-            .entityObtaining(Services.CONFIG::isFishObtainingEnabled)
-            .dyeable(FastColor.ARGB32.color(255, 14975336))
-            .durability(Services.CONFIG::getDurability)
+    public static final Item UNFIRED_CLAY_BUCKET = Registry.register(BuiltInRegistries.ITEM, UNFIRED_CLAY_BUCKET_LOCATION, new Item(new Item.Properties().setId(ResourceKey.create(BuiltInRegistries.ITEM.key(), UNFIRED_CLAY_BUCKET_LOCATION))));
+    public static final Item CERAMIC_BUCKET = Registry.register(BuiltInRegistries.ITEM, CERAMIC_BUCKET_LOCATION, new UniversalBucketItem(
+            ResourceKey.create(BuiltInRegistries.ITEM.key(), CERAMIC_BUCKET_LOCATION),
+            new UniversalBucketItem.Properties()
+                    .upperCrackingTemperature(Services.CONFIG::getBreakTemperature)
+                    .crackingFluids(ModTags.Fluids.CERAMIC_CRACKING)
+                    .milking(Services.CONFIG::isMilkingEnabled)
+                    .entityObtaining(Services.CONFIG::isFishObtainingEnabled)
+                    .dyeable(ARGB.color(255, 14975336))
+                    .durability(Services.CONFIG::getDurability)
     ));
 
     @Override
