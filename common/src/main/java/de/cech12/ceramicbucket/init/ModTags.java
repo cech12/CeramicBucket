@@ -4,8 +4,7 @@ import de.cech12.ceramicbucket.Constants;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.material.Fluid;
-
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class ModTags {
 
@@ -13,7 +12,7 @@ public class ModTags {
 
         public static final TagKey<Fluid> CERAMIC_CRACKING = tag("ceramic_cracking");
 
-        private static TagKey<Fluid> tag(@Nonnull String name) {
+        private static TagKey<Fluid> tag(@NotNull String name) {
             return TagKey.create(Registries.FLUID, Constants.id(name));
         }
 

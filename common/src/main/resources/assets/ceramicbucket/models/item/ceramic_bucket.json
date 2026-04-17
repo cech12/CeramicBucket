@@ -1,9 +1,0 @@
-{
-  "parent": "bucketlib:item/universal_bucket",
-  "textures": {
-    "base": "ceramicbucket:item/ceramic_bucket",
-    "lowerBase": "ceramicbucket:item/ceramic_bucket_lower",
-    "crackedBase": "ceramicbucket:item/ceramic_bucket_cracked",
-    "crackedLowerBase": "ceramicbucket:item/ceramic_bucket_cracked_lower"
-  }
-}

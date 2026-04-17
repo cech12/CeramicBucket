@@ -40,7 +40,7 @@ jobs:
 #      title-prefix: forge-
 #      curseforge-id: 363799
 #      game-versions: |
-#        1.21.3
+#        1.21.4
 #      release-type: release
 #      loaders: |
 #        forge
@@ -58,7 +58,7 @@ jobs:
 #      title-prefix: forge-
 #      modrinth-id: M9G5zpf1
 #      game-versions: |
-#        1.21.3
+#        1.21.4
 #      release-type: release
 #      loaders: |
 #        forge
@@ -76,7 +76,7 @@ jobs:
       title-prefix: neoforge-
       curseforge-id: 363799
       game-versions: |
-        1.21.3
+        1.21.4
       release-type: release
       loaders: |
         neoforge
@@ -94,7 +94,7 @@ jobs:
       title-prefix: neoforge-
       modrinth-id: M9G5zpf1
       game-versions: |
-        1.21.3
+        1.21.4
       release-type: release
       loaders: |
         neoforge
@@ -112,7 +112,7 @@ jobs:
       title-prefix: fabric-
       curseforge-id: 363799
       game-versions: |
-        1.21.3
+        1.21.4
       release-type: release
       loaders: |
         fabric
@@ -131,7 +131,7 @@ jobs:
       title-prefix: fabric-
       modrinth-id: M9G5zpf1
       game-versions: |
-        1.21.3
+        1.21.4
       release-type: release
       loaders: |
         fabric

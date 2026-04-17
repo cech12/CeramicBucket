@@ -10,7 +10,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.ARGB;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 
@@ -28,7 +27,6 @@ public class CeramicBucketMod implements ModInitializer {
                     .crackingFluids(ModTags.Fluids.CERAMIC_CRACKING)
                     .milking(Services.CONFIG::isMilkingEnabled)
                     .entityObtaining(Services.CONFIG::isFishObtainingEnabled)
-                    .dyeable(ARGB.color(255, 14975336))
                     .durability(Services.CONFIG::getDurability)
     ));
 

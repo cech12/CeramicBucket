@@ -6,7 +6,6 @@ import de.cech12.ceramicbucket.init.ModTags;
 import de.cech12.ceramicbucket.platform.Services;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.util.ARGB;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
@@ -29,7 +28,6 @@ public class CeramicBucketMod {
                     .crackingFluids(ModTags.Fluids.CERAMIC_CRACKING)
                     .milking(Services.CONFIG::isMilkingEnabled)
                     .entityObtaining(Services.CONFIG::isFishObtainingEnabled)
-                    .dyeable(ARGB.color(255, 14975336))
                     .durability(Services.CONFIG::getDurability)
     ));
 

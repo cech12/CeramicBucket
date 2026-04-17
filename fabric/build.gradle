@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id 'idea'
     id 'maven-publish'
-    id 'fabric-loom' version '[1.9,1.10)'
+    id 'fabric-loom' version '1.9-SNAPSHOT'
 }
 base {
     archivesName = "${mod_id}-fabric"
@@ -26,7 +26,6 @@ dependencies {
 
     modImplementation("com.github.cech12.BucketLib:fabric:${bucketlib_version}")
 
-    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     compileOnly project(":common")
 }
 
