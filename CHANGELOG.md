@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [this versioning scheme](https://gist.github.com/cech12/69319028e88c50349a6b044000a6607b).
 
+## [1.21.5-6.4.0.0] - 2026-04-18
+### Changed
+- Updated to Minecraft 1.21.5 (Fabric 0.120.0+1.21.5, NeoForge 21.5.97)
+- Updated BucketLib to 1.21.5-4.4.0.0
+- Updated Cloth Config support (18.0.145) (Fabric/Quilt)
+- Updated ModMenu support (14.0.2) (Fabric/Quilt)
+
 ## [1.21.4-6.3.0.0] - 2026-04-17
 ### Changed
 - Updated to Minecraft 1.21.4 (Fabric 0.116.0+1.21.4, NeoForge 21.4.157)
