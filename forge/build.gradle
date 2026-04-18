@@ -1,7 +1,7 @@
 plugins {
     id 'idea'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '6.0.24'
+    id 'net.minecraftforge.gradle' version '6.0.36'
     id 'org.spongepowered.mixin' version '0.7-SNAPSHOT'
 }
 base {
@@ -30,8 +30,9 @@ minecraft {
         configureEach {
             workingDirectory project.file('run')
             ideaModule "${rootProject.name}.${project.name}.main"
-            property 'forge.logging.markers', 'REGISTRIES'
+            //property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
+            property 'eventbus.api.strictRuntimeChecks', 'true'
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
         }
@@ -64,8 +65,7 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     compileOnly project(":common")
     //annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
-    //temporary necessary:
-    implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
+    annotationProcessor 'net.minecraftforge:eventbus-validator:7.0-beta.8'
 
     implementation fg.deobf("com.github.cech12.BucketLib:forge:${bucketlib_version}")
 }
