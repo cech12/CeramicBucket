@@ -9,11 +9,11 @@ displayName="${mod_name}"
 displayURL="${mod_url}"
 logoFile="logo.png"
 authors="${mod_author}"
-description='''${mod_description}'''
+description='''${description}'''
 [[dependencies.${mod_id}]]
 modId="forge"
 mandatory=true
-versionRange="${forge_version_range}"
+versionRange="[${forge_version},)"
 ordering="NONE"
 side="BOTH"
 [[dependencies.${mod_id}]]

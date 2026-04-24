@@ -8,16 +8,16 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 
 @SuppressWarnings("unused")
 public class CeramicBucketMod implements ModInitializer {
 
-    public static final ResourceLocation UNFIRED_CLAY_BUCKET_LOCATION = Constants.id(Constants.UNFIRED_CLAY_BUCKET_NAME);
-    public static final ResourceLocation CERAMIC_BUCKET_LOCATION = Constants.id(Constants.CERAMIC_BUCKET_NAME);
+    public static final Identifier UNFIRED_CLAY_BUCKET_LOCATION = Constants.id(Constants.UNFIRED_CLAY_BUCKET_NAME);
+    public static final Identifier CERAMIC_BUCKET_LOCATION = Constants.id(Constants.CERAMIC_BUCKET_NAME);
 
     public static final Item UNFIRED_CLAY_BUCKET = Registry.register(BuiltInRegistries.ITEM, UNFIRED_CLAY_BUCKET_LOCATION, new Item(new Item.Properties().setId(ResourceKey.create(BuiltInRegistries.ITEM.key(), UNFIRED_CLAY_BUCKET_LOCATION))));
     public static final Item CERAMIC_BUCKET = Registry.register(BuiltInRegistries.ITEM, CERAMIC_BUCKET_LOCATION, new UniversalBucketItem(

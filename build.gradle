@@ -1,93 +1,10 @@
 plugins {
-    // Required for NeoGradle
-    id "org.jetbrains.gradle.plugin.idea-ext" version "1.1.7"
-}
-
-subprojects {
-    apply plugin: 'java'
-
-    version "$project.minecraft_version-$project.mod_version"
-
-    java.toolchain.languageVersion = JavaLanguageVersion.of(java_version)
-    //java.withSourcesJar()
-    //java.withJavadocJar()
-
-    jar {
-        from(rootProject.file("LICENSE"))
-        manifest {
-            attributes([
-                    'Specification-Title'     : mod_id,
-                    'Specification-Vendor'    : mod_author,
-                    'Specification-Version'   : project.jar.archiveVersion,
-                    'Implementation-Title'    : project.name,
-                    'Implementation-Version'  : project.jar.archiveVersion,
-                    'Implementation-Vendor'   : mod_author,
-                    'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                    'Timestamp'               : System.currentTimeMillis(),
-                    'Built-On-Java'           : "${System.getProperty('java.vm.version')} (${System.getProperty('java.vm.vendor')})",
-                    'Built-On-Minecraft'      : minecraft_version
-            ])
-        }
-    }
-
-    //sourcesJar {
-    //    from(rootProject.file("LICENSE"))
-    //}
-
-    repositories {
-        mavenCentral()
-        maven {
-            name = 'Sponge / Mixin'
-            url = 'https://repo.spongepowered.org/repository/maven-public/'
-        }
-        maven {
-            name = 'BlameJared Maven (JEI / CraftTweaker / Bookshelf)'
-            url = 'https://maven.blamejared.com'
-        }
-        maven {
-            name = 'Jitpack'
-            url = 'https://jitpack.io'
-        }
-    }
-
-    processResources {
-        def expandProps = [
-                "version": version,
-                "group": project.group, //Else we target the task's group.
-                "java_version": java_version,
-                "minecraft_version": minecraft_version,
-                "minecraft_version_range": minecraft_version_range,
-                //"forge_version": forge_version,
-                //"forge_version_range": forge_version_range,
-                //"forge_loader_version_range": forge_loader_version_range,
-                "fabric_version": fabric_version,
-                "fabric_loader_version": fabric_loader_version,
-                "cloth_config_version": cloth_config_version,
-                "mod_menu_version": mod_menu_version,
-                "neoforge_version": neoforge_version,
-                "neoforge_version_range": neoforge_version_range,
-                "neoforge_loader_version_range": neoforge_loader_version_range,
-                "mod_id": mod_id,
-                "mod_name": mod_name,
-                "mod_author": mod_author,
-                "mod_license": mod_license,
-                "mod_url": mod_url,
-                "mod_issue_tracker": mod_issue_tracker,
-                "mod_description": project.description,
-                "bucketlib_version": bucketlib_version,
-                "bucketlib_version_range": bucketlib_version_range
-        ]
-
-        filesMatching(['pack.mcmeta', 'fabric.mod.json', 'META-INF/neoforge.mods.toml', 'META-INF/mods.toml', '*.mixins.json']) {
-            expand expandProps
-        }
-        inputs.properties(expandProps)
-    }
-
-    // Disables Gradle's custom module metadata from being published to maven. The
-    // metadata includes mapped dependencies which are not reasonably consumable by
-    // other mod developers.
-    tasks.withType(GenerateModuleMetadata).configureEach {
-        enabled = false
-    }
+    // see https://fabricmc.net/develop/ for new versions
+    id 'fabric-loom' version '1.15-SNAPSHOT' apply false
+    // see https://projects.neoforged.net/neoforged/moddevgradle for new versions
+    id 'net.neoforged.moddev' version '2.0.140' apply false
+    // see https://files.minecraftforge.net/net/minecraftforge/forgegradle/index.html for new versions
+    id 'net.minecraftforge.gradle' version '7.0.0' apply false
+    // see https://plugins.gradle.org/plugin/net.minecraftforge.accesstransformers
+    id 'net.minecraftforge.accesstransformers' version '5.0.3' apply false
 }

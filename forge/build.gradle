@@ -1,54 +1,76 @@
 plugins {
-    id 'idea'
-    id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '6.0.36'
-    id 'org.spongepowered.mixin' version '0.7-SNAPSHOT'
+    id 'multiloader-loader'
+    id 'net.minecraftforge.accesstransformers'
+    id 'net.minecraftforge.gradle'
 }
-base {
-    archivesName = "${mod_id}-forge"
+jar {
+    manifest {
+        attributes["MixinConfigs"] = "${mod_id}.mixins.json,${mod_id}.forge.mixins.json"
+    }
 }
-//mixin {
-//    add(sourceSets.main, "${mod_id}.refmap.json")
-//    config("${mod_id}.mixins.json")
-//    config("${mod_id}.forge.mixins.json")
-//}
 
 minecraft {
-    mappings channel: 'official', version: minecraft_version
-    reobf = false
-
-    copyIdeResources = true //Calls processResources when in dev
+    mappings channel: 'parchment', version: "${parchment_version}-${parchment_minecraft}"
 
     // Automatically enable forge AccessTransformers if the file exists
     // This location is hardcoded in Forge and can not be changed.
     // https://github.com/MinecraftForge/MinecraftForge/blob/be1698bb1554f9c8fa2f58e32b9ab70bc4385e60/fmlloader/src/main/java/net/minecraftforge/fml/loading/moddiscovery/ModFile.java#L123
-    if (file('src/main/resources/META-INF/accesstransformer.cfg').exists()) {
-        accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+    // Forge still uses SRG names during compile time, so we cannot use the common AT's
+    def at = file('src/main/resources/META-INF/accesstransformer.cfg')
+    if (at.exists()) {
+        accessTransformer = true
     }
 
     runs {
         configureEach {
-            workingDirectory project.file('run')
-            ideaModule "${rootProject.name}.${project.name}.main"
-            //property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            property 'eventbus.api.strictRuntimeChecks', 'true'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            args "-mixin.config=${mod_id}.mixins.json"
+            args "-mixin.config=${mod_id}.forge.mixins.json"
         }
         client {
-            property 'forge.enabledGameTestNamespaces', mod_id
+            workingDir = file('runs/client')
         }
         server {
-            property 'forge.enabledGameTestNamespaces', mod_id
-            args '--nogui'
-        }
-        gameTestServer {
-            property 'forge.enabledGameTestNamespaces', mod_id
+            workingDir = file('runs/server')
         }
         data {
-            workingDirectory project.file('run-data')
+            workingDir = file('runs/data')
             args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+        }
+    }
+}
+
+//duplicate accesstransformer
+tasks.withType(Copy).configureEach {
+    if (name == 'processResources' || name.endsWith('ProcessResources')) {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+}
+tasks.withType(Jar).configureEach {
+    if (name == 'sourcesJar' || name.endsWith('SourcesJar')) {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+}
+
+test {
+    failOnNoDiscoveredTests = false
+}
+
+sourceSets.main.resources.srcDir 'src/generated/resources'
+
+repositories {
+    maven minecraft.mavenizer
+    maven fg.forgeMaven
+    maven fg.minecraftLibsMaven
+}
+
+dependencies {
+    implementation minecraft.dependency("net.minecraftforge:forge:${minecraft_version}-${forge_version}")
+    annotationProcessor 'net.minecraftforge:eventbus-validator:7.0-beta.10'
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
         }
     }
 }
@@ -59,42 +81,21 @@ sourceSets.each {
     it.java.destinationDirectory = dir
 }
 
-sourceSets.main.resources.srcDir 'src/generated/resources'
-
-dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    compileOnly project(":common")
-    //annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
-    annotationProcessor 'net.minecraftforge:eventbus-validator:7.0-beta.8'
-
-    implementation fg.deobf("com.github.cech12.BucketLib:forge:${bucketlib_version}")
-}
-
-tasks.withType(JavaCompile).configureEach {
-    source(project(":common").sourceSets.main.allSource)
-}
-//tasks.withType(Javadoc).configureEach {
-//    source(project(":common").sourceSets.main.allJava)
-//}
-//tasks.named("sourcesJar", Jar) {
-//    from(project(":common").sourceSets.main.allSource)
-//}
-
-processResources {
-    from project(":common").sourceSets.main.resources
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifactId base.archivesName.get()
-            from components.java
-            fg.component(it)
+// Implement mcgradleconventions loader attribute
+def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
+['apiElements', 'runtimeElements', 'sourcesElements', 'javadocElements'].each { variant ->
+    configurations.named("$variant") {
+        attributes {
+            attribute(loaderAttribute, 'forge')
         }
     }
-    repositories {
-        maven {
-            url "file://" + System.getenv("local_maven")
+}
+sourceSets.configureEach {
+    [it.compileClasspathConfigurationName, it.runtimeClasspathConfigurationName].each { variant->
+        configurations.named("$variant") {
+            attributes {
+                attribute(loaderAttribute, 'forge')
+            }
         }
     }
 }
