@@ -5,7 +5,7 @@ import de.cech12.bucketlib.api.item.UniversalBucketItem;
 import de.cech12.ceramicbucket.init.ModTags;
 import de.cech12.ceramicbucket.platform.Services;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -36,7 +36,7 @@ public class CeramicBucketMod implements ModInitializer {
         //register bucket
         BucketLibApi.registerBucket(CERAMIC_BUCKET_LOCATION);
         //register creative tab
-        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.INGREDIENTS).register(content -> {
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS).register(content -> {
             content.accept(UNFIRED_CLAY_BUCKET);
         });
     }
