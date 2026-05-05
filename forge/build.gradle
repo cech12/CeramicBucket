@@ -9,9 +9,18 @@ jar {
     }
 }
 
-minecraft {
-    mappings channel: 'parchment', version: "${parchment_version}-${parchment_minecraft}"
+repositories {
+    minecraft.mavenizer(it)
+    maven fg.forgeMaven
+    maven fg.minecraftLibsMaven
+}
 
+dependencies {
+    implementation minecraft.dependency("net.minecraftforge:forge:${minecraft_version}-${forge_version}")
+    annotationProcessor 'net.minecraftforge:eventbus-validator:7.0-beta.10'
+}
+
+minecraft {
     // Automatically enable forge AccessTransformers if the file exists
     // This location is hardcoded in Forge and can not be changed.
     // https://github.com/MinecraftForge/MinecraftForge/blob/be1698bb1554f9c8fa2f58e32b9ab70bc4385e60/fmlloader/src/main/java/net/minecraftforge/fml/loading/moddiscovery/ModFile.java#L123
@@ -56,17 +65,6 @@ test {
 }
 
 sourceSets.main.resources.srcDir 'src/generated/resources'
-
-repositories {
-    maven minecraft.mavenizer
-    maven fg.forgeMaven
-    maven fg.minecraftLibsMaven
-}
-
-dependencies {
-    implementation minecraft.dependency("net.minecraftforge:forge:${minecraft_version}-${forge_version}")
-    annotationProcessor 'net.minecraftforge:eventbus-validator:7.0-beta.10'
-}
 
 publishing {
     publications {

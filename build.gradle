@@ -1,10 +1,10 @@
 plugins {
     // see https://fabricmc.net/develop/ for new versions
-    id 'fabric-loom' version '1.15-SNAPSHOT' apply false
+    id 'net.fabricmc.fabric-loom' version '1.15-SNAPSHOT' apply false
     // see https://projects.neoforged.net/neoforged/moddevgradle for new versions
-    id 'net.neoforged.moddev' version '2.0.140' apply false
+    id 'net.neoforged.moddev' version '2.0.141' apply false
     // see https://files.minecraftforge.net/net/minecraftforge/forgegradle/index.html for new versions
-    id 'net.minecraftforge.gradle' version '7.0.0' apply false
+    id 'net.minecraftforge.gradle' version '7.0.17' apply false
     // see https://plugins.gradle.org/plugin/net.minecraftforge.accesstransformers
     id 'net.minecraftforge.accesstransformers' version '5.0.3' apply false
 }

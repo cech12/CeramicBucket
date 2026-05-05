@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:crafting_dye",
+  "category": "misc",
+  "dye": "#minecraft:dyes",
+  "result": {
+    "id": "ceramicbucket:ceramic_bucket"
+  },
+  "target": "ceramicbucket:ceramic_bucket"
+}
